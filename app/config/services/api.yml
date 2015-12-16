@@ -1,5 +1,41 @@
 services:
+    resource.watch_link.collection_operation.get:
+        class:     'Dunglas\ApiBundle\Api\Operation\Operation'
+        public:    false
+        factory:   [ "@api.operation_factory", "createCollectionOperation" ]
+        arguments: [ "@resource.watch_link", "GET" ]
+
+    resource.watch_link.collection_operation.post:
+        class:     'Dunglas\ApiBundle\Api\Operation\Operation'
+        public:    false
+        factory:   [ "@api.operation_factory", "createCollectionOperation" ]
+        arguments: [ "@resource.watch_link", "POST" ]
+
+
+    resource.watch_link.collection_operation.discover:
+        class:   'Dunglas\ApiBundle\Api\Operation\Operation'
+        public:  false
+        factory: [ "@api.operation_factory", "createItemOperation" ]
+        arguments:
+            -    "@resource.watch_link"
+            -    [ "POST" ]
+            -    "/watch_links/discover"
+            -    "AppBundle:WatchLink:discover"
+            -    "api_watch_links_discover"
+            -
+                 "@type":       "hydra:Operation"
+                 "hydra:title": "Creates a watch link by discovery"
+                 "returns":     "xmls:string"
+
     resource.watch_link:
         parent:    'api.resource'
         arguments: [ 'AppBundle\Entity\WatchLink' ]
         tags:      [ { name: 'api.resource' } ]
+        calls:
+            - method: 'initCollectionOperations'
+              arguments:
+                -
+                    - "@resource.watch_link.collection_operation.get"
+                    - "@resource.watch_link.collection_operation.post"
+                    - "@resource.watch_link.collection_operation.discover"
+

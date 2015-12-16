@@ -1,2 +1,14 @@
 imports:
     - { resource: services/api.yml }
+
+services:
+    guzzle.client:
+        class: GuzzleHttp\Client
+
+    fetcher.guzzle:
+        class:    AppBundle\Fetcher\GuzzleFetcher
+        autowire: true
+
+    extractor.watch_link_metadata:
+        class:    AppBundle\Extractor\WatchLinkMetadataExtractor
+        autowire: true

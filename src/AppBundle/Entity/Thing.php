@@ -8,9 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * The most generic type of item.
- * 
+ *
  * @see http://schema.org/Thing Documentation on Schema.org
- * 
+ *
  * @ORM\MappedSuperclass
  * @Iri("http://schema.org/Thing")
  */
@@ -18,7 +18,7 @@ abstract class Thing
 {
     /**
      * @var int
-     * 
+     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -26,7 +26,7 @@ abstract class Thing
     private $id;
     /**
      * @var string A short description of the item.
-     * 
+     *
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
      * @Iri("https://schema.org/description")
@@ -34,7 +34,7 @@ abstract class Thing
     private $description;
     /**
      * @var string An image of the item. This can be a [URL](http://schema.org/URL) or a fully described [ImageObject](http://schema.org/ImageObject).
-     * 
+     *
      * @ORM\Column(nullable=true)
      * @Assert\Url
      * @Iri("https://schema.org/image")
@@ -42,7 +42,7 @@ abstract class Thing
     private $image;
     /**
      * @var string The name of the item.
-     * 
+     *
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
      * @Iri("https://schema.org/name")
@@ -50,15 +50,17 @@ abstract class Thing
     private $name;
     /**
      * @var string URL of the item.
-     * 
-     * @ORM\Column(nullable=true)
+     *
+     * @ORM\Column
      * @Assert\Url
+     * @Assert\NotBlank
+     *
      * @Iri("https://schema.org/url")
      */
     private $url;
     /**
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(type="datetime")
      * @Assert\DateTime
      * @Assert\NotNull
@@ -67,9 +69,9 @@ abstract class Thing
 
     /**
      * Sets id.
-     * 
+     *
      * @param int $id
-     * 
+     *
      * @return $this
      */
     public function setId($id)
@@ -81,7 +83,7 @@ abstract class Thing
 
     /**
      * Gets id.
-     * 
+     *
      * @return int
      */
     public function getId()
@@ -91,9 +93,9 @@ abstract class Thing
 
     /**
      * Sets description.
-     * 
+     *
      * @param string $description
-     * 
+     *
      * @return $this
      */
     public function setDescription($description)
@@ -105,7 +107,7 @@ abstract class Thing
 
     /**
      * Gets description.
-     * 
+     *
      * @return string
      */
     public function getDescription()
@@ -115,9 +117,9 @@ abstract class Thing
 
     /**
      * Sets image.
-     * 
+     *
      * @param string $image
-     * 
+     *
      * @return $this
      */
     public function setImage($image)
@@ -129,7 +131,7 @@ abstract class Thing
 
     /**
      * Gets image.
-     * 
+     *
      * @return string
      */
     public function getImage()
@@ -139,9 +141,9 @@ abstract class Thing
 
     /**
      * Sets name.
-     * 
+     *
      * @param string $name
-     * 
+     *
      * @return $this
      */
     public function setName($name)
@@ -153,7 +155,7 @@ abstract class Thing
 
     /**
      * Gets name.
-     * 
+     *
      * @return string
      */
     public function getName()
@@ -163,9 +165,9 @@ abstract class Thing
 
     /**
      * Sets url.
-     * 
+     *
      * @param string $url
-     * 
+     *
      * @return $this
      */
     public function setUrl($url)
@@ -177,7 +179,7 @@ abstract class Thing
 
     /**
      * Gets url.
-     * 
+     *
      * @return string
      */
     public function getUrl()
@@ -187,9 +189,9 @@ abstract class Thing
 
     /**
      * Sets createdAt.
-     * 
+     *
      * @param \DateTime $createdAt
-     * 
+     *
      * @return $this
      */
     public function setCreatedAt(\DateTime $createdAt)
@@ -201,7 +203,7 @@ abstract class Thing
 
     /**
      * Gets createdAt.
-     * 
+     *
      * @return \DateTime
      */
     public function getCreatedAt()
