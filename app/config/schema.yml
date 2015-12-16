@@ -1,0 +1,19 @@
+rdfa:
+    - vendor/api-platform/schema-generator/tests/data/schema.rdfa
+annotationGenerators:
+    - ApiPlatform\SchemaGenerator\AnnotationGenerator\PhpDocAnnotationGenerator
+    - ApiPlatform\SchemaGenerator\AnnotationGenerator\DoctrineOrmAnnotationGenerator
+    - ApiPlatform\SchemaGenerator\AnnotationGenerator\ConstraintAnnotationGenerator
+    - ApiPlatform\SchemaGenerator\AnnotationGenerator\DunglasApiAnnotationGenerator
+namespaces:
+  entity: AppBundle\Entity
+types:
+    Thing:
+        parent: false
+        abstract: true
+        properties:
+            name: ~
+            url: ~
+            description: ~
+            image: ~
+            createdAt: { range: DateTime }

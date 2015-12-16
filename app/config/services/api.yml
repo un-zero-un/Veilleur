@@ -1,0 +1,5 @@
+services:
+    resource.watch_link:
+        parent:    'api.resource'
+        arguments: [ 'AppBundle\Entity\WatchLink' ]
+        tags:      [ { name: 'api.resource' } ]

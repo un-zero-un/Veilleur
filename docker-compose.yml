@@ -1,0 +1,28 @@
+data:
+    image: unzeroun/base
+
+fpm:
+    image:        unzeroun/fpm7
+    volumes_from: [ data ]
+    links:        [ mysql ]
+    volumes:      [ '.:/www' ]
+
+mysql:
+    build:        docker/mysql
+    volumes_from: [ data ]
+    environment:  { MYSQL_ROOT_PASSWORD: root }
+
+apache:
+    image:        unzeroun/apache
+    volumes_from: [ data      ]
+    links:        [ fpm       ]
+    ports:        [ '80:80' ]
+    volumes:      [ '.:/www'  ]
+
+cli:
+    image:        unzeroun/cli7
+    volumes_from: [ data     ]
+    links:        [ mysql    ]
+    volumes:      [ '.:/www' ]
+    stdin_open:   true
+    tty:          true
