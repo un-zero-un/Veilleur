@@ -16,6 +16,11 @@ class WatchLinkMetadataExtractor
      */
     private $fetcher;
 
+    /**
+     * @var Crawler
+     */
+    private $crawler;
+
     public function __construct(Fetcher $fetcher, Crawler $crawler = null)
     {
         $this->fetcher = $fetcher;

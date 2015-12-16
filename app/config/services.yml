@@ -6,9 +6,12 @@ services:
         class: GuzzleHttp\Client
 
     fetcher.guzzle:
-        class:    AppBundle\Fetcher\GuzzleFetcher
-        autowire: true
+        class:     AppBundle\Fetcher\GuzzleFetcher
+        arguments: [ '@guzzle.client' ]
 
     extractor.watch_link_metadata:
-        class:    AppBundle\Extractor\WatchLinkMetadataExtractor
-        autowire: true
+        class:     AppBundle\Extractor\WatchLinkMetadataExtractor
+        arguments: [ '@fetcher.guzzle' ]
+
+    parser.slack_message:
+        class: AppBundle\Parser\SlackMessageParser

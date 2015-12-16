@@ -14,3 +14,5 @@ parameters:
     api_name: 'Veilleur API'
     api_description: 'API to interact with veilleur'
     secret: ThisTokenIsNotSoSecretChangeIt
+    slack_web_api_token: null
+    slack_web_channel: null
