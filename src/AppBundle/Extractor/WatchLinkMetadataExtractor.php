@@ -37,13 +37,12 @@ class WatchLinkMetadataExtractor
         $watchLink = new WatchLink;
         $watchLink->setUrl($url);
 
+        $this->crawler->clear();
         $this->crawler->addHtmlContent($this->fetcher->fetch($url));
 
         $watchLink->setName($this->extractTitle());
         $watchLink->setDescription($this->extractDescription());
         $watchLink->setImage($this->extractImage());
-
-        $this->crawler->clear();
 
         return $watchLink;
     }

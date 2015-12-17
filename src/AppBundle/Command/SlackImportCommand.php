@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,9 +49,18 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
             try {
                 $url       = $this->container->get('parser.slack_message')->parse($message->text);
                 $watchLink = $this->container->get('extractor.watch_link_metadata')->extract($url);
+                $watchLink->setCreatedAt((new \DateTime())->setTimestamp($message->ts));
 
                 $this->container->get('doctrine')->getManager()->persist($watchLink);
-            } catch (\InvalidArgumentException $e) {}
+            } catch (\InvalidArgumentException $e) {
+                $this->container->get('logger')->addNotice(
+                    'Unable to insert watchlink',
+                    [
+                        'exception' => $e,
+                        'message'   => $message->text,
+                    ]
+                );
+            }
         }
         $io->progressFinish();
 

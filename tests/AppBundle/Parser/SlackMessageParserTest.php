@@ -48,6 +48,9 @@ class SlackMessageParserTest extends \PHPUnit_Framework_TestCase
             ['Foo http://localhost:8000/toto?query-that&foo=toto#baz Foo, bar baz', 'http://localhost:8000/toto?query-that&foo=toto#baz'],
             ['https://github.com/chenglou/react-motion', 'https://github.com/chenglou/react-motion'],
             ['http://angularjs.blogspot.fr/2015/12/angular-2-beta.html \o/ #angular #js #front-end #framework #release', 'http://angularjs.blogspot.fr/2015/12/angular-2-beta.html'],
+            ['https://twitter.com/francoisz/status/677114293524021250 #api #standard', 'https://twitter.com/francoisz/status/677114293524021250'],
+            ['<https://twitter.com/francoisz/status/677114293524021250> #api #standard', 'https://twitter.com/francoisz/status/677114293524021250'],
+            ['http://www.pantone.com/pages/fcr/?season=Spring&amp;year=2016&amp;from=topNav', 'http://www.pantone.com/pages/fcr/?season=Spring&year=2016&from=topNav'],
         ];
     }
 
