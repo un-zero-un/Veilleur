@@ -7,6 +7,8 @@
 !var/cache/.gitkeep
 !/var/logs
 /var/logs/*
+!/var/sessions/.gitkeep
+/var/sessions/*
 !var/logs/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/

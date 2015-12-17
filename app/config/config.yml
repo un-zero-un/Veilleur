@@ -17,7 +17,9 @@ framework:
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
-    session: ~
+    session:
+        handler_id:  ~
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
     fragments:       ~
     http_method_override: true
     assets: ~
