@@ -2,6 +2,9 @@ imports:
     - { resource: services/api.yml }
 
 services:
+    monolog.formatter.colored_line:
+        class: Bramus\Monolog\Formatter\ColoredLineFormatter
+
     guzzle.client:
         class: GuzzleHttp\Client
 
