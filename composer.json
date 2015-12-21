@@ -30,13 +30,9 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
-        "api-platform/schema-generator": "dev-fix-symfony-3.0-compatibility@dev",
+        "api-platform/schema-generator": "dev-master@dev",
         "phpunit/phpunit": "^5.1"
     },
-    "repositories": [{
-        "type": "vcs",
-        "url": "http://github.com/yohang/schema-generator"
-    }],
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",

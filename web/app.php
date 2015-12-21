@@ -8,14 +8,12 @@ if (is_file(__DIR__.'/../env.php')) {
     $config = require __DIR__ . '/../env.php';
 }
 
+$loader = require __DIR__.'/../app/autoload.php';
 if ($config['debug']) {
-    $loader = require __DIR__.'/../app/autoload.php';
     Debug::enable();
 } else {
-    $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+    include_once __DIR__.'/../app/bootstrap.php.cache';
 }
-
-require_once __DIR__.'/../app/AppKernel.php';
 
 $kernel = new AppKernel($config['env'], $config['debug']);
 $kernel->loadClassCache();
