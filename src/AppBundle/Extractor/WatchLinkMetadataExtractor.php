@@ -3,7 +3,6 @@
 namespace AppBundle\Extractor;
 
 use AppBundle\Entity\Repository\TagRepository;
-use AppBundle\Entity\Tag;
 use AppBundle\Entity\WatchLink;
 use AppBundle\Fetcher\Fetcher;
 use Symfony\Component\DomCrawler\Crawler;

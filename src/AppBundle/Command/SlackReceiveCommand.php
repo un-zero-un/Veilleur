@@ -46,7 +46,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
         } catch (NoResultException $e) {
             $io->error('No message found in base, you should import first.');
 
-            exit;
+            return;
         }
 
         $slack     = $this->container->get('slack.api');
@@ -64,7 +64,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             $ws->close();
             $io->comment('Exiting.');
 
-            exit;
+            return;
         };
 
         foreach ([SIGTERM, SIGINT, SIGQUIT, SIGHUP] as $sig) {
