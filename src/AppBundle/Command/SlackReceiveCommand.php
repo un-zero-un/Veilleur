@@ -5,7 +5,7 @@ declare(ticks = 1);
 namespace AppBundle\Command;
 
 use AppBundle\Entity\ProcessedSlackMessage;
-use AppBundle\Specification\Andx;
+use AppBundle\Specification\AndX;
 use AppBundle\Specification\IsHumanMessage;
 use AppBundle\Specification\IsInChannel;
 use AppBundle\Specification\IsNotOld;
@@ -121,7 +121,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
 
         $data = json_decode($message);
 
-        if (!(new Andx(
+        if (!(new AndX(
             new IsSlackMessage(),
             new IsHumanMessage(),
             new IsInChannel($channelId),

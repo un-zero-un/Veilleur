@@ -5,7 +5,7 @@ namespace AppBundle\Specification;
 /**
  * @author Yohan Giarelli <yohan@giarel.li>
  */
-class Andx implements Specification
+class AndX implements Specification
 {
     /**
      * @var Specification[]

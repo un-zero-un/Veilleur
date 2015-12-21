@@ -3,7 +3,7 @@
 namespace AppBundle\Command;
 
 use AppBundle\Entity\ProcessedSlackMessage;
-use AppBundle\Specification\Andx;
+use AppBundle\Specification\AndX;
 use AppBundle\Specification\IsHumanMessage;
 use AppBundle\Specification\IsSlackMessage;
 use Doctrine\ORM\NoResultException;
@@ -48,7 +48,7 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
         $io->progressStart(count($messages));
         foreach ($messages as $message) {
             $io->progressAdvance();
-            if (!(new Andx(new IsSlackMessage, new IsHumanMessage))->isSatisfiedBy($message)) {
+            if (!(new AndX(new IsSlackMessage, new IsHumanMessage))->isSatisfiedBy($message)) {
                 continue;
             }
 
