@@ -2,6 +2,8 @@
 
 namespace AppBundle\Extractor;
 
+use AppBundle\Entity\Repository\TagRepository;
+use AppBundle\Entity\Tag;
 use AppBundle\Entity\WatchLink;
 use AppBundle\Fetcher\Fetcher;
 use Symfony\Component\DomCrawler\Crawler;
@@ -17,22 +19,29 @@ class WatchLinkMetadataExtractor
     private $fetcher;
 
     /**
+     * @var TagRepository
+     */
+    private $tagRepository;
+
+    /**
      * @var Crawler
      */
     private $crawler;
 
-    public function __construct(Fetcher $fetcher, Crawler $crawler = null)
+    public function __construct(Fetcher $fetcher, TagRepository $tagRepository, Crawler $crawler = null)
     {
         $this->fetcher = $fetcher;
+        $this->tagRepository = $tagRepository;
         $this->crawler = $crawler ?: new Crawler();
     }
 
     /**
      * @param string $url
+     * @param array  $tags
      *
      * @return WatchLink
      */
-    public function extract($url)
+    public function extract(string $url, array $tags): WatchLink
     {
         $watchLink = new WatchLink;
         $watchLink->setUrl($url);
@@ -43,6 +52,10 @@ class WatchLinkMetadataExtractor
         $watchLink->setName($this->extractTitle());
         $watchLink->setDescription($this->extractDescription());
         $watchLink->setImage($this->extractImage());
+
+        foreach ($tags as $tag) {
+            $watchLink->addTag($this->tagRepository->findOrCreate($tag));
+        }
 
         return $watchLink;
     }

@@ -28,7 +28,7 @@ class WatchLinkController extends ResourceController
         );
         $violations = $this->get('validator')->validate($object);
         if (0 === count($violations)) {
-            $object = $this->get('extractor.watch_link_metadata')->extract($object->getUrl());
+            $object = $this->get('extractor.watch_link_metadata')->extract($object->getUrl(), []);
             $this->getDoctrine()->getManager()->persist($object);
             $this->getDoctrine()->getManager()->flush();
 

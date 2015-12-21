@@ -1,6 +1,8 @@
 <?php
 
 namespace Tests\AppBundle\Extractor;
+use AppBundle\Entity\Repository\TagRepository;
+use AppBundle\Entity\Tag;
 use AppBundle\Entity\WatchLink;
 use AppBundle\Extractor\WatchLinkMetadataExtractor;
 use AppBundle\Fetcher\Fetcher;
@@ -12,20 +14,39 @@ class WatchLinkMetadataExtractorTest extends \PHPUnit_Framework_TestCase
 {
     public function test_it_extracts_metadata()
     {
+        $tags    = ['foo', 'bar', 'baz'];
         $fetcher = $this->prophesize(Fetcher::class);
         $fetcher
             ->fetch('https://foo.bar/baz')
             ->shouldBeCalled()
             ->willReturn(file_get_contents(__FILE__, null, null, __COMPILER_HALT_OFFSET__));
 
-        $extractor = new WatchLinkMetadataExtractor($fetcher->reveal());
+        $tagRepository = $this->prophesize(TagRepository::class);
+        $tagRepository
+            ->findOrCreate('foo')
+            ->shouldBeCalled()
+            ->willReturn(new Tag('foo'));
+        $tagRepository
+            ->findOrCreate('bar')
+            ->shouldBeCalled()
+            ->willReturn(new Tag('bar'));
+        $tagRepository
+            ->findOrCreate('baz')
+            ->shouldBeCalled()
+            ->willReturn(new Tag('baz'));
 
-        $link = $extractor->extract('https://foo.bar/baz');
+        $extractor = new WatchLinkMetadataExtractor($fetcher->reveal(), $tagRepository->reveal());
+
+        $link = $extractor->extract('https://foo.bar/baz', $tags);
         $this->assertInstanceOf(WatchLink::class, $link);
         $this->assertSame('Universal React', $link->getName());
         $this->assertSame('https://foo.bar/baz', $link->getUrl());
         $this->assertSame('Jack Franklin darns the holes left in our applications by exploring how our client-side JavaScript frameworks might also be run on the server to provide universal support for all types of user. How will you react when you see mommy kissing Server Claus?', $link->getDescription());
         $this->assertSame('https://cloud.24ways.org/authors/jackfranklin160.jpg', $link->getImage());
+
+        $this->assertCount(3, $link->getTags());
+        $this->assertInstanceOf(Tag::class, $link->getTags()[0]);
+        $this->assertSame('foo', $link->getTags()[0]->getName());
     }
 }
 

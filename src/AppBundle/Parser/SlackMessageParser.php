@@ -20,12 +20,14 @@ class SlackMessageParser
         [>]?
     ~ix';
 
+    const TAG_PATTERN = '~(\#(?<tag>[\w-]+))~ix';
+
     /**
      * @param string $message
      *
      * @return string
      */
-    public function parse($message)
+    public function parseUrl(string $message): string
     {
         $matches = null;
         if (!preg_match(self::URL_PATTERN, $message, $matches)) {
@@ -41,5 +43,19 @@ class SlackMessageParser
         $url   = str_replace($matches['query'], $query, $url);
 
         return $url;
+    }
+    /**
+     * @param string $message
+     *
+     * @return array
+     */
+    public function parseTags(string $message): array
+    {
+        $matches = null;
+        if (!preg_match_all(self::TAG_PATTERN, $message, $matches)) {
+            return [];
+        }
+
+        return $matches['tag'];
     }
 }

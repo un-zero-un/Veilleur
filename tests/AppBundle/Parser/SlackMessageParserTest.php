@@ -20,23 +20,46 @@ class SlackMessageParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider it_parses_messages_data_provider
+     * @dataProvider it_parses_messages_data_url_provider
      */
-    public function test_it_parses_messages($message, $url)
+    public function test_it_parses_messages_url(string $message, string $url)
     {
-        $this->assertSame($url, $this->parser->parse($message));
+        $this->assertSame($url, $this->parser->parseUrl($message));
     }
 
     /**
-     * @dataProvider      it_throws_exception_for_bad_messages
+     * @dataProvider      it_throws_exception_for_bad_messages_url_provider
      * @expectedException \InvalidArgumentException
      */
-    public function test_it_throws_exception_for_bad_messages($message)
+    public function test_it_throws_exception_for_bad_messages_url(string $message)
     {
-        $this->parser->parse($message);
+        $this->parser->parseUrl($message);
     }
 
-    public function it_parses_messages_data_provider()
+    /**
+     * @dataProvider it_parses_messages_tags_provider
+     */
+    public function test_it_parses_messages_tags(string $message, array $rawTags)
+    {
+        $tags = $this->parser->parseTags($message);
+
+        $this->assertCount(count($rawTags), $tags);
+        foreach ($rawTags as $rawTag) {
+            $found = false;
+            foreach ($tags as $tag) {
+                if ($tag === $rawTag) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                $this->fail('Missing tag ' . $rawTag);
+            }
+        }
+    }
+
+    public function it_parses_messages_data_url_provider()
     {
         return [
             ['https://github.com', 'https://github.com'],
@@ -55,11 +78,19 @@ class SlackMessageParserTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function it_throws_exception_for_bad_messages()
+    public function it_throws_exception_for_bad_messages_url_provider()
     {
         return [
             ['Y’a rien là ?'],
             ['http: que dalle']
+        ];
+    }
+
+    public function it_parses_messages_tags_provider()
+    {
+        return [
+            ['https://developers.google.com/web/updates/2015/11/app-shell?hl=en #worker #service', ['worker', 'service']],
+            ['http://angularjs.blogspot.fr/2015/12/angular-2-beta.html \o/ #angular #js #front-end #framework #release', ['angular', 'js', 'front-end', 'framework', 'release']],
         ];
     }
 }
