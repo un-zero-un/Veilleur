@@ -1,0 +1,17 @@
+language: php
+sudo: false
+php:
+    - 7
+
+before_install:
+  - composer self-update
+
+install:
+  - travis_retry composer install --no-interaction --prefer-source
+
+script:
+  - ./bin/phpunit --coverage-clover=coverage.clover --coverage-text
+
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar; fi
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
