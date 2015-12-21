@@ -1,6 +1,7 @@
 <?php
 
-namespace Tests\AppBundle\Extractor;
+namespace tests\AppBundle\Extractor;
+
 use AppBundle\Entity\Repository\TagRepository;
 use AppBundle\Entity\Tag;
 use AppBundle\Entity\WatchLink;
@@ -14,7 +15,7 @@ class WatchLinkMetadataExtractorTest extends \PHPUnit_Framework_TestCase
 {
     public function test_it_extracts_metadata()
     {
-        $tags    = ['foo', 'bar', 'baz'];
+        $tags = ['foo', 'bar', 'baz'];
         $fetcher = $this->prophesize(Fetcher::class);
         $fetcher
             ->fetch('https://foo.bar/baz')
@@ -49,7 +50,6 @@ class WatchLinkMetadataExtractorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('foo', $link->getTags()[0]->getName());
     }
 }
-
 
 __halt_compiler();
 <!DOCTYPE html>

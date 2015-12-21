@@ -38,8 +38,8 @@ class Tag
 
     public function __construct($name)
     {
-        $this->name       = $name;
-        $this->watchLinks = new ArrayCollection;
+        $this->name = $name;
+        $this->watchLinks = new ArrayCollection();
     }
 
     /**

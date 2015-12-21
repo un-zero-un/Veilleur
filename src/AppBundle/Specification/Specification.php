@@ -2,7 +2,6 @@
 
 namespace AppBundle\Specification;
 
-
 interface Specification
 {
     /**

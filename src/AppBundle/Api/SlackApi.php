@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AppBundle\Api;
 
 use GuzzleHttp\ClientInterface;
@@ -23,7 +22,7 @@ class SlackApi
     public function __construct(ClientInterface $guzzle, $token)
     {
         $this->guzzle = $guzzle;
-        $this->token  = $token;
+        $this->token = $token;
     }
 
     /**

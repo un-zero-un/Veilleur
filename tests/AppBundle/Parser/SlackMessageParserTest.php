@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Parser;
+namespace tests\AppBundle\Parser;
 
 use AppBundle\Parser\SlackMessageParser;
 
@@ -16,7 +16,7 @@ class SlackMessageParserTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->parser = new SlackMessageParser;
+        $this->parser = new SlackMessageParser();
     }
 
     /**
@@ -54,7 +54,7 @@ class SlackMessageParserTest extends \PHPUnit_Framework_TestCase
             }
 
             if (!$found) {
-                $this->fail('Missing tag ' . $rawTag);
+                $this->fail('Missing tag '.$rawTag);
             }
         }
     }
@@ -82,7 +82,7 @@ class SlackMessageParserTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['Y’a rien là ?'],
-            ['http: que dalle']
+            ['http: que dalle'],
         ];
     }
 

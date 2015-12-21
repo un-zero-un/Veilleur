@@ -1,6 +1,6 @@
 <?php
 
-declare(ticks = 1);
+declare (ticks = 1);
 
 namespace AppBundle\Command;
 
@@ -49,9 +49,9 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             return;
         }
 
-        $slack     = $this->container->get('slack.api');
+        $slack = $this->container->get('slack.api');
         $channelId = $slack->findChannelId($this->container->getParameter('slack_web_channel'));
-        $response  = $slack->request('rtm.start');
+        $response = $slack->request('rtm.start');
 
         $io->comment('Socket URL received, connecting…');
 
@@ -60,7 +60,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
         $io->comment('Connected.');
 
         $exit = function ($sig) use ($ws, $io) {
-            $io->comment('Received closing signal ' . $sig);
+            $io->comment('Received closing signal '.$sig);
             $ws->close();
             $io->comment('Exiting.');
 
@@ -85,7 +85,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
                     break;
                 }
 
-                $pingId++;
+                ++$pingId;
             }
         }
 
@@ -132,12 +132,12 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
         }
 
         try {
-            $url       = $this->container->get('parser.slack_message')->parseUrl($data->text);
-            $tags      = $this->container->get('parser.slack_message')->parseTags($data->text);
+            $url = $this->container->get('parser.slack_message')->parseUrl($data->text);
+            $tags = $this->container->get('parser.slack_message')->parseTags($data->text);
             $watchLink = $this->container->get('extractor.watch_link_metadata')->extract($url, $tags);
             $watchLink->setCreatedAt(\DateTime::createFromFormat('U.u', $data->ts));
 
-            $io->note('Parsing ' . $url);
+            $io->note('Parsing '.$url);
 
             $processedMessage = new ProcessedSlackMessage($watchLink->getCreatedAt());
             $this->container->get('doctrine')->getManager()->persist($watchLink);
@@ -148,7 +148,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
                 'Unable to insert watchlink',
                 [
                     'exception' => $e,
-                    'message'   => $data->text,
+                    'message' => $data->text,
                 ]
             );
         }

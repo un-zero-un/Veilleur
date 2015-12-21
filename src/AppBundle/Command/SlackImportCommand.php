@@ -33,14 +33,15 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
         $io->title('Slack import');
         $io->comment('Requesting slack history…');
 
-        $om       = $this->container->get('doctrine')->getManager();
-        $slack    = $this->container->get('slack.api');
-        $args     = ['channel' => $slack->findChannelId($this->container->getParameter('slack_web_channel')), 'count' => 1000];
+        $om = $this->container->get('doctrine')->getManager();
+        $slack = $this->container->get('slack.api');
+        $args = ['channel' => $slack->findChannelId($this->container->getParameter('slack_web_channel')), 'count' => 1000];
 
         try {
             $latest = $om->getRepository(ProcessedSlackMessage::class)->findMostRecent();
             $args['oldest'] = $latest->getDate()->format('U.u');
-        } catch (NoResultException $e) {}
+        } catch (NoResultException $e) {
+        }
 
         $response = $slack->request('channels.history', $args);
 
@@ -48,13 +49,13 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
         $io->progressStart(count($messages));
         foreach ($messages as $message) {
             $io->progressAdvance();
-            if (!(new AndX(new IsSlackMessage, new IsHumanMessage))->isSatisfiedBy($message)) {
+            if (!(new AndX(new IsSlackMessage(), new IsHumanMessage()))->isSatisfiedBy($message)) {
                 continue;
             }
 
             try {
-                $url       = $this->container->get('parser.slack_message')->parseUrl($message->text);
-                $tags      = $this->container->get('parser.slack_message')->parseTags($message->text);
+                $url = $this->container->get('parser.slack_message')->parseUrl($message->text);
+                $tags = $this->container->get('parser.slack_message')->parseTags($message->text);
                 $watchLink = $this->container->get('extractor.watch_link_metadata')->extract($url, $tags);
                 $watchLink->setCreatedAt((new \DateTime())->setTimestamp($message->ts));
 
@@ -66,7 +67,7 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
                     'Unable to insert watchlink',
                     [
                         'exception' => $e,
-                        'message'   => $message->text,
+                        'message' => $message->text,
                     ]
                 );
             }

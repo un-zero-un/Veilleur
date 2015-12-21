@@ -30,7 +30,7 @@ class WatchLink extends Thing
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
-        $this->tags = new ArrayCollection;
+        $this->tags = new ArrayCollection();
     }
 
     /**

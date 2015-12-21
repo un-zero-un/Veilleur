@@ -13,10 +13,10 @@ class IsNotOldTest extends \PHPUnit_Framework_TestCase
     {
         $message = new \stdClass();
         $message->ts = (new \DateTime('+1 month'))->format('U.u');
-        $this->assertTrue((new IsNotOld(new \DateTime))->isSatisfiedBy($message));
+        $this->assertTrue((new IsNotOld(new \DateTime()))->isSatisfiedBy($message));
 
         $message = new \stdClass();
         $message->ts = (new \DateTime('-1 month'))->format('U.u');
-        $this->assertFalse((new IsNotOld(new \DateTime))->isSatisfiedBy($message));
+        $this->assertFalse((new IsNotOld(new \DateTime()))->isSatisfiedBy($message));
     }
 }

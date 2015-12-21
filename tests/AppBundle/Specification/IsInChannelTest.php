@@ -15,7 +15,6 @@ class IsInChannelTest extends \PHPUnit_Framework_TestCase
         $message->channel = 'foobar';
         $this->assertTrue((new IsInChannel('foobar'))->isSatisfiedBy($message));
 
-
         $message = new \stdClass();
         $message->channel = 'bazqux';
         $this->assertFalse((new IsInChannel('foobar'))->isSatisfiedBy($message));

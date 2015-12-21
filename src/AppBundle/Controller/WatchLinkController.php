@@ -17,8 +17,8 @@ class WatchLinkController extends ResourceController
      */
     public function discoverAction(Request $request)
     {
-        $resource   = $this->getResource($request);
-        $object     = $this->get('serializer')->deserialize(
+        $resource = $this->getResource($request);
+        $object = $this->get('serializer')->deserialize(
             $request->getContent(),
             $resource->getEntityClass(),
             'json-ld',
