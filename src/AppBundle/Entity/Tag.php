@@ -32,7 +32,7 @@ class Tag
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\WatchLink", mappedBy="tags")
      *
-     * @var WatchLink[]
+     * @var ArrayCollection<WatchLink>
      */
     private $watchLinks;
 

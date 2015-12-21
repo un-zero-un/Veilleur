@@ -23,7 +23,7 @@ class WatchLink extends Thing
      *     inverseJoinColumns={@ORM\JoinColumn(name="tag_id")}
      * )
      *
-     * @var Tag[]
+     * @var ArrayCollection<Tag>
      */
     private $tags;
 
