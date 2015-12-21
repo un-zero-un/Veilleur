@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Dunglas\ApiBundle\Annotation\Iri;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -27,6 +28,7 @@ abstract class Thing
     /**
      * @var string A short description of the item.
      *
+     * @Groups({"WatchLink"})
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
      * @Iri("https://schema.org/description")
@@ -35,6 +37,7 @@ abstract class Thing
     /**
      * @var string An image of the item. This can be a [URL](http://schema.org/URL) or a fully described [ImageObject](http://schema.org/ImageObject).
      *
+     * @Groups({"WatchLink"})
      * @ORM\Column(nullable=true)
      * @Assert\Url
      * @Iri("https://schema.org/image")
@@ -43,6 +46,7 @@ abstract class Thing
     /**
      * @var string The name of the item.
      *
+     * @Groups({"WatchLink"})
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
      * @Iri("https://schema.org/name")
@@ -51,16 +55,17 @@ abstract class Thing
     /**
      * @var string URL of the item.
      *
+     * @Groups({"WatchLink"})
      * @ORM\Column
      * @Assert\Url
      * @Assert\NotBlank
-     *
      * @Iri("https://schema.org/url")
      */
     private $url;
     /**
      * @var \DateTime
      *
+     * @Groups({"WatchLink"})
      * @ORM\Column(type="datetime", name="created_at")
      * @Assert\DateTime
      * @Assert\NotNull
