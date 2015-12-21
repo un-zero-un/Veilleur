@@ -2,7 +2,11 @@
 
 namespace AppBundle\Command;
 
-use GuzzleHttp\Exception\ClientException;
+use AppBundle\Entity\ProcessedSlackMessage;
+use AppBundle\Specification\Andx;
+use AppBundle\Specification\IsHumanMessage;
+use AppBundle\Specification\IsSlackMessage;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,20 +33,22 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
         $io->title('Slack import');
         $io->comment('Requesting slack history…');
 
-        $response = $this->sendSlackRequest(
-            'channels.history',
-            ['channel' => $this->getChannelId(), 'count' => 1000]
-        );
+        $om       = $this->container->get('doctrine')->getManager();
+        $slack    = $this->container->get('slack.api');
+        $args     = ['channel' => $slack->findChannelId($this->container->getParameter('slack_web_channel')), 'count' => 1000];
+
+        try {
+            $latest = $om->getRepository(ProcessedSlackMessage::class)->findMostRecent();
+            $args['oldest'] = $latest->getDate()->format('U.u');
+        } catch (NoResultException $e) {}
+
+        $response = $slack->request('channels.history', $args);
 
         $messages = json_decode($response)->messages;
         $io->progressStart(count($messages));
         foreach ($messages as $message) {
             $io->progressAdvance();
-            if (isset($message->bot_id)) {
-                continue;
-            }
-
-            if (!isset($message->text)) {
+            if (!(new Andx(new IsSlackMessage, new IsHumanMessage))->isSatisfiedBy($message)) {
                 continue;
             }
 
@@ -51,7 +57,9 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
                 $watchLink = $this->container->get('extractor.watch_link_metadata')->extract($url);
                 $watchLink->setCreatedAt((new \DateTime())->setTimestamp($message->ts));
 
-                $this->container->get('doctrine')->getManager()->persist($watchLink);
+                $processedMessage = new ProcessedSlackMessage($watchLink->getCreatedAt());
+                $om->persist($processedMessage);
+                $om->persist($watchLink);
             } catch (\InvalidArgumentException $e) {
                 $this->container->get('logger')->addNotice(
                     'Unable to insert watchlink',
@@ -66,38 +74,8 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
 
         $io->comment('Flush links…');
 
-        $this->container->get('doctrine')->getManager()->flush();
+        $om->flush();
 
         $io->comment('Done.');
-    }
-
-    private function getChannelId()
-    {
-        $response = $this->sendSlackRequest('channels.list');
-
-        foreach (json_decode($response)->channels as $channel) {
-            if ($channel->name === $this->container->getParameter('slack_web_channel')) {
-                return $channel->id;
-            }
-        }
-
-        throw new \RuntimeException('No channel found');
-    }
-
-    /**
-     * @param string $method
-     * @param array  $args
-     *
-     * @return string
-     */
-    private function sendSlackRequest($method, array $args = [])
-    {
-        $url = sprintf(
-            'https://slack.com/api/%s?%s',
-            $method,
-            http_build_query(array_merge(['token' => $this->container->getParameter('slack_web_api_token')], $args))
-        );
-
-        return $this->container->get('guzzle.client')->request('GET', $url)->getBody()->getContents();
     }
 }

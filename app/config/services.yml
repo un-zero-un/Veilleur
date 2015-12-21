@@ -18,3 +18,7 @@ services:
 
     parser.slack_message:
         class: AppBundle\Parser\SlackMessageParser
+
+    slack.api:
+        class:     AppBundle\Api\SlackApi
+        arguments: [ '@guzzle.client', '%slack_web_api_token%' ]
