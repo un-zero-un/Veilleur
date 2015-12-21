@@ -13,7 +13,7 @@ mysql:
     environment:  { MYSQL_ROOT_PASSWORD: root }
 
 apache:
-    image:        unzeroun/apache
+    build:        docker/apache
     volumes_from: [ data      ]
     links:        [ fpm       ]
     ports:        [ '80:80' ]
