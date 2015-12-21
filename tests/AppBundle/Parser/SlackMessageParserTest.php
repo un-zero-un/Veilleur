@@ -91,6 +91,8 @@ class SlackMessageParserTest extends \PHPUnit_Framework_TestCase
         return [
             ['https://developers.google.com/web/updates/2015/11/app-shell?hl=en #worker #service', ['worker', 'service']],
             ['http://angularjs.blogspot.fr/2015/12/angular-2-beta.html \o/ #angular #js #front-end #framework #release', ['angular', 'js', 'front-end', 'framework', 'release']],
+            ['http://ionicframework.com/docs/components/#header', []],
+            ['http://ionicframework.com/docs/components/#header #foobar', ['foobar']],
         ];
     }
 }

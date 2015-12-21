@@ -20,7 +20,7 @@ class SlackMessageParser
         [>]?
     ~ix';
 
-    const TAG_PATTERN = '~(\#(?<tag>[\w-]+))~ix';
+    const TAG_PATTERN = '~(\s\#(?<tag>[\w-]+))~ix';
 
     /**
      * @param string $message

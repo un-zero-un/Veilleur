@@ -39,3 +39,8 @@ services:
                     - "@resource.watch_link.collection_operation.post"
                     - "@resource.watch_link.collection_operation.discover"
 
+    resource.tag:
+        parent:    'api.resource'
+        arguments: [ 'AppBundle\Entity\Tag' ]
+        tags:      [ { name: 'api.resource' } ]
+
