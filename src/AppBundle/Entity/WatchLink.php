@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
@@ -22,6 +23,8 @@ class WatchLink extends Thing
      *     joinColumns={@ORM\JoinColumn(name="watch_link_id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="tag_id")}
      * )
+     *
+     * @Groups({"WatchLink"})
      *
      * @var ArrayCollection<Tag>
      */

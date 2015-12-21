@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\TagRepository")
@@ -24,6 +25,7 @@ class Tag
 
     /**
      * @ORM\Column(type="string", unique=true)
+     * @Groups({"WatchLink"})
      *
      * @var string
      */

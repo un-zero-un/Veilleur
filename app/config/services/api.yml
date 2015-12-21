@@ -38,6 +38,8 @@ services:
                     - "@resource.watch_link.collection_operation.get"
                     - "@resource.watch_link.collection_operation.post"
                     - "@resource.watch_link.collection_operation.discover"
+            - method:    "initNormalizationContext"
+              arguments: [ { groups: [ "WatchLink" ] } ]
 
     resource.tag:
         parent:    'api.resource'
