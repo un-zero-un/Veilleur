@@ -21,7 +21,7 @@ class TagRepository extends EntityRepository
     public function findOrCreate(string $name): Tag
     {
         try {
-            $this->createQueryBuilder('t')
+            return $this->createQueryBuilder('t')
                 ->where('t.name = :name')
                 ->setParameter('name', $name)
                 ->setMaxResults(1)
