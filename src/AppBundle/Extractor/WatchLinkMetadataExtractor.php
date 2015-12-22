@@ -69,7 +69,7 @@ class WatchLinkMetadataExtractor
         }
 
         if (0 !== count($this->crawler->filter('[name="twitter:title"]'))) {
-            return $this->crawler->filter('[property="og:title"]')->attr('content');
+            return $this->crawler->filter('[property="twitter:title"]')->attr('content');
         }
 
         if (0 !== count($this->crawler->filter('title'))) {
