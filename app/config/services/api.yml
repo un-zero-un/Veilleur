@@ -30,6 +30,10 @@ services:
         parent:    "api.doctrine.orm.order_filter"
         arguments: [ { "createdAt": ~ } ]
 
+    resource.watch_link.tag_filter:
+        class:     AppBundle\Filter\TagFilter
+        arguments: ["@doctrine"]
+
     resource.watch_link:
         parent:    'api.resource'
         arguments: [ 'AppBundle\Entity\WatchLink' ]
@@ -44,7 +48,7 @@ services:
             - method:    "initNormalizationContext"
               arguments: [ { groups: [ "WatchLink" ] } ]
             - method:    "initFilters"
-              arguments: [ [ "@resource.watch_link.order_filter" ] ]
+              arguments: [ [ "@resource.watch_link.order_filter", "@resource.watch_link.tag_filter" ] ]
 
     resource.tag:
         parent:    'api.resource'
