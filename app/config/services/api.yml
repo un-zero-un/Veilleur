@@ -11,7 +11,6 @@ services:
         factory:   [ "@api.operation_factory", "createCollectionOperation" ]
         arguments: [ "@resource.watch_link", "POST" ]
 
-
     resource.watch_link.collection_operation.discover:
         class:   'Dunglas\ApiBundle\Api\Operation\Operation'
         public:  false
@@ -27,6 +26,10 @@ services:
                  "hydra:title": "Creates a watch link by discovery"
                  "returns":     "xmls:string"
 
+    resource.watch_link.order_filter:
+        parent:    "api.doctrine.orm.order_filter"
+        arguments: [ { "createdAt": ~ } ]
+
     resource.watch_link:
         parent:    'api.resource'
         arguments: [ 'AppBundle\Entity\WatchLink' ]
@@ -40,6 +43,8 @@ services:
                     - "@resource.watch_link.collection_operation.discover"
             - method:    "initNormalizationContext"
               arguments: [ { groups: [ "WatchLink" ] } ]
+            - method:    "initFilters"
+              arguments: [ [ "@resource.watch_link.order_filter" ] ]
 
     resource.tag:
         parent:    'api.resource'
