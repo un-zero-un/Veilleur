@@ -62,6 +62,9 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
                 $processedMessage = new ProcessedSlackMessage($watchLink->getCreatedAt());
                 $om->persist($processedMessage);
                 $om->persist($watchLink);
+
+                // Flush required at each round for tags unicity
+                $om->flush();
             } catch (\InvalidArgumentException $e) {
                 $this->container->get('logger')->addNotice(
                     'Unable to insert watchlink',
@@ -75,8 +78,6 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
         $io->progressFinish();
 
         $io->comment('Flush links…');
-
-        $om->flush();
 
         $io->comment('Done.');
     }
