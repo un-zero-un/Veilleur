@@ -20,7 +20,7 @@
         "sensio/distribution-bundle": "~5.0",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "dunglas/api-bundle": "~1.0",
+        "dunglas/api-bundle": "^1.1@dev",
         "nelmio/cors-bundle": "~1.4",
         "nelmio/api-doc-bundle": "~2.9",
         "symfony/proxy-manager-bridge": "~2.8",

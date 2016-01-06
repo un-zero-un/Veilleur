@@ -20,6 +20,7 @@ framework:
     session:
         handler_id:  ~
         save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+        name: veilleur
     fragments:       ~
     http_method_override: true
     assets: ~
