@@ -13,6 +13,6 @@ parameters:
     cors_allow_origin: 'http://localhost'
     api_name: 'Veilleur API'
     api_description: 'API to interact with veilleur'
-    secret: ThisTokenIsNotSoSecretChangeIt
+    secret: THis-IS_the_secr3t-OF-veilleur
     slack_web_api_token: null
     slack_web_channel: null
