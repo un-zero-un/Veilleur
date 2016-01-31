@@ -54,9 +54,10 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
             }
 
             try {
-                $url = $this->container->get('parser.slack_message')->parseUrl($message->text);
-                $tags = $this->container->get('parser.slack_message')->parseTags($message->text);
+                $url       = $this->container->get('parser.slack_message')->parseUrl($message->text);
+                $tags      = $this->container->get('parser.slack_message')->parseTags($message->text);
                 $watchLink = $this->container->get('extractor.watch_link_metadata')->extract($url, $tags);
+
                 $watchLink->setCreatedAt((new \DateTime())->setTimestamp($message->ts));
 
                 $processedMessage = new ProcessedSlackMessage($watchLink->getCreatedAt());
@@ -71,6 +72,14 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
                     [
                         'exception' => $e,
                         'message' => $message->text,
+                    ]
+                );
+            } catch (\Exception $e) {
+                $this->container->get('logger')->addError(
+                    'Unknow exception',
+                    [
+                        'exception' => $e,
+                        'message'   => $message->text,
                     ]
                 );
             }

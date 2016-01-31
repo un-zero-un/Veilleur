@@ -132,8 +132,8 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
         }
 
         try {
-            $url = $this->container->get('parser.slack_message')->parseUrl($data->text);
-            $tags = $this->container->get('parser.slack_message')->parseTags($data->text);
+            $url       = $this->container->get('parser.slack_message')->parseUrl($data->text);
+            $tags      = $this->container->get('parser.slack_message')->parseTags($data->text);
             $watchLink = $this->container->get('extractor.watch_link_metadata')->extract($url, $tags);
             $watchLink->setCreatedAt(\DateTime::createFromFormat('U.u', $data->ts));
 
@@ -149,6 +149,14 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
                 [
                     'exception' => $e,
                     'message' => $data->text,
+                ]
+            );
+        } catch (\Exception $e) {
+            $this->container->get('logger')->addError(
+                'Unknow exception',
+                [
+                    'exception' => $e,
+                    'message'   => $data->text,
                 ]
             );
         }

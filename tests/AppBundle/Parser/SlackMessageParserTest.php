@@ -75,6 +75,7 @@ class SlackMessageParserTest extends \PHPUnit_Framework_TestCase
             ['<https://twitter.com/francoisz/status/677114293524021250> #api #standard', 'https://twitter.com/francoisz/status/677114293524021250'],
             ['http://www.pantone.com/pages/fcr/?season=Spring&amp;year=2016&amp;from=topNav', 'http://www.pantone.com/pages/fcr/?season=Spring&year=2016&from=topNav'],
             ['<https://www.un-zero-un.fr>', 'https://www.un-zero-un.fr'],
+            ['<http://magento-elastic-suite.io/|magento-elastic-suite.io/> #magento #e-commerce', 'http://magento-elastic-suite.io/']
         ];
     }
 

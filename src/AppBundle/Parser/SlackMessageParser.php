@@ -11,9 +11,9 @@ class SlackMessageParser
         [<]?
         (?<url>
             (?<scheme>(http)|(https))://  # Matches the scheme, http or https
-            (?<host>[^\s/>]+)              # Matches the host, could be anything but / or space
+            (?<host>[^\s|/>]+)              # Matches the host, could be anything but / or space
             (?<port>:\d+)?                # Matches the port, should be a digit
-            (?<path>(/[^\s/#>?]*))*       # Matches the path, could be anything but / or space
+            (?<path>(/[^|\s/#>?]*))*       # Matches the path, could be anything but / or space
             (?<query>\?[^?#>\s]*)?        # Matches the query, could be anything but / or space
             (?<anchor>(\#[^\s>]*))?       # Matches the anchor, could be anything but # or space
         )
