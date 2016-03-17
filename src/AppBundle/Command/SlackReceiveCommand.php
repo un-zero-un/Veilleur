@@ -12,6 +12,7 @@ use AppBundle\Specification\IsNotOld;
 use AppBundle\Specification\IsOriginalMessage;
 use AppBundle\Specification\IsSlackMessage;
 use AppBundle\Websocket\Client;
+use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -151,6 +152,16 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
                     'message' => $data->text,
                 ]
             );
+        } catch (DriverException $e) {
+            $this->container->get('logger')->addError(
+                'Database exception',
+                [
+                    'exception' => $e,
+                    'message'   => $data->text,
+                ]
+            );
+
+            exit(1);
         } catch (\Exception $e) {
             $this->container->get('logger')->addError(
                 'Unknow exception',
