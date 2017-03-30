@@ -36,13 +36,13 @@ class WatchLink extends Thing
      *
      * @var bool
      */
-    private $overriden;
+    private $overridden;
 
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
-        $this->tags = new ArrayCollection();
-        $this->overriden = false;
+        $this->tags       = new ArrayCollection();
+        $this->overridden = false;
     }
 
     /**
@@ -61,8 +61,8 @@ class WatchLink extends Thing
     /**
      * @return bool
      */
-    public function isOverriden(): bool
+    public function isOverridden()
     {
-        return $this->overriden;
+        return $this->overridden;
     }
 }
