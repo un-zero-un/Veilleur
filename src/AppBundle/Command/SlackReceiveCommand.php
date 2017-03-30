@@ -5,6 +5,7 @@ declare (ticks = 1);
 namespace AppBundle\Command;
 
 use AppBundle\Entity\ProcessedSlackMessage;
+use AppBundle\Entity\WatchLink;
 use AppBundle\Specification\AndX;
 use AppBundle\Specification\IsHumanMessage;
 use AppBundle\Specification\IsInChannel;
@@ -13,6 +14,7 @@ use AppBundle\Specification\IsOriginalMessage;
 use AppBundle\Specification\IsSlackMessage;
 use AppBundle\Websocket\Client;
 use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,9 +52,9 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             return;
         }
 
-        $slack = $this->container->get('slack.api');
+        $slack     = $this->container->get('slack.api');
         $channelId = $slack->findChannelId($this->container->getParameter('slack_web_channel'));
-        $response = $slack->request('rtm.start');
+        $response  = $slack->request('rtm.start');
 
         $io->comment('Socket URL received, connecting…');
 
@@ -61,7 +63,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
         $io->comment('Connected.');
 
         $exit = function ($sig) use ($ws, $io) {
-            $io->comment('Received closing signal '.$sig);
+            $io->comment('Received closing signal ' . $sig);
             $ws->close();
             $io->comment('Exiting.');
 
@@ -128,7 +130,8 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             new IsInChannel($channelId),
             new IsOriginalMessage(),
             new IsNotOld($latest->getDate())
-        ))->isSatisfiedBy($data)) {
+        ))->isSatisfiedBy($data)
+        ) {
             return;
         }
 
@@ -140,18 +143,22 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             $watchLink = $this->container->get('extractor.watch_link_metadata')->extract($url, $tags);
             $watchLink->setCreatedAt(\DateTime::createFromFormat('U.u', $data->ts));
 
-            $io->note('Parsing '.$url);
+            $io->note('Parsing ' . $url);
 
+            /** @var EntityManager $em */
+            $em               = $this->container->get('doctrine')->getManager();
             $processedMessage = new ProcessedSlackMessage($watchLink->getCreatedAt());
-            $this->container->get('doctrine')->getManager()->persist($watchLink);
-            $this->container->get('doctrine')->getManager()->persist($processedMessage);
-            $this->container->get('doctrine')->getManager()->flush();
+
+            $em->transactional(function() use ($em, $watchLink, $processedMessage) {
+                $em->getRepository(WatchLink::class)->declare($watchLink);
+                $em->persist($processedMessage);
+            });
         } catch (\InvalidArgumentException $e) {
             $this->container->get('logger')->addNotice(
                 'Unable to insert watchlink',
                 [
                     'exception' => $e,
-                    'message' => $data->text,
+                    'message'   => $data->text,
                 ]
             );
         } catch (DriverException $e) {
