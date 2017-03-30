@@ -4,6 +4,7 @@ declare (ticks = 1);
 
 namespace AppBundle\Command;
 
+use AppBundle\Api\SlackApi;
 use AppBundle\Entity\ProcessedSlackMessage;
 use AppBundle\Entity\WatchLink;
 use AppBundle\Specification\AndX;
@@ -52,6 +53,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             return;
         }
 
+        /** @var SlackApi $slack */
         $slack     = $this->container->get('slack.api');
         $channelId = $slack->findChannelId($this->container->getParameter('slack_web_channel'));
         $response  = $slack->request('rtm.start');
@@ -104,7 +106,23 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
     private function receive(Client $ws, $channelId, SymfonyStyle $io, ProcessedSlackMessage $latest)
     {
         while (true) {
-            $this->processMessage($ws->receive(), $channelId, $io, $latest);
+            /** @var WatchLink $watchLink */
+            $watchLink = $this->processMessage($ws->receive(), $channelId, $io, $latest);
+
+            if (null === $watchLink) {
+                continue;
+            }
+
+            $ws->send(
+                json_encode(
+                    [
+                        'id'      => $watchLink->getId(),
+                        'type'    => 'message',
+                        'channel' => $channelId,
+                        'text'    => 'Message reçu et enregistré. (Id : ' . $watchLink->getId() . ')',
+                    ]
+                )
+            );
 
             sleep(1);
         }
@@ -149,10 +167,12 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             $em               = $this->container->get('doctrine')->getManager();
             $processedMessage = new ProcessedSlackMessage($watchLink->getCreatedAt());
 
-            $em->transactional(function() use ($em, $watchLink, $processedMessage) {
+            $em->transactional(function () use ($em, $watchLink, $processedMessage) {
                 $em->getRepository(WatchLink::class)->declare($watchLink);
                 $em->persist($processedMessage);
             });
+
+            return $watchLink;
         } catch (\InvalidArgumentException $e) {
             $this->container->get('logger')->addNotice(
                 'Unable to insert watchlink',

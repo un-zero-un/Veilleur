@@ -14,7 +14,7 @@ class WatchLinkRepository extends EntityRepository
     {
         $this->createQueryBuilder('w')
             ->update()
-            ->set('w.overriden', true)
+            ->set('w.overridden', true)
             ->where('w.url = :url')
             ->setParameter('url', $watchLink->getUrl())
             ->getQuery()
