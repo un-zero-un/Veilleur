@@ -132,6 +132,8 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             return;
         }
 
+        $io->writeln('Received message : ' . $data->text);
+
         try {
             $url       = $this->container->get('parser.slack_message')->parseUrl($data->text);
             $tags      = $this->container->get('parser.slack_message')->parseTags($data->text);

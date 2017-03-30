@@ -12,8 +12,8 @@ mysql:
     volumes_from: [ data ]
     environment:  { MYSQL_ROOT_PASSWORD: root }
 
-apache:
-    build:        docker/apache
+nginx:
+    image:        unzeroun/nginx
     volumes_from: [ data      ]
     links:        [ fpm       ]
     ports:        [ '80:80' ]
