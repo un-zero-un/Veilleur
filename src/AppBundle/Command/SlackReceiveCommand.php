@@ -211,6 +211,6 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
     {
         $data = json_decode($message);
 
-        return 'pong' === $data->type;
+        return isset($data->type) && 'pong' === $data->type;
     }
 }
