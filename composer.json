@@ -23,14 +23,12 @@
         "dunglas/api-bundle": "^1.1@dev",
         "nelmio/cors-bundle": "~1.4",
         "nelmio/api-doc-bundle": "~2.9",
-        "symfony/proxy-manager-bridge": "~2.8",
         "guzzlehttp/guzzle": "^6.1",
         "bramus/monolog-colored-line-formatter": "^2.0",
         "textalk/websocket": "^1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
-        "api-platform/schema-generator": "dev-master@dev",
         "phpunit/phpunit": "^5.1"
     },
     "scripts": {
