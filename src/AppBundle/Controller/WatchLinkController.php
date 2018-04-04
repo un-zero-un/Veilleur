@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use Dunglas\ApiBundle\Controller\ResourceController;
+//use Dunglas\ApiBundle\Controller\ResourceController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Yohan Giarelli <yohan@giarel.li>
  */
-class WatchLinkController extends ResourceController
+class WatchLinkController //extends ResourceController
 {
     /**
      * @param Request $request

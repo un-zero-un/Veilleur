@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Dunglas\ApiBundle\Annotation\Iri;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @see http://schema.org/Thing Documentation on Schema.org
  *
  * @ORM\MappedSuperclass
- * @Iri("http://schema.org/Thing")
+ * //Iri("http://schema.org/Thing")
  */
 abstract class Thing
 {
@@ -31,7 +30,7 @@ abstract class Thing
      * @Groups({"WatchLink"})
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
-     * @Iri("https://schema.org/description")
+     * //Iri("https://schema.org/description")
      */
     private $description;
     /**
@@ -40,7 +39,7 @@ abstract class Thing
      * @Groups({"WatchLink"})
      * @ORM\Column(nullable=true)
      * @Assert\Url
-     * @Iri("https://schema.org/image")
+     * //Iri("https://schema.org/image")
      */
     private $image;
     /**
@@ -49,7 +48,7 @@ abstract class Thing
      * @Groups({"WatchLink"})
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
-     * @Iri("https://schema.org/name")
+     * //Iri("https://schema.org/name")
      */
     private $name;
     /**
@@ -59,7 +58,7 @@ abstract class Thing
      * @ORM\Column
      * @Assert\Url
      * @Assert\NotBlank
-     * @Iri("https://schema.org/url")
+     * //Iri("https://schema.org/url")
      */
     private $url;
     /**
