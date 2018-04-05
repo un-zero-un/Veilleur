@@ -24,3 +24,9 @@ services:
     slack.api:
         class:     AppBundle\Api\SlackApi
         arguments: [ '@guzzle.client', '%slack_web_api_token%' ]
+
+    'AppBundle\Filter\TagFilter':
+        arguments: ["@doctrine"]
+
+    'AppBundle\Filter\OverriddenFilter':
+        arguments: ["@doctrine"]

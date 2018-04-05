@@ -2,37 +2,47 @@
 
 namespace AppBundle\Filter;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
-use Dunglas\ApiBundle\Api\ResourceInterface;
-use Dunglas\ApiBundle\Doctrine\Orm\Filter\AbstractFilter;
+use Symfony\Component\Config\Resource\ResourceInterface;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @author Yohan Giarelli <yohan@giarel.li>
  */
 class TagFilter extends AbstractFilter
 {
+	public function __construct(ManagerRegistry $doctrine, RequestStack $requestStack)
+	{
+		parent::__construct($doctrine, $requestStack, null, ['tags' => null]);
+	}
+
     /**
      * {@inheritdoc}
      */
-    public function apply(ResourceInterface $resource, QueryBuilder $queryBuilder, Request $request)
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
     {
-        if (!$request->query->has('tags')) {
-            return;
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request->query->has('tags'))
+             return;
+
+
+        foreach ($value as $i => $tag)
+        {
+            $queryBuilder->innerJoin($queryBuilder->getRootAliases()[0] . '.tags', 't' . $i)
+                         ->andWhere('t' . $i . '.name = :name_' . $i)
+                         ->setParameter('name_' . $i, $tag);
         }
 
-        foreach ($request->query->get('tags') as $i => $tag) {
-            $queryBuilder
-                ->innerJoin($queryBuilder->getRootAliases()[0] . '.tags', 't'.$i)
-                ->andWhere('t'.$i.'.name = :name_' . $i)
-                ->setParameter('name_' . $i, $tag);
-        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDescription(ResourceInterface $resource)
+    public function getDescription(string $resource): array
     {
         return [
             'tags[]' => [

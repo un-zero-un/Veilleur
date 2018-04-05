@@ -56,3 +56,7 @@ nelmio_cors:
         max_age:       3600
     paths:
         '^/': ~
+
+api_platform:
+  title: "%api_name%"
+  description: "%api_description%"

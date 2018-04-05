@@ -6,6 +6,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use AppBundle\Filter\TagFilter;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\WatchLinkRepository")
@@ -15,6 +19,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  *
  * @author Yohan Giarelli <yohan@giarel.li>
+ * @ApiResource(
+ * 	attributes={
+ * 		"normalization_context"={"groups"={"WatchLink"}}
+ * 	},
+ * )
+ * @ApiFilter(OrderFilter::class, properties={"createdAt"}, arguments={"orderParameterName"="order"})
+ * @ApiFilter(TagFilter::class)
  */
 class WatchLink extends Thing
 {

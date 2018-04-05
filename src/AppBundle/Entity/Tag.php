@@ -5,12 +5,21 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\TagRepository")
  * @ORM\Table(name="tag", indexes={@ORM\Index(name="name_idx", columns={"name"})})
  *
  * @author Yohan Giarelli <yohan@giarel.li>
+ * @ApiResource(
+ * 	collectionOperations={"get"},
+ * 	itemOperations={"get"}
+ * )
+ * @ApiFilter(DateFilter::class, properties={"createdAt"})
  */
 class Tag
 {
