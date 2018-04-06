@@ -26,7 +26,7 @@ services:
         arguments: [ '@guzzle.client', '%slack_web_api_token%' ]
 
     'AppBundle\Filter\TagFilter':
-        arguments: ["@doctrine"]
+        arguments: ["@doctrine", '@request_stack']
 
     'AppBundle\Filter\OverriddenFilter':
-        arguments: ["@doctrine"]
+        arguments: ["@doctrine", '@request_stack']

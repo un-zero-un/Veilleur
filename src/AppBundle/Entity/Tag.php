@@ -19,7 +19,6 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
  * 	collectionOperations={"get"},
  * 	itemOperations={"get"}
  * )
- * @ApiFilter(DateFilter::class, properties={"createdAt"})
  */
 class Tag
 {
