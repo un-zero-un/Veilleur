@@ -24,11 +24,13 @@ class OverriddenFilter extends AbstractFilter
 	 */
 	protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
 	{
+		$bool = filter_var($value, FILTER_VALIDATE_BOOLEAN);
 		if ($resourceClass !== WatchLink::class || $property !== "overridden")
 			return;
 
+
 		$queryBuilder->andWhere($queryBuilder->getRootAliases()[0] . '.overridden = :val')
-					 ->setParameter("val", $value);
+					 ->setParameter("val", $bool);
 	}
 
 	/**
