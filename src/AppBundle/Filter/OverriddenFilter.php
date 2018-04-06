@@ -14,36 +14,37 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class OverriddenFilter extends AbstractFilter
 {
-	public function __construct(ManagerRegistry $doctrine, RequestStack $rs)
-	{
-		parent::__construct($doctrine, $rs, null, ['overridden' => null]);
-	}
+    public function __construct(ManagerRegistry $doctrine, RequestStack $rs)
+    {
+        parent::__construct($doctrine, $rs, null, ['overridden' => null]);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
-	{
-		$bool = filter_var($value, FILTER_VALIDATE_BOOLEAN);
-		if ($resourceClass !== WatchLink::class || $property !== "overridden")
-			return;
+    /**
+     * {@inheritdoc}
+     */
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
+    {
+        $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        if ($resourceClass !== WatchLink::class || $property !== "overridden") {
+            return;
+        }
 
 
-		$queryBuilder->andWhere($queryBuilder->getRootAliases()[0] . '.overridden = :val')
-					 ->setParameter("val", $bool);
-	}
+        $queryBuilder->andWhere($queryBuilder->getRootAliases()[0].'.overridden = :val')
+                     ->setParameter("val", $bool);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getDescription(string $resource): array
-	{
-		return [
-			"overridden" => [
-				"property" => "overridden",
-				"type" => "bool",
-				"required" => false
-			]
-		];
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription(string $resource): array
+    {
+        return [
+            "overridden"   => [
+                "property" => "overridden",
+                "type"     => "bool",
+                "required" => false
+            ]
+        ];
+    }
 }

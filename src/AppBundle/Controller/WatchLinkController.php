@@ -16,27 +16,27 @@ use Symfony\Component\Serializer\Serializer;
 class WatchLinkController extends Controller
 {
 
-	/**
-	 * @Route(
-	 *     name="watchlink_discover",
-	 *     path="/watch_links/discover",
-	 *     methods={"POST"},
-	 *     defaults={
-	 *          "_api_resource_class"=WatchLink::class,
-	 *          "_api_collection_operation_name"="discover"
-	 *     }
-	 * )
-	 */
+    /**
+     * @Route(
+     *     name="watchlink_discover",
+     *     path="/watch_links/discover",
+     *     methods={"POST"},
+     *     defaults={
+     *          "_api_resource_class"=WatchLink::class,
+     *          "_api_collection_operation_name"="discover"
+     *     }
+     * )
+     */
     public function __invoke(Request $rq)
     {
-    	$class = WatchLink::class;
-    	$ctx   = [ "groups" => [ "WatchLink" ] ];
+        $class = WatchLink::class;
+        $ctx   = ["groups" => ["WatchLink"]];
 
 
-	    /** @var Serializer $ser */
-		$ser = $this->get('serializer');
+        /** @var Serializer $ser */
+        $ser = $this->get('serializer');
 
-		/** @var WatchLink $object */
+        /** @var WatchLink $object */
         $object = $ser->deserialize(
             $rq->getContent(),
             $class,
@@ -53,8 +53,8 @@ class WatchLinkController extends Controller
 
             $nrm = $ser->normalize($object, 'jsonld', $ctx);
 
-			return new Response(json_encode($nrm), 201);
+            return new Response(json_encode($nrm), 201);
         }
-	    return new Response(json_encode($ser->normalize($violations, 'hydra-error')), 400);
+        return new Response(json_encode($ser->normalize($violations, 'hydra-error')), 400);
     }
 }

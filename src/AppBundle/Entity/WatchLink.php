@@ -33,51 +33,51 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class WatchLink extends Thing
 {
-	/**
-	 * @ORM\ManyToMany(targetEntity="Tag", inversedBy="watchLinks")
-	 * @ORM\JoinTable(name="watch_link_tag",
-	 *     joinColumns={@ORM\JoinColumn(name="watch_link_id")},
-	 *     inverseJoinColumns={@ORM\JoinColumn(name="tag_id")}
-	 * )
-	 *
-	 * @Groups({"WatchLink"})
-	 *
-	 * @var ArrayCollection<Tag>
-	 */
-	private $tags;
+    /**
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="watchLinks")
+     * @ORM\JoinTable(name="watch_link_tag",
+     *     joinColumns={@ORM\JoinColumn(name="watch_link_id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="tag_id")}
+     * )
+     *
+     * @Groups({"WatchLink"})
+     *
+     * @var ArrayCollection<Tag>
+     */
+    private $tags;
 
-	/**
-	 * @ORM\Column(type="boolean", nullable=false, options={"default": FALSE})
-	 *
-	 * @var bool
-	 */
-	private $overridden;
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default": FALSE})
+     *
+     * @var bool
+     */
+    private $overridden;
 
-	public function __construct()
-	{
-		$this->setCreatedAt(new \DateTime());
-		$this->tags       = new ArrayCollection();
-		$this->overridden = false;
-	}
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTime());
+        $this->tags       = new ArrayCollection();
+        $this->overridden = false;
+    }
 
-	/**
-	 * @return ArrayCollection<Tag>
-	 */
-	public function getTags()
-	{
-		return $this->tags;
-	}
+    /**
+     * @return ArrayCollection<Tag>
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
 
-	public function addTag(Tag $tag)
-	{
-		$this->tags[] = $tag;
-	}
+    public function addTag(Tag $tag)
+    {
+        $this->tags[] = $tag;
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isOverridden()
-	{
-		return $this->overridden;
-	}
+    /**
+     * @return bool
+     */
+    public function isOverridden()
+    {
+        return $this->overridden;
+    }
 }
