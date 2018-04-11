@@ -30,3 +30,6 @@ services:
 
     'AppBundle\Filter\OverriddenFilter':
         arguments: ["@doctrine", '@request_stack']
+
+    'AppBundle\Filter\SearchFilter':
+      arguments: ["@doctrine", "@request_stack"]

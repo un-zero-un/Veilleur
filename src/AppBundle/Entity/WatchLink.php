@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use AppBundle\Filter\OverriddenFilter;
+use AppBundle\Filter\SearchFilter;
 use AppBundle\Filter\TagFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiFilter(OrderFilter::class, properties={"createdAt"}, arguments={"orderParameterName"="order"})
  * @ApiFilter(TagFilter::class)
  * @ApiFilter(OverriddenFilter::class)
+ * @ApiFilter(SearchFilter::class)
  */
 class WatchLink extends Thing
 {

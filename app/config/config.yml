@@ -54,8 +54,12 @@ nelmio_cors:
         allow_methods: ["POST", "PUT", "GET", "DELETE", "OPTIONS"]
         allow_headers: ["content-type", "authorization"]
         max_age:       3600
+        expose_headers: ['Content-Disposition', 'Content-Length', 'Link']
     paths:
-        '^/': ~
+        '^/':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
 
 api_platform:
   title: "%api_name%"
