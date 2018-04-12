@@ -25,8 +25,12 @@ class SearchFilter extends AbstractFilter
             return;
         }
 
-        $queryBuilder->andWhere("UPPER(" . $queryBuilder->getRootAliases()[0] . ".name) LIKE CONCAT('%', UPPER(:search), '%')")
-                     ->setParameter('search', $value);
+        $i = 0;
+        foreach (explode(" ", $value) as $val){
+            $queryBuilder->andWhere("UPPER(" . $queryBuilder->getRootAliases()[0] . ".name) LIKE CONCAT('%', UPPER(:search_" . $i . "), '%')")
+                         ->setParameter('search_' . $i, $val);
+            ++$i;
+        }
     }
 
     public function getDescription(string $resourceClass): array

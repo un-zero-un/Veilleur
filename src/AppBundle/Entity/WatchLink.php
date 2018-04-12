@@ -25,7 +25,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *    itemOperations={"get"},
  *    attributes={
  *        "normalization_context"={"groups"={"WatchLink"}},
- *        "denormalization_context"={"groups"={"WatchLink"}}
+ *        "denormalization_context"={"groups"={"WatchLink"}},
+ *        "order"={"createdAt": "DESC"}
  *    },
  * )
  * @ApiFilter(OrderFilter::class, properties={"createdAt"}, arguments={"orderParameterName"="order"})
