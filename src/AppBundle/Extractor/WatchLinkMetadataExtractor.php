@@ -5,6 +5,8 @@ namespace AppBundle\Extractor;
 use AppBundle\Entity\Repository\TagRepository;
 use AppBundle\Entity\WatchLink;
 use AppBundle\Fetcher\Fetcher;
+use Exception;
+use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -34,10 +36,18 @@ class WatchLinkMetadataExtractor
         $this->crawler = $crawler ?: new Crawler();
     }
 
+    public function bounds($text, $length = 255) {
+        if (strlen($text) > $length) {
+            return substr($text, $length);
+        }
+        return $text;
+    }
+
     /**
      * @param string $url
-     * @param array  $tags
+     * @param array $tags
      *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      * @return WatchLink
      */
     public function extract(string $url, array $tags): WatchLink
@@ -45,15 +55,20 @@ class WatchLinkMetadataExtractor
         $watchLink = new WatchLink;
         $watchLink->setUrl($url);
 
-        $this->crawler->clear();
-        $this->crawler->addHtmlContent($this->fetcher->fetch($url));
+        try {
+            $this->crawler->clear();
+            $this->crawler->addHtmlContent($this->fetcher->fetch($url));
 
-        $watchLink->setName($this->extractTitle());
-        $watchLink->setDescription($this->extractDescription());
-        $watchLink->setImage($this->extractImage());
+            $watchLink->setName($this->bounds($this->extractTitle()));
 
-        foreach ($tags as $tag) {
-            $watchLink->addTag($this->tagRepository->findOrCreate($tag));
+            $watchLink->setDescription($this->bounds($this->extractDescription()));
+            $watchLink->setImage($this->extractImage());
+
+            foreach ($tags as $tag) {
+                $watchLink->addTag($this->tagRepository->findOrCreate($tag));
+            }
+        } catch (RequestException $r) {
+            var_dump($r->getMessage());
         }
 
         return $watchLink;

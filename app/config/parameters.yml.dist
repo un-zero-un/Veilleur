@@ -1,6 +1,6 @@
 parameters:
-    database_driver: pdo_mysql
-    database_host: mysql
+    database_driver: pdo_pgsql
+    database_host: database
     database_port: null
     database_name: veilleur
     database_user: veilleur

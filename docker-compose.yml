@@ -1,21 +1,39 @@
-data:
-    image: unzeroun/base
+version: "3"
 
-fpm:
-    build:        docker/php
-    volumes_from: [ data ]
-    links:        [ mysql ]
-    volumes:      [ '.:/www' ]
+services:
 
-mysql:
-    build:        docker/mysql
-    volumes_from: [ data ]
-    environment:  { MYSQL_ROOT_PASSWORD: root }
+  nginx:
+    build:
+      context: ./docker/nginx
+    ports:
+      - "80:80"
+    links:
+      - php
+    volumes:
+      - .:/www
 
-nginx:
-    image:        unzeroun/nginx
-    volumes_from: [ data      ]
-    links:        [ fpm       ]
-    ports:        [ '80:80' ]
-    volumes:      [ '.:/www'  ]
+  php:
+    build:
+      context: ./docker/php
+    links:
+      - database
+    volumes:
+      - .:/www
 
+  database:
+    image: postgres:10.3-alpine
+    volumes:
+      - database:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: veilleur
+      POSTGRES_PASSWORD: veilleur
+
+  adminer:
+    image: adminer
+    links:
+      - database
+    ports:
+      - 8080:8080
+
+volumes:
+  database: ~
