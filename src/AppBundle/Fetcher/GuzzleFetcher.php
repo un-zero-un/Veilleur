@@ -23,8 +23,9 @@ class GuzzleFetcher implements Fetcher
     /**
      * @param string $url
      *
-     * @throws GuzzleException
+     * @param array $headers
      * @return string
+     * @throws GuzzleException
      */
     public function fetch(string $url, array $headers = []): string
     {

@@ -72,7 +72,7 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
                         'Unable to insert watchlink',
                         [
                             'exception' => $e,
-                            'errmsg' => $e->getMessage(),
+                            /*'errmsg' => $e->getMessage(),*/
                             'message' => $message->text,
                         ]
                     );
@@ -81,7 +81,7 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
                         'Unknown exception',
                         [
                             'exception' => $e,
-                            'errmsg' => $e->getMessage(),
+                            /*'errmsg' => $e->getMessage(),*/
                             'message' => $message->text,
                         ]
                     );
@@ -97,7 +97,7 @@ class SlackImportCommand extends Command implements ContainerAwareInterface
                 'Unknown exception',
                 [
                     'exception' => $e,
-                    'errmsg' => $e->getMessage(),
+                    /*'errmsg' => $e->getMessage(),*/
                 ]
             );
         }

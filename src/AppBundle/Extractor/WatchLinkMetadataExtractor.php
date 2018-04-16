@@ -55,20 +55,16 @@ class WatchLinkMetadataExtractor
         $watchLink = new WatchLink;
         $watchLink->setUrl($url);
 
-        try {
-            $this->crawler->clear();
-            $this->crawler->addHtmlContent($this->fetcher->fetch($url));
+        $this->crawler->clear();
+        $this->crawler->addHtmlContent($this->fetcher->fetch($url));
 
-            $watchLink->setName($this->bounds($this->extractTitle()));
+        $watchLink->setName($this->bounds($this->extractTitle()));
 
-            $watchLink->setDescription($this->bounds($this->extractDescription()));
-            $watchLink->setImage($this->extractImage());
+        $watchLink->setDescription($this->bounds($this->extractDescription()));
+        $watchLink->setImage($this->extractImage());
 
-            foreach ($tags as $tag) {
-                $watchLink->addTag($this->tagRepository->findOrCreate($tag));
-            }
-        } catch (RequestException $r) {
-            var_dump($r->getMessage());
+        foreach ($tags as $tag) {
+            $watchLink->addTag($this->tagRepository->findOrCreate($tag));
         }
 
         return $watchLink;
