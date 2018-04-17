@@ -22,6 +22,15 @@ services:
     links:
       - database
 
+  veilleur:
+    build:
+      context: .
+      dockerfile: ./docker/prod/veilleur/Dockerfile
+    env_file: env.prod
+    image: veilleur_service
+    links:
+      - database
+
   database:
     image: postgres:10.3-alpine
     env_file: env.prod
