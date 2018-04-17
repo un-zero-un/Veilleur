@@ -1,11 +1,14 @@
+parameters:
+    locale: en
+    slack_web_channel: '%env(SLACK_WEB_CHANNEL)%'
+
 imports:
-    - { resource: parameters.yml }
     - { resource: services.yml }
 
 framework:
     esi:             ~
     translator:      { fallbacks: ["%locale%"] }
-    secret:          "%secret%"
+    secret:          "%env(APP_SECRET)%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
@@ -28,19 +31,14 @@ framework:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   "%database_driver%"
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
+        driver:   pdo_pgsql
+        server_version: 10.3
+        host:     "%env(POSTGRES_HOST)%"
+        port:     "%env(POSTGRES_PORT)%"
+        dbname:   "%env(POSTGRES_DB)%"
+        user:     "%env(POSTGRES_USER)%"
+        password: "%env(POSTGRES_PASSWORD)%"
         charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
@@ -49,7 +47,7 @@ doctrine:
 # Nelmio CORS
 nelmio_cors:
     defaults:
-        allow_origin:  ["%cors_allow_origin%"]
+        allow_origin:  ["%env(CORS_ALLOW_ORIGIN)%"]
         allow_methods: ["POST", "PUT", "GET", "DELETE", "OPTIONS"]
         allow_headers: ["content-type", "authorization"]
         max_age:       3600
@@ -61,5 +59,5 @@ nelmio_cors:
             allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
 
 api_platform:
-  title: "%api_name%"
-  description: "%api_description%"
+  title: "%env(API_NAME)%"
+  description: "%env(API_DESCRIPTION)%"

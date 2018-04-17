@@ -4,7 +4,8 @@ services:
 
   nginx:
     build:
-      context: ./docker/nginx
+      context: ./docker/dev/nginx
+    env_file: env
     ports:
       - "80:80"
     links:
@@ -14,7 +15,8 @@ services:
 
   php:
     build:
-      context: ./docker/php
+      context: ./docker/dev/php
+    env_file: env
     links:
       - database
     volumes:
@@ -24,16 +26,14 @@ services:
     image: postgres:10.3-alpine
     volumes:
       - database:/var/lib/postgresql
-    environment:
-      POSTGRES_USER: veilleur
-      POSTGRES_PASSWORD: veilleur
+    env_file: env
 
-  adminer:
-    image: adminer
-    links:
-      - database
-    ports:
-      - 8080:8080
+  # adminer:
+  #   image: adminer
+  #   links:
+  #     - database
+  #   ports:
+  #     - 8080:8080
 
 volumes:
   database: ~

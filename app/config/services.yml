@@ -23,7 +23,7 @@ services:
 
     slack.api:
         class:     AppBundle\Api\SlackApi
-        arguments: [ '@guzzle.client', '%slack_web_api_token%' ]
+        arguments: [ '@guzzle.client', '%env(SLACK_WEB_API_TOKEN)%' ]
 
     'AppBundle\Filter\TagFilter':
         arguments: ["@doctrine", '@request_stack']

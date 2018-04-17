@@ -19,21 +19,19 @@
         "symfony/monolog-bundle": "~2.7",
         "sensio/distribution-bundle": "~5.0",
         "sensio/framework-extra-bundle": "~3.0",
-        "incenteev/composer-parameter-handler": "~2.0",
         "nelmio/cors-bundle": "^1.5",
         "guzzlehttp/guzzle": "^6.1",
         "bramus/monolog-colored-line-formatter": "^2.0",
         "textalk/websocket": "^1.2",
         "twig/twig": "^1.35",
-        "api-platform/core": "^2.2"
+        "api-platform/core": "^2.2",
+        "nelmio/api-doc-bundle": "^3.2"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~3.0",
         "phpunit/phpunit": "^5.1"
     },
     "scripts": {
         "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
@@ -42,7 +40,6 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
         "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
@@ -59,9 +56,6 @@
         "symfony-web-dir": "web",
         "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        },
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
