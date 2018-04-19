@@ -36,7 +36,7 @@ abstract class Thing
      * @var string An image of the item. This can be a [URL](http://schema.org/URL) or a fully described [ImageObject](http://schema.org/ImageObject).
      *
      * @Groups({"WatchLink"})
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(nullable=true, length=1024)
      * @Assert\Url
      */
     private $image;
@@ -52,7 +52,7 @@ abstract class Thing
      * @var string URL of the item.
      *
      * @Groups({"WatchLink"})
-     * @ORM\Column
+     * @ORM\Column(length=1024)
      * @Assert\Url
      * @Assert\NotBlank
      */

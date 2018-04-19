@@ -28,12 +28,12 @@ services:
       - database:/var/lib/postgresql
     env_file: env
 
-  # adminer:
-  #   image: adminer
-  #   links:
-  #     - database
-  #   ports:
-  #     - 8080:8080
+  adminer:
+   image: adminer
+   links:
+     - database
+   ports:
+     - 8080:8080
 
 volumes:
   database: ~

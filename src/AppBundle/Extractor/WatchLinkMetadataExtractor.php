@@ -61,7 +61,7 @@ class WatchLinkMetadataExtractor
         $watchLink->setName($this->bounds($this->extractTitle()));
 
         $watchLink->setDescription($this->bounds($this->extractDescription()));
-        $watchLink->setImage($this->extractImage());
+        $watchLink->setImage($this->bounds($this->extractImage(), 1024));
 
         foreach ($tags as $tag) {
             $watchLink->addTag($this->tagRepository->findOrCreate($tag));
