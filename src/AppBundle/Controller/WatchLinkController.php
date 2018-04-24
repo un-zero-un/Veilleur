@@ -44,10 +44,17 @@ class WatchLinkController extends Controller
             $ctx
         );
 
+        $tags = json_decode($rq->getContent(), true);
+        if (array_key_exists('taglist', $tags))
+            $tags = $tags['taglist'];
+        else
+            $tags = [];
+
         $violations = $this->get('validator')->validate($object);
 
-        if (0 === count($violations)) {
-            $object = $this->get('extractor.watch_link_metadata')->extract($object->getUrl(), []);
+        if (0 === count($violations))
+        {
+            $object = $this->get('extractor.watch_link_metadata')->extract($object->getUrl(), $tags);
             $this->getDoctrine()->getManager()->persist($object);
             $this->getDoctrine()->getManager()->flush();
 
