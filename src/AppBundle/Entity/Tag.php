@@ -1,14 +1,13 @@
 <?php
-
 namespace AppBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
-
+use AppBundle\Filter\DuplicateFilter;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\TagRepository")
@@ -16,9 +15,14 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
  *
  * @author Yohan Giarelli <yohan@giarel.li>
  * @ApiResource(
- * 	collectionOperations={"get"},
- * 	itemOperations={"get"}
+ *    collectionOperations={ "get" },
+ *    itemOperations={"get"},
+ *  attributes={
+ *     "normalization_context"={"groups"={"Tag"}},
+ *     "denormalization_context"={"groups"={"Tag"}}
+ * },
  * )
+ * @ApiFilter(DuplicateFilter::class)
  */
 class Tag
 {
@@ -33,7 +37,7 @@ class Tag
 
     /**
      * @ORM\Column(type="string", unique=true)
-     * @Groups({"WatchLink"})
+     * @Groups({"WatchLink", "Tag"})
      *
      * @var string
      */
@@ -46,7 +50,22 @@ class Tag
      */
     private $watchLinks;
 
-    public function __construct($name)
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tag")
+     *
+     * @var Tag
+     */
+    private $mainTag;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Tag", mappedBy="mainTag")
+     *
+     * @Groups({"Tag"})
+     * @var ArrayCollection<Tag>
+     */
+    private $duplicates;
+
+    public function __construct(string $name)
     {
         $this->name = $name;
         $this->watchLinks = new ArrayCollection();
@@ -69,10 +88,48 @@ class Tag
     }
 
     /**
-     * @return WatchLink[]
+     * @return ArrayCollection<WatchLink>
      */
     public function getWatchLinks()
     {
         return $this->watchLinks;
+    }
+
+    public function setMainTag(Tag $tag)
+    {
+        $this->mainTag = $tag;
+    }
+
+    /**
+     * @return ArrayCollection<Tag>
+     */
+    public function getDuplicates()
+    {
+        return $this->duplicates;
+    }
+
+    public function getRootTag() {
+        if ($this->mainTag != null)
+            return $this->mainTag->getRootTag();
+        else
+            return $this;
+    }
+
+    public function addDuplicate(Tag $tag)
+    {
+        if (($tag->mainTag != null && $tag->mainTag !== $this) || $this->mainTag === null) {
+            if (!$this->duplicates->contains($tag)) {
+                if ($this->mainTag !== null) {
+                    return $this->mainTag->addDuplicate($tag);
+                } else {
+                    $this->duplicates->add($tag);
+                    $tag->setMainTag($this);
+                    return Response::HTTP_CREATED;
+                }
+            } else {
+                return Response::HTTP_ALREADY_REPORTED;
+            }
+        }
+        return Response::HTTP_LOOP_DETECTED;
     }
 }

@@ -4,6 +4,7 @@ namespace AppBundle\Filter;
 
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use AppBundle\Entity\Tag;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,8 +30,14 @@ class TagFilter extends AbstractFilter
 
         foreach ($value as $i => $tag)
         {
+            $subq = $queryBuilder->getEntityManager()->getRepository(Tag::class)->createQueryBuilder('tag'.$i);
+            $subq->select('t'.$i)->andWhere('tag'.$i.'.name=:name_'.$i)->andWhere('tag'.$i.' = t'.$i.'.mainTag');
+
             $queryBuilder->innerJoin($queryBuilder->getRootAliases()[0].'.tags', 't'.$i)
-                ->andWhere('t'.$i.'.name = :name_'.$i)
+                ->andWhere($queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->eq('t'.$i.'.name', ':name_'.$i),
+                    $queryBuilder->expr()->in('t'.$i, $subq->getDQL())
+                ))
                 ->setParameter('name_'.$i, $tag);
         }
 
