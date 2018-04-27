@@ -33,3 +33,7 @@ services:
 
     'AppBundle\Filter\SearchFilter':
       arguments: ["@doctrine", "@request_stack"]
+
+    'veilleur.userprovider':
+      class: AppBundle\Provider\UserProvider
+      arguments: ['@doctrine']

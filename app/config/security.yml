@@ -1,0 +1,40 @@
+security:
+    providers:
+      hwi:
+        id: veilleur.userprovider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+          pattern: ^/login
+          stateless: true
+          anonymous: true
+          oauth:
+            resource_owners:
+              google_auth: '/login/check-google'
+            login_path: /login/check-google
+            use_forward: false
+            success_handler: lexik_jwt_authentication.handler.authentication_success
+            failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            oauth_user_provider:
+              service: veilleur.userprovider
+
+        authed_user:
+          pattern: ^/(watch_links/discover)|(tags/link)/
+          stateless: true
+          guard:
+            authenticators:
+              - lexik_jwt_authentication.jwt_token_authenticator
+          anonymous: false
+
+        mainapi:
+          pattern: ^/
+          anonymous: true
+
+    access_control:
+      - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(watch_links/discover)|(tags/link)/, roles: ROLE_ADMIN }

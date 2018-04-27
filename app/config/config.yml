@@ -4,6 +4,7 @@ parameters:
 
 imports:
     - { resource: services.yml }
+    - { resource: security.yml }
 
 framework:
     esi:             ~
@@ -61,3 +62,23 @@ nelmio_cors:
 api_platform:
   title: "%env(API_NAME)%"
   description: "%env(API_DESCRIPTION)%"
+  swagger:
+    api_keys:
+      apiKey:
+        name: Authorization
+        type: header
+
+hwi_oauth:
+  firewall_names: [ login ]
+  resource_owners:
+    google_auth:
+      type: google
+      client_id: '%env(GOOGLE_CLIENT_ID)%'
+      client_secret: '%env(GOOGLE_CLIENT_SECRET)%'
+      scope: 'email profile'
+
+lexik_jwt_authentication:
+  private_key_path: '%env(PRIVATE_KEY_PATH)%'
+  public_key_path: '%env(PUBLIC_KEY_PATH)%'
+  pass_phrase: '%env(PASSPHRASE_KEY)%'
+  token_ttl: '%env(TOKEN_TTL)%'

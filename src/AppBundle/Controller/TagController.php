@@ -2,7 +2,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,8 +13,14 @@ class TagController extends Controller
 {
 
     /**
-     * @Route("/tags/link/{mainTag}/{secondaryTag}")
-     * @Method({ "POST" })
+     * @Route(name="link_tags",
+     *        path="/tags/link/{mainTag}/{secondaryTag}",
+     *        methods={"POST"},
+     *        defaults={
+     *          "_api_resource_class"=Tag::class,
+     *          "_api_collection_operation_name"="link_tags"
+     *        }
+     *     )
      *
      * @param $mainTag       Tag    Main tag, the only one shown
      * @param $secondaryTag  Tag    Secondary tag, alias of the main one

@@ -26,6 +26,9 @@ class WatchLinkController extends Controller
      *          "_api_collection_operation_name"="discover"
      *     }
      * )
+     * @param Request $rq
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function __invoke(Request $rq)
     {

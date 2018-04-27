@@ -51,7 +51,7 @@ class Tag
     private $watchLinks;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tag")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tag", inversedBy="duplicates")
      *
      * @var Tag
      */
