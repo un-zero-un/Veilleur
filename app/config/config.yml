@@ -68,6 +68,7 @@ api_platform:
         name: Authorization
         type: header
 
+
 hwi_oauth:
   firewall_names: [ login ]
   resource_owners:

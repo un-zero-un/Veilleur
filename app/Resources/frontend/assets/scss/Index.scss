@@ -1,0 +1,28 @@
+@import 'Colors';
+
+@font-face {
+  font-family: 'hacknf';
+  src: url('../hack_nf.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: 'hacknf';
+}
+
+body, #root, #app {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  color: $fg-main;
+  background-color: $bg-main;
+}
+
+#root, #app{
+  text-align: center;
+  background-color: $bg-main;
+  display: flex;
+  flex-direction: row;
+}

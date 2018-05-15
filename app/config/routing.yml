@@ -13,9 +13,19 @@ hwi_oauth_login:
 google_login:
     path: /login/check-google
 
+react_app:
+  path: '{uri}'
+  defaults: { _controller: 'FrameworkBundle:Template:template', template: 'react_app.html.twig' }
+  condition: "request !== null and request.headers.get('Accept') matches '/html/i'"
+  requirements: { uri: '.*' }
+
 api_platform:
     resource: .
     type: api_platform
+
+swagger_ui:
+  path: /docs/api
+  controller: api_platform.swagger.action.ui
 
 app:
     resource: '../../src/AppBundle/Controller'

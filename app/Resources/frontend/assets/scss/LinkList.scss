@@ -1,0 +1,68 @@
+@import 'Colors';
+
+#linkslist {
+
+  width: 75%;
+  float: right;
+
+  #pager {
+    margin: 0;
+    padding: 0;
+  }
+
+  #pager, h1 {
+    height: 10%;
+    padding: 0;
+    margin: 0;
+
+    background-color: $bg-dark;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #links {
+    margin: 0;
+    padding: 0 !important;
+    height: 80%;
+    overflow-y: scroll;
+
+    .item {
+      min-height: 150px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 10px;
+
+      img {
+        max-width: 15%;
+        min-width: 15%;
+      }
+
+      div {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        span {
+        }
+      }
+
+      &:hover {
+        background-color: $list-selected;
+        cursor: pointer;
+      }
+    }
+  }
+
+  #pager {
+
+    div {
+      width: 30%
+    }
+
+  }
+}

@@ -1,0 +1,26 @@
+@import 'Icons';
+@import 'Colors';
+
+#taglink-show {
+  padding: 10px;
+  background-color: $bg-darker;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+
+  span {
+    margin: 0 10px 0 10px;
+  }
+
+}
+
+#addLinkTaglist {
+  margin-top: 20px;
+}

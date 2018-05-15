@@ -1,5 +1,36 @@
 {
+  "name": "veilleur_front",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "react-autosuggest": "^9.3.4"
+    "babel-loader": "^7.1.4",
+    "babel-preset-es2018": "^1.0.0",
+    "babel-runtime": "^6.26.0",
+    "jwt-decode": "^2.2.0",
+    "material-ui": "^0.20.0",
+    "node-sass": "^4.8.3",
+    "react": "^16.3.2",
+    "react-autosuggest": "^9.3.4",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-redux-router": "^0.0.14",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.4",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^0.16.0",
+    "sass-loader": "^7.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.20.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-react": "^6.24.1"
   }
 }

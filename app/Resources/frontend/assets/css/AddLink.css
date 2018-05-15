@@ -1,0 +1,22 @@
+#addLink {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 50px; }
+
+.addLinkURL {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center; }
+  .addLinkURL div {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  .addLinkURL button {
+    margin-top: 14px; }
+
+#addLinkTaglist {
+  text-align: center;
+  height: 200px;
+  overflow-y: scroll; }
+
+/*# sourceMappingURL=AddLink.css.map */

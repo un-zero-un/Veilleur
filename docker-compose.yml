@@ -25,7 +25,7 @@ services:
   database:
     image: postgres:10.3-alpine
     volumes:
-      - database:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
     env_file: env
 
   adminer:
@@ -36,4 +36,4 @@ services:
      - 8080:8080
 
 volumes:
-  database: ~
+  db: ~

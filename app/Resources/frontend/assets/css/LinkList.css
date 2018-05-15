@@ -1,0 +1,42 @@
+#linkslist {
+  width: 75%;
+  float: right; }
+  #linkslist #pager {
+    margin: 0;
+    padding: 0; }
+  #linkslist #pager, #linkslist h1 {
+    height: 10%;
+    padding: 0;
+    margin: 0;
+    background-color: #303030;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; }
+  #linkslist #links {
+    margin: 0;
+    padding: 0 !important;
+    height: 80%;
+    overflow-y: scroll; }
+    #linkslist #links .item {
+      min-height: 150px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 10px; }
+      #linkslist #links .item img {
+        max-width: 15%;
+        min-width: 15%; }
+      #linkslist #links .item div {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; }
+      #linkslist #links .item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        cursor: pointer; }
+  #linkslist #pager div {
+    width: 30%; }
+
+/*# sourceMappingURL=LinkList.css.map */
