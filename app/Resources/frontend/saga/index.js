@@ -134,14 +134,12 @@ function* linkTag(action) {
 }
 
 function* getJWT(action) {
-
     let url = Config.API_HOST + "login/check-google?code=" + action.payload.code;
-    console.log(action.payload.code);
 
     try {
-    //    const res = yield call(fetch, url);
+        const res = yield call(fetch, url);
 
-        console.log(action.payload.code);
+        console.log(url);
     } catch (err) {
         console.log(err);
     }

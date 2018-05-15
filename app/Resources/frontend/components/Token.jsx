@@ -1,5 +1,5 @@
+import { retreiveTokenAction, retreiveCodeAction } from "../actions/token_actions";
 import { bindActionCreators } from "redux";
-import { retreiveTokenAction } from "../actions/token_actions";
 import { Redirect, withRouter } from "react-router-dom";
 import React, { Component } from 'react';
 import { connect } from "react-redux";
@@ -22,8 +22,12 @@ class Token extends Component {
     componentWillMount() {
         let code = this.getCode();
         if (!code) {
-            console.log("???");
+
         } else {
+            this.props.setAuthToken({code});
+            /**
+             * Save the authtoken in the cookies ?
+             */
             this.props.getJWT({ code });
         }
     }
@@ -45,6 +49,7 @@ export default withRouter(connect(
         token: state.tokenReducer.token
     }),
     dispatch => ({
-        getJWT: bindActionCreators(retreiveTokenAction, dispatch)
+        getJWT: bindActionCreators(retreiveTokenAction, dispatch),
+        setAuthToken: bindActionCreators(retreiveCodeAction, dispatch)
     })
 )(Token));

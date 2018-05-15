@@ -1,4 +1,4 @@
-import { RETREIVE_TOKEN, RETREIVED_TOKEN } from "../actions/token_actions";
+import { RETREIVE_CODE, RETREIVE_TOKEN } from "../actions/token_actions";
 
 const initialState = {
     code: '',
@@ -7,10 +7,10 @@ const initialState = {
 
 export default function (state = initialState, action) {
     switch(action.type) {
-        case RETREIVED_TOKEN:
-            return { ...state, token: action.payload.token };
         case RETREIVE_TOKEN:
-            return { ...state, code: action.payload.code }
+            return { ...state, token: action.payload.token };
+        case RETREIVE_CODE:
+            return { ...state, code: action.payload.code };
         default:
             return state;
     }

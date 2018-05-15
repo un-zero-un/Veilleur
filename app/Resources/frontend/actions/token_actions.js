@@ -1,11 +1,11 @@
-export const RETREIVE_TOKEN = "RETREIVE_TOKEN";
+export const RETREIVE_CODE = "RETREIVE_CODE";
 
-export const retreiveTokenAction = (payload = { code: '' }) => {
-    return { type: RETREIVE_TOKEN, payload };
+export const retreiveCodeAction = (payload = { code: '' }) => {
+    return { type: RETREIVE_CODE, payload };
 };
 
-export const RETREIVED_TOKEN = "RETREIVED_TOKEN";
+export const RETREIVE_TOKEN = "RETREIVE_TOKEN";
 
-export const retreivedTokenAction = (payload = { token: '' }) => {
-    return { type: RETREIVED_TOKEN, payload };
+export const retreiveTokenAction = (payload = { token: '' }) => {
+    return { type: RETREIVE_TOKEN, payload };
 };

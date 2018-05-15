@@ -67,7 +67,8 @@ class Tagbar extends Component {
             callback();
         } else {
             console.log("Auth needed");
-            window.open("https://accounts.google.com/o/oauth2/v2/auth?client_id=" + Config.CLIENT_ID + "&redirect_uri=" + encodeURI(Config.CALLBACK_URL) +  "&response_type=code&scope=email%20profile").focus();
+            let url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + Config.CLIENT_ID + "&redirect_uri=" + encodeURI(Config.CALLBACK_URL) +  "&response_type=code&scope=email%20profile";
+            window.open(url, '_self').focus();
             //window.open("https://accounts.google.com/o/oauth2/v2/auth?client_id=" + Config.CLIENT_ID + "&redirect_uri=" + encodeURI(Config.API_HOST + "login/check-google") +  "&response_type=code&scope=email%20profile").focus();
         }
     }
