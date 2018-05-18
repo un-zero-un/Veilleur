@@ -1,16 +1,18 @@
-import { RETREIVE_CODE, RETREIVE_TOKEN } from "../actions/token_actions";
+import { GET_TOKEN, READ_TOKEN, DELETE_TOKEN } from "../actions/token_actions";
 
 const initialState = {
-    code: '',
-    token: ''
+    token: '',
+    refreshToken: ''
 };
 
 export default function (state = initialState, action) {
-    switch(action.type) {
-        case RETREIVE_TOKEN:
-            return { ...state, token: action.payload.token };
-        case RETREIVE_CODE:
-            return { ...state, code: action.payload.code };
+    switch (action.type) {
+        case GET_TOKEN:
+            return { ...state };
+        case READ_TOKEN:
+            return { ...state, token: action.payload.token, refreshToken: action.payload.refreshToken };
+        case DELETE_TOKEN:
+            return { ...state };
         default:
             return state;
     }

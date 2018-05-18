@@ -8,6 +8,11 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        refresh:
+            pattern:  ^/token/refresh
+            stateless: true
+            anonymous: true
+
         login:
           pattern: ^/login
           stateless: true
@@ -17,7 +22,7 @@ security:
               google_auth: '/login/check-google'
             login_path: /login/check-google
             use_forward: false
-            success_handler: lexik_jwt_authentication.handler.authentication_success
+            success_handler: veilleur.auth_success
             failure_handler: lexik_jwt_authentication.handler.authentication_failure
             oauth_user_provider:
               service: veilleur.userprovider
@@ -38,3 +43,4 @@ security:
       - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/(watch_links/discover)|(tags/link)/, roles: ROLE_ADMIN }
+      - { path: ^/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }

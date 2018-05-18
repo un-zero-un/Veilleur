@@ -18,7 +18,6 @@ class TagController extends Controller
      *        methods={"POST"},
      *        defaults={
      *          "_api_resource_class"=Tag::class,
-     *          "_api_collection_operation_name"="link_tags"
      *        }
      *     )
      *
@@ -28,7 +27,6 @@ class TagController extends Controller
      * @return Response
      */
     public function linkTags($mainTag, $secondaryTag) {
-
         $rp = $this->getDoctrine()->getRepository(Tag::class);
         $em = $this->getDoctrine()->getManager();
 

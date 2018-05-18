@@ -5,7 +5,7 @@ import LinkItem               from "./LinkItem";
 import { List }               from "material-ui";
 import Pager                  from "./Pager";
 
-import '../assets/css/LinkList.css';
+import '../assets/scss/LinkList.scss';
 
 class LinkList extends Component {
 
