@@ -35,8 +35,19 @@ class User implements UserInterface
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $roles;
+
+    public function __construct() {
+       $this->roles = [];
+    }
+
     public function getID() { return $this->id; }
+
     public function getUsername() { return $this->username; }
+
     public function getEmail() { return $this->email; }
 
     public function setUsername(string $username)
@@ -45,20 +56,40 @@ class User implements UserInterface
         return $this;
     }
 
-    public function setEmail(string $email) {
+    public function setEmail(string $email)
+    {
         $this->email = $email;
         return $this;
     }
 
-    public function getRoles() {
-        if (preg_match_all("#^([a-z]|[A-Z]|[0-9])+\@un\-zero\-un\.fr$#", $this->getEmail()))
-            return [ "ROLE_ADMIN" ];
-        else
-            return [ "ROLE_USER" ];
+    /**
+     * @return string[]
+     */
+    public function getRoles(): ?array
+    {
+        return $this->roles;
     }
 
+    /**
+     * @param string $role
+     * @return User
+     */
+    public function addRole(string $role): User
+    {
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+        return $this;
+    }
+
+    /**
+     * @return null
+     */
     public function getPassword() { return null; }
 
+    /**
+     * @return null
+     */
     public function getSalt() { return null; }
 
     public function eraseCredentials() { }

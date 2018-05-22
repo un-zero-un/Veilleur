@@ -1,24 +1,25 @@
+import { deleteTokenAction, getTokenAction } from "../actions/token_actions";
 import { FlatButton, FontIcon }              from "material-ui";
 import { toggleLinkingAction }               from "../actions/linkingtags_actions";
+import { NO_TOKEN_AVAILABLE }                from "../middleware/LocalStorageMiddleware";
+import { toggleDialogAction }                from "../actions/addlinks_actions";
 import { retreiveTagsAction }                from "../actions/tags_actions";
 import { bindActionCreators }                from "redux";
+import React, { Component }                  from "react";
 import { List, ListItem }                    from 'material-ui/List';
 import { filterAction }                      from "../actions/filter_actions";
+import * as jwt_decode                       from 'jwt-decode';
 import { withRouter }                        from "react-router-dom";
 import SnackbarCustom                        from "./SnackbarCustom";
 import { connect }                           from "react-redux";
 import LinkingTags                           from "./LinkingTags";
 import IconButton                            from 'material-ui/IconButton';
 import TextField                             from 'material-ui/TextField';
-import jwt_check                             from '../jwt';
 import AddLink                               from "./AddLink";
 import Config                                from "../Config";
 import logo                                  from '../assets/logo.svg';
 import Tag                                   from "../model/Tag";
-import { deleteTokenAction, getTokenAction } from "../actions/token_actions";
-import { toggleDialogAction }                from "../actions/addlinks_actions";
-import { NO_TOKEN_AVAILABLE }                from "../middleware/LocalStorageMiddleware";
-import React, { Component }                  from "react";
+import getJWTRoles                           from '../jwt';
 
 import '../assets/scss/Tagbar.scss';
 
@@ -153,17 +154,26 @@ class Tagbar extends Component {
         let params = this.getTags();
 
         let icons = [];
-        if (NO_TOKEN_AVAILABLE === this.props.jwt) {
+        let token = this.props.jwt;
+        if (NO_TOKEN_AVAILABLE === token || token.length < 1) {
             //Login
             icons.push(
-                <FlatButton icon={<FontIcon key={"log_bt"} className="Icon-Login"/>} onClick={() => this.handleLogin()}/>
+                <FlatButton icon={<FontIcon key={"log_bt"} className="Icon-Login"/>}
+                            onClick={() => this.handleLogin()}/>
             );
         } else {
             // Logged
+            let user = jwt_decode(token);
+            let isAdmin = user.roles.includes('ROLE_ADMIN');
+
             icons.push(
-                <FlatButton icon={<FontIcon key={"linktag_bt"} className="Icon-Link"/>} onClick={() => this.handleLinkTags()}/>,
-                <FlatButton icon={<FontIcon key={"addlink_bt"} className="Icon-Add"/>} onClick={() => this.handleAddToggle()}/>,
-                <FlatButton icon={<FontIcon key={"log-out_bt"} className="Icon-Logout"/>} onClick={() => this.handleLogout()}/>
+                <div className={"user_infos"}><div>Vous êtes connecté en tant que</div><div>{user.username}</div></div>,
+                <FlatButton disabled={!isAdmin} icon={<FontIcon key={"linktag_bt"} className="Icon-Link"/>}
+                            onClick={() => this.handleLinkTags()}/>,
+                <FlatButton disabled={!isAdmin} icon={<FontIcon key={"addlink_bt"} className="Icon-Add"/>}
+                            onClick={() => this.handleAddToggle()}/>,
+                <FlatButton icon={<FontIcon key={"log-out_bt"} className="Icon-Logout"/>}
+                            onClick={() => this.handleLogout()}/>
             );
         }
 

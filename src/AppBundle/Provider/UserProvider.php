@@ -7,11 +7,19 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
+use AppBundle\Security\AdminValidator;
 
 class UserProvider extends EntityUserProvider implements OAuthAwareUserProviderInterface
 {
-    public function __construct(ManagerRegistry $registry, array $properties = [], $managerName = null)
+
+    /**
+     * @var AdminValidator
+     */
+    private $adminValidator;
+
+    public function __construct(ManagerRegistry $registry, AdminValidator $admin, array $properties = [], $managerName = null)
     {
+        $this->adminValidator = $admin;
         parent::__construct($registry, User::class, $properties, $managerName);
     }
 
@@ -21,17 +29,23 @@ class UserProvider extends EntityUserProvider implements OAuthAwareUserProviderI
 
         if (null === $user) {
             $user = $this->createUser($response);
+
+            if ($this->adminValidator->isAdmin($user)) {
+                $user->addRole('ROLE_ADMIN');
+            } else {
+                $user->addRole('ROLE_USER');
+            }
+
+            $this->updateUser($user);
         }
 
-        $user->setUsername($response->getUsername());
-        $this->updateUser($user);
 
         return $user;
     }
 
     public function createUser(UserResponseInterface $uri) : User
     {
-        return (new User())->setUsername($uri->getUsername())->setEmail($uri->getEmail());
+        return (new User())->setUsername($uri->getEmail())->setEmail($uri->getEmail());
     }
 
     public function updateUser($user)

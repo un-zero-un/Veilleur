@@ -37,6 +37,9 @@ class AddLink extends Component {
     handleTagAdd() {
         let tag = this.props.typedTag;
 
+        if (tag.trim().length < 1)
+            return;
+
         let exists = false;
         for (let a = 0; a < this.props.tags.length; ++a)
             if (this.props.tags[ a ].name === tag)

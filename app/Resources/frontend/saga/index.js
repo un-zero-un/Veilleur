@@ -8,7 +8,6 @@ import Tag                                                        from '../model
 import { clearDialogAction, DISCOVER_DIALOG, toggleDialogAction } from "../actions/addlinks_actions";
 import { updateSnackbarAction }                                   from "../actions/snackbar_actions";
 import { LINK_TAG_ACTION, linkingClickAction }                    from "../actions/linkingtags_actions";
-import jwt_decode                                                 from 'jwt-decode';
 import { readTokenAction }                                        from "../actions/token_actions";
 
 function parseURL(url) {

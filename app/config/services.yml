@@ -34,9 +34,13 @@ services:
     'AppBundle\Filter\SearchFilter':
       arguments: ["@doctrine", "@request_stack"]
 
+    'veilleur.adminvalidator':
+      class: AppBundle\Security\AdminValidator
+      arguments: [ "%env(json:ADMIN_DOMAINS)%" ]
+
     'veilleur.userprovider':
       class: AppBundle\Provider\UserProvider
-      arguments: ['@doctrine']
+      arguments: ['@doctrine', '@veilleur.adminvalidator' ]
 
     'veilleur.auth_success':
       class: AppBundle\Security\AuthenticationSuccessHandler
