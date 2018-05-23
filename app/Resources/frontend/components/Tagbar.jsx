@@ -19,7 +19,6 @@ import AddLink                               from "./AddLink";
 import Config                                from "../Config";
 import logo                                  from '../assets/logo.svg';
 import Tag                                   from "../model/Tag";
-import getJWTRoles                           from '../jwt';
 
 import '../assets/scss/Tagbar.scss';
 

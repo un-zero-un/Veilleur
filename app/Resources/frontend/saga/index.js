@@ -9,6 +9,7 @@ import { clearDialogAction, DISCOVER_DIALOG, toggleDialogAction } from "../actio
 import { updateSnackbarAction }                                   from "../actions/snackbar_actions";
 import { LINK_TAG_ACTION, linkingClickAction }                    from "../actions/linkingtags_actions";
 import { readTokenAction }                                        from "../actions/token_actions";
+import * as jwt_decode                                            from 'jwt-decode';
 
 function parseURL(url) {
     let params = url.split("&");
@@ -77,7 +78,7 @@ function* discover(action) {
         }
 
         const token = yield select((item) => (item.tokenReducer));
-        if(yield checkToken(token.token, token.refreshToken)) {
+        if (yield checkToken(token.token, token.refreshToken)) {
             const token = yield select((item) => (item.tokenReducer));
 
             const res = yield call(fetch, url, {
@@ -119,7 +120,7 @@ function* linkTag(action) {
 
     const token = yield select((item) => (item.tokenReducer));
 
-    if(yield checkToken(token.token, token.refreshToken)) {
+    if (yield checkToken(token.token, token.refreshToken)) {
         // Getting tokenreducer's content again so that if the token was refreshed it is now the good one
         const token = yield select((item) => (item.tokenReducer));
         try {
@@ -154,25 +155,28 @@ function* linkTag(action) {
 function* checkToken(token, refresh) {
     let decoded_token = jwt_decode(token);
     if (undefined !== decoded_token.exp) {
-        if (decoded_token.exp < Date.now().valueOf() / 1000){
+        if (decoded_token.exp < Date.now().valueOf() / 1000) {
             const res = yield call(fetch, Config.API_HOST + 'token/refresh', {
                 headers: {
-                    'Accept': 'application/ld+json',
+                    'Accept'      : 'application/ld+json',
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                method: 'POST',
-                body: 'refresh_token=' + refresh
+                method : 'POST',
+                body   : 'refresh_token=' + refresh
             });
 
             if (200 === res.status) {
-                let newToken = yield call([ res, 'json' ]);
-                localStorage["token"] = newToken["token"];
-                localStorage["refresh_token"] = newToken["refresh_token"];
-                yield put(readTokenAction({ token: newToken["token"], refreshToken: newToken["refresh_token"] }));
+                let newToken                    = yield call([ res, 'json' ]);
+                localStorage[ "token" ]         = newToken[ "token" ];
+                localStorage[ "refresh_token" ] = newToken[ "refresh_token" ];
+                yield put(readTokenAction({ token: newToken[ "token" ], refreshToken: newToken[ "refresh_token" ] }));
             } else {
                 localStorage.removeItem("token");
                 localStorage.removeItem("refresh_token");
-                yield put(updateSnackbarAction({ open: true, message: 'Votre token à expiré et ne peut être renouvelé' }));
+                yield put(updateSnackbarAction({
+                    open   : true,
+                    message: 'Votre token à expiré et ne peut être renouvelé'
+                }));
                 return false;
             }
         }

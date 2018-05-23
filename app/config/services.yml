@@ -14,9 +14,12 @@ services:
         class:     AppBundle\Fetcher\GuzzleFetcher
         arguments: [ '@guzzle.client' ]
 
+    'veilleur.urlparser':
+      class: AppBundle\Parser\UrlParser
+
     extractor.watch_link_metadata:
         class:     AppBundle\Extractor\WatchLinkMetadataExtractor
-        arguments: [ '@fetcher.guzzle', '@repository.tag' ]
+        arguments: [ '@veilleur.urlparser', '@fetcher.guzzle', '@repository.tag' ]
 
     parser.slack_message:
         class: AppBundle\Parser\SlackMessageParser

@@ -3,13 +3,13 @@ import {
     clearDialogAction,
     updateTypedAction,
     discoverDialogAction
-} from "../actions/addlinks_actions";
+}                                                                    from "../actions/addlinks_actions";
 import { Dialog, FlatButton, IconButton, List, ListItem, TextField } from "material-ui";
-import { updateSnackbarAction } from "../actions/snackbar_actions";
-import { bindActionCreators } from "redux";
-import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import { updateSnackbarAction }                                      from "../actions/snackbar_actions";
+import { bindActionCreators }                                        from "redux";
+import React, { Component }                                          from 'react';
+import { withRouter }                                                from "react-router-dom";
+import { connect }                                                   from "react-redux";
 
 import '../assets/scss/AddLink.scss';
 
@@ -37,6 +37,7 @@ class AddLink extends Component {
     handleTagAdd() {
         let tag = this.props.typedTag;
 
+
         if (tag.trim().length < 1)
             return;
 
@@ -47,7 +48,7 @@ class AddLink extends Component {
 
         if (!exists)
             this.props.updateTyped({
-                tags: [ ...this.props.tags, { id: tag, name: tag } ],
+                tags    : [ ...this.props.tags, { id: tag, name: tag } ],
                 typedTag: '',
             });
         else
@@ -99,16 +100,16 @@ class AddLink extends Component {
 export default withRouter(connect(
     state => ({
         dialogOpen: state.addlinksReducer.open,
-        typedTag: state.addlinksReducer.typedTag,
-        tags: state.addlinksReducer.tags,
-        knownTags: state.filterReducer.tags,
-        url: state.addlinksReducer.url
+        typedTag  : state.addlinksReducer.typedTag,
+        tags      : state.addlinksReducer.tags,
+        knownTags : state.filterReducer.tags,
+        url       : state.addlinksReducer.url
     }),
     dispatch => ({
-        clear: bindActionCreators(clearDialogAction, dispatch),
-        toggleDialog: bindActionCreators(toggleDialogAction, dispatch),
-        updateTyped: bindActionCreators(updateTypedAction, dispatch),
-        discover: bindActionCreators(discoverDialogAction, dispatch),
+        clear               : bindActionCreators(clearDialogAction, dispatch),
+        toggleDialog        : bindActionCreators(toggleDialogAction, dispatch),
+        updateTyped         : bindActionCreators(updateTypedAction, dispatch),
+        discover            : bindActionCreators(discoverDialogAction, dispatch),
         updateSnackbarAction: bindActionCreators(updateSnackbarAction, dispatch)
     })
 )(AddLink));
