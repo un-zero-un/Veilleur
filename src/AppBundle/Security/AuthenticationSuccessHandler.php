@@ -73,7 +73,6 @@ if (storageAvailable('localStorage')) {
     localStorage['refresh_token'] = '$refreshToken';
 }
 
-console.log(localStorage);
 window.location = "/";
 JS;
         return $response->setJS($storeToken);

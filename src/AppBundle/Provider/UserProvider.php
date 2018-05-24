@@ -25,7 +25,7 @@ class UserProvider extends EntityUserProvider implements OAuthAwareUserProviderI
 
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $user = $this->findUser(['email' => $response->getEmail()]);
+        $user = $this->findUser(['username' => $response->getEmail()]);
 
         if (null === $user) {
             $user = $this->createUser($response);
@@ -45,7 +45,7 @@ class UserProvider extends EntityUserProvider implements OAuthAwareUserProviderI
 
     public function createUser(UserResponseInterface $uri) : User
     {
-        return (new User())->setUsername($uri->getEmail())->setEmail($uri->getEmail());
+        return (new User())->setUsername($uri->getEmail());
     }
 
     public function updateUser($user)

@@ -108,6 +108,9 @@ class Tag
         return $this->duplicates;
     }
 
+    /**
+     * Gets the main tag, the one who is not duplicate of any
+     */
     public function getRootTag() {
         if ($this->mainTag != null)
             return $this->mainTag->getRootTag();
@@ -115,21 +118,26 @@ class Tag
             return $this;
     }
 
+    /**
+     * If finds the root tag and add it the given one to it's duplicates
+     * If
+     */
     public function addDuplicate(Tag $tag)
     {
+        $root = $this->getRootTag();
+
         if (($tag->mainTag != null && $tag->mainTag !== $this) || $this->mainTag === null) {
             if (!$this->duplicates->contains($tag)) {
-                if ($this->mainTag !== null) {
-                    return $this->mainTag->addDuplicate($tag);
-                } else {
-                    $this->duplicates->add($tag);
-                    $tag->setMainTag($this);
-                    return Response::HTTP_CREATED;
+                $root->duplicates->add($tag);
+                $tag->setMainTag($root);
+                foreach ($tag->getDuplicates() as $currTag) {
+                   $currTag->setMainTag($root);
                 }
+                return true;
             } else {
-                return Response::HTTP_ALREADY_REPORTED;
+                return false;
             }
         }
-        return Response::HTTP_LOOP_DETECTED;
+        return false;
     }
 }

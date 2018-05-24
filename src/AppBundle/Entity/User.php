@@ -29,13 +29,6 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
-     *
-     * @var string
-     */
-    private $email;
-
-    /**
      * @ORM\Column(type="array")
      */
     private $roles;
@@ -48,17 +41,9 @@ class User implements UserInterface
 
     public function getUsername() { return $this->username; }
 
-    public function getEmail() { return $this->email; }
-
     public function setUsername(string $username)
     {
         $this->username = $username;
-        return $this;
-    }
-
-    public function setEmail(string $email)
-    {
-        $this->email = $email;
         return $this;
     }
 
