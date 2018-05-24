@@ -119,7 +119,8 @@ class Tagbar extends Component {
     }
 
     handleLogin() {
-        let url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + Config.CLIENT_ID + "&redirect_uri=" + encodeURI(Config.CALLBACK_URL) + "&response_type=code&scope=email%20profile";
+        let browserURL = document.location.origin;
+        let url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + Config.CLIENT_ID + "&redirect_uri=" + encodeURI(browserURL + Config.CALLBACK_URL) + "&response_type=code&scope=email%20profile";
         window.open(url, '_self').focus();
     }
 
