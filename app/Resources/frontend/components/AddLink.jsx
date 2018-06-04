@@ -1,12 +1,17 @@
-import {toggleDialogAction, clearDialogAction, updateTypedAction, discoverDialogAction} from "../actions/addlinks_actions";
-import {Dialog, FlatButton, IconButton, List, ListItem, TextField} from "material-ui";
-import { bindActionCreators }   from "redux";
-import React, { Component }     from 'react';
-import { withRouter }           from "react-router-dom";
-import { connect }              from "react-redux";
+import {
+    toggleDialogAction,
+    clearDialogAction,
+    updateTypedAction,
+    discoverDialogAction
+}                                                                    from "../actions/addlinks_actions";
+import { Dialog, FlatButton, IconButton, List, ListItem, TextField } from "material-ui";
+import { updateSnackbarAction }                                      from "../actions/snackbar_actions";
+import { bindActionCreators }                                        from "redux";
+import React, { Component }                                          from 'react';
+import { withRouter }                                                from "react-router-dom";
+import { connect }                                                   from "react-redux";
 
-import '../assets/css/AddLink.css';
-import {updateSnackbarAction} from "../actions/snackbar_actions";
+import '../assets/scss/AddLink.scss';
 
 class AddLink extends Component {
 
@@ -32,14 +37,18 @@ class AddLink extends Component {
     handleTagAdd() {
         let tag = this.props.typedTag;
 
+
+        if (tag.trim().length < 1)
+            return;
+
         let exists = false;
         for (let a = 0; a < this.props.tags.length; ++a)
-            if (this.props.tags[a].name === tag)
+            if (this.props.tags[ a ].name === tag)
                 exists = true;
 
         if (!exists)
             this.props.updateTyped({
-                tags: [ ...this.props.tags, { id: tag, name: tag }],
+                tags    : [ ...this.props.tags, { id: tag, name: tag } ],
                 typedTag: '',
             });
         else
@@ -57,26 +66,30 @@ class AddLink extends Component {
             <FlatButton
                 label="Annuler"
                 primary={true}
-                onClick={() => this.handleClose() }
+                onClick={() => this.handleClose()}
             />,
             <FlatButton
                 label="Ajouter"
                 primary={true}
-                onClick={() => this.handleValidate() }
+                onClick={() => this.handleValidate()}
                 disabled={this.props.url.length < 1}
             />,
         ];
 
-        return <Dialog title="Ajouter un lien" actions={actions} modal={false} open={this.props.dialogOpen} onRequestClose={() => this.props.toggleDialog()} >
-            <TextField floatingLabelText={"URL"} style={{ width: '100%' }} className="addLinkURL" onChange={ (val) => this.props.updateTyped({ url: val.target.value }) }/>
+        return <Dialog title="Ajouter un lien" actions={actions} modal={false} open={this.props.dialogOpen}
+                       onRequestClose={() => this.props.toggleDialog()}>
+            <TextField floatingLabelText={"URL"} style={{ width: '100%' }} className="addLinkURL"
+                       onChange={(val) => this.props.updateTyped({ url: val.target.value })}/>
             <div className={"addLinkURL"}>
-                <TextField floatingLabelText={"Tags"} value={this.props.typedTag} onKeyDown={ (e) => this.keypressed(e) } onChange={(elt) => (this.props.updateTyped({ typedTag: elt.target.value }))}/>
-                <IconButton iconClassName="Icon-Add" onClick={() => this.handleTagAdd() } />
+                <TextField floatingLabelText={"Tags"} value={this.props.typedTag} onKeyDown={(e) => this.keypressed(e)}
+                           onChange={(elt) => (this.props.updateTyped({ typedTag: elt.target.value }))}/>
+                <IconButton iconClassName="Icon-Add" onClick={() => this.handleTagAdd()}/>
             </div>
             <List id="addLinkTaglist">
                 {
                     this.props.tags.map((tag) => {
-                        return <ListItem primaryText={"#" + tag.name} key={tag.id} onClick={() => this.handleTagRemove(tag)}/>
+                        return <ListItem primaryText={"#" + tag.name} key={tag.id}
+                                         onClick={() => this.handleTagRemove(tag)}/>;
                     })
                 }
             </List>
@@ -87,16 +100,16 @@ class AddLink extends Component {
 export default withRouter(connect(
     state => ({
         dialogOpen: state.addlinksReducer.open,
-        typedTag: state.addlinksReducer.typedTag,
-        tags: state.addlinksReducer.tags,
-        knownTags: state.filterReducer.tags,
-        url: state.addlinksReducer.url
+        typedTag  : state.addlinksReducer.typedTag,
+        tags      : state.addlinksReducer.tags,
+        knownTags : state.filterReducer.tags,
+        url       : state.addlinksReducer.url
     }),
     dispatch => ({
-        clear: bindActionCreators(clearDialogAction, dispatch),
-        toggleDialog: bindActionCreators(toggleDialogAction, dispatch),
-        updateTyped: bindActionCreators(updateTypedAction, dispatch),
-        discover: bindActionCreators(discoverDialogAction, dispatch),
+        clear               : bindActionCreators(clearDialogAction, dispatch),
+        toggleDialog        : bindActionCreators(toggleDialogAction, dispatch),
+        updateTyped         : bindActionCreators(updateTypedAction, dispatch),
+        discover            : bindActionCreators(discoverDialogAction, dispatch),
         updateSnackbarAction: bindActionCreators(updateSnackbarAction, dispatch)
     })
 )(AddLink));

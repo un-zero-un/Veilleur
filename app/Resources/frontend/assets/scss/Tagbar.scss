@@ -2,43 +2,45 @@
 @import 'Icons';
 
 #tagbar {
-
-  width: 25%;
-  background-color: $bg-darker;
-  box-sizing: content-box;
-
-  display: flex;
-  flex-flow: column;
-
-  padding: 0 20px 20px 20px;
+  width            : 25%;
+  background-color : $bg-darker;
+  box-sizing       : content-box;
+  display          : flex;
+  flex-flow        : column;
+  padding          : 0 20px 20px 20px;
 
   #header {
-    margin-top: 20px;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: 0;
+    margin-top  : 20px;
+    flex-grow   : 0;
+    flex-shrink : 0;
+    flex-basis  : 0;
 
     img {
-      height: 80px;
+      height : 80px;
     }
 
     h1 {
-      font-size: 1.5em;
+      font-size : 1.5em;
     }
 
   }
 
   #taglist {
-    padding: 0 !important;
-    margin: 20px 0 20px 0;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-    overflow-y: scroll;
-
-    .selected {
-      background-color: $list-selected !important;
-    }
+    padding     : 0 !important;
+    margin      : 20px 0 20px 0;
+    flex-grow   : 1;
+    flex-shrink : 1;
+    flex-basis  : auto;
+    overflow-y  : scroll;
   }
 
+  .user_infos {
+    width  : 85%;
+    margin : auto auto 15px auto;
+  }
+
+}
+
+.selected {
+  background-color : $list-selected !important;
 }

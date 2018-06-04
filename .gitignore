@@ -17,3 +17,4 @@
 /env
 /env.prod
 /node_modules/
+/web/build/

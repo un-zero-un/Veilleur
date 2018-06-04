@@ -83,3 +83,7 @@ lexik_jwt_authentication:
   public_key_path: '%env(PUBLIC_KEY_PATH)%'
   pass_phrase: '%env(PASSPHRASE_KEY)%'
   token_ttl: '%env(TOKEN_TTL)%'
+
+gesdinet_jwt_refresh_token:
+    ttl: 2592000
+    user_provider: veilleur.userprovider

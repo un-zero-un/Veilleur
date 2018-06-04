@@ -1,12 +1,12 @@
-import {Dialog, FlatButton, FontIcon, List, ListItem} from "material-ui";
-import {bindActionCreators} from "redux";
-import React, {Component} from 'react';
-import {withRouter} from "react-router-dom";
-import {connect} from "react-redux";
+import { linkingClickAction, linkTagAction, toggleLinkingAction } from "../actions/linkingtags_actions";
+import { Dialog, FlatButton, FontIcon, List, ListItem } from "material-ui";
+import { updateSnackbarAction } from "../actions/snackbar_actions";
+import { bindActionCreators } from "redux";
+import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
-import '../assets/css/LinkTags.css';
-import {updateSnackbarAction} from "../actions/snackbar_actions";
-import {linkingClickAction, linkTagAction, toggleLinkingAction} from "../actions/linkingtags_actions";
+import '../assets/scss/LinkTags.scss';
 
 class LinkingTags extends Component {
 
@@ -20,7 +20,7 @@ class LinkingTags extends Component {
     }
 
     handleTagClick(tag) {
-        let value = {masterTag: this.props.masterTag, slaveTag: this.props.slaveTag};
+        let value = { masterTag: this.props.masterTag, slaveTag: this.props.slaveTag };
 
         if (this.props.masterTag === tag) {
             value.masterTag = null;
@@ -36,7 +36,7 @@ class LinkingTags extends Component {
     }
 
     clearField(field) {
-        let value = {masterTag: this.props.masterTag, slaveTag: this.props.slaveTag};
+        let value = { masterTag: this.props.masterTag, slaveTag: this.props.slaveTag };
 
         switch (field) {
             case 0:
@@ -57,26 +57,30 @@ class LinkingTags extends Component {
             <FlatButton
                 label="Annuler"
                 primary={true}
-                onClick={() => this.handleClose() }
+                onClick={() => this.handleClose()}
             />,
             <FlatButton
                 label="Lier"
                 primary={true}
-                onClick={() => this.handleValidate() }
-                disabled={ this.props.masterTag === null || this.props.slaveTag === null }
+                onClick={() => this.handleValidate()}
+                disabled={this.props.masterTag === null || this.props.slaveTag === null}
             />,
         ];
 
-        return <Dialog title="Lier des tags" actions={actions} modal={false} open={this.props.dialogOpen} onRequestClose={() => this.props.toggleDialog()} >
+        return <Dialog title="Lier des tags" actions={actions} modal={false} open={this.props.dialogOpen}
+                       onRequestClose={() => this.props.toggleDialog()}>
             <div id="taglink-show">
-                <FlatButton label={this.props.masterTag != null ? this.props.masterTag.name : ""} onClick={() => this.clearField(0) }/>
-                <FontIcon className="Icon-Arrowequals" />
-                <FlatButton label={this.props.slaveTag != null ? this.props.slaveTag.name : ""} onClick={() => this.clearField(1) }/>
+                <FlatButton label={this.props.masterTag != null ? this.props.masterTag.name : ""}
+                            onClick={() => this.clearField(0)}/>
+                <FontIcon className="Icon-Arrowequals"/>
+                <FlatButton label={this.props.slaveTag != null ? this.props.slaveTag.name : ""}
+                            onClick={() => this.clearField(1)}/>
             </div>
             <List id="addLinkTaglist">
                 {
                     this.props.tags.map((tag) => {
-                        return <ListItem primaryText={"#" + tag.name} key={tag.id} onClick={() => this.handleTagClick(tag)}/>
+                        return <ListItem primaryText={"#" + tag.name} key={tag.id}
+                                         onClick={() => this.handleTagClick(tag)}/>;
                     })
                 }
             </List>

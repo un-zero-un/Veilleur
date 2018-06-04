@@ -2,12 +2,28 @@
 
 namespace AppBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="veilleur_user")
+ * @ApiResource(
+ *    collectionOperations={ "get" },
+ *    itemOperations={"get", "toggleAdmin"={
+ *              "method"="PUT",
+ *              "path"="/users/{id}/admin/{val}",
+ *              "controller"=AppBundle\Controller\UserController::class
+ *      }
+ *     },
+ *     attributes={
+ *         "normalization_context"={"groups"={"users"}},
+ *         "denormalization_context"={"groups"={"users"}},
+ *         "pagination_enabled"=false
+ *     }
+ * )
  */
 class User implements UserInterface
 {
@@ -16,6 +32,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({ "users" })
      *
      * @var int
      */
@@ -23,21 +40,32 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Groups({ "users" })
      *
      * @var string
      */
     private $username;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
-     *
-     * @var string
+     * @ORM\Column(type="array")
+     * @Groups({ "users" })
      */
-    private $email;
+    private $roles;
 
-    public function getID() { return $this->id; }
-    public function getUsername() { return $this->username; }
-    public function getEmail() { return $this->email; }
+    public function __construct()
+    {
+        $this->roles = [];
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
 
     public function setUsername(string $username)
     {
@@ -45,21 +73,58 @@ class User implements UserInterface
         return $this;
     }
 
-    public function setEmail(string $email) {
-        $this->email = $email;
+    /**
+     * @return string[]
+     */
+    public function getRoles(): ?array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param string $role
+     *
+     * @return User
+     */
+    public function addRole(string $role): User
+    {
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
         return $this;
     }
 
-    public function getRoles() {
-        if (preg_match_all("#^([a-z]|[A-Z]|[0-9])+\@un\-zero\-un\.fr$#", $this->getEmail()))
-            return [ "ROLE_ADMIN" ];
-        else
-            return [ "ROLE_USER" ];
+    public function removeRole(string $role): User
+    {
+        var_dump('Removing ' .$role);
+        if (in_array($role, $this->roles, true)) {
+            var_dump('In array');
+            $index = array_search($role, $this->roles);
+            var_dump('At index ' . $index);
+            array_splice($this->roles, $index, 1);
+        }
+        var_dump("Done");
+        return $this;
     }
 
-    public function getPassword() { return null; }
+    /**
+     * @return null
+     */
+    public function getPassword()
+    {
+        return null;
+    }
 
-    public function getSalt() { return null; }
+    /**
+     * @return null
+     */
+    public function getSalt()
+    {
+        return null;
+    }
 
-    public function eraseCredentials() { }
+    public function eraseCredentials()
+    {
+    }
+
 }

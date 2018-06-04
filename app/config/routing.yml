@@ -6,12 +6,14 @@ hwi_oauth_connect:
     resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
     prefix:   /connect
 
-hwi_oauth_login:
-    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
-    prefix:   /login
+gesdinet_jwt_refresh_token:
+    path:     /token/refresh
+    defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
 
-google_login:
-    path: /login/check-google
+react_token:
+  path: /login/check-google
+  condition: "request !== null and request.headers.get('Accept') matches '/html/i'"
+  controller: AppBundle\Controller\MainController::login
 
 react_app:
   path: '{uri}'

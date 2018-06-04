@@ -18,7 +18,6 @@ class TagController extends Controller
      *        methods={"POST"},
      *        defaults={
      *          "_api_resource_class"=Tag::class,
-     *          "_api_collection_operation_name"="link_tags"
      *        }
      *     )
      *
@@ -28,7 +27,6 @@ class TagController extends Controller
      * @return Response
      */
     public function linkTags($mainTag, $secondaryTag) {
-
         $rp = $this->getDoctrine()->getRepository(Tag::class);
         $em = $this->getDoctrine()->getManager();
 
@@ -42,18 +40,47 @@ class TagController extends Controller
 
         $wasAdded = $tag->addDuplicate($sec);
 
-        if ($wasAdded === Response::HTTP_CREATED) {
+        if ($wasAdded) {
             $em->persist($tag);
             $em->flush();
 
             $nrm = $ser->normalize($tag, 'jsonld');
 
-            return new Response(json_encode($nrm), $wasAdded);
+            return new Response(json_encode($nrm), Response::HTTP_CREATED);
         } else {
-            return new Response('', $wasAdded);
+            return new Response('', Response::HTTP_BAD_REQUEST);
         }
     }
 
 
+    /**
+     * @Route(name="unlink_tags",
+     *        path="/tags/link/{child}",
+     *        methods={"DELETE"},
+     *        defaults={
+     *          "_api_resource_class"=Tag::class,
+     *        }
+     *     )
+     *
+     * @param $child Tag The tag you want to un-child from another one
+     *
+     * @return Response
+     */
+    public function unlinkTags($child)
+    {
+        $rp = $this->getDoctrine()->getRepository(Tag::class);
+        $em = $this->getDoctrine()->getManager();
+
+        $tag = $rp->findOneBy(['name' => $child]);
+
+        if (null === $tag) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        $em->persist($tag);
+        $em->flush();
+
+        return new Response('', Response::HTTP_NO_CONTENT);
+    }
 
 }

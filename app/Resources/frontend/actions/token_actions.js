@@ -1,11 +1,15 @@
-export const RETREIVE_CODE = "RETREIVE_CODE";
+export const READ_TOKEN   = "READ_TOKEN";
+export const GET_TOKEN    = "GET_TOKEN";
+export const DELETE_TOKEN = "DELETE_TOKEN";
 
-export const retreiveCodeAction = (payload = { code: '' }) => {
-    return { type: RETREIVE_CODE, payload };
+export const getTokenAction = () => {
+    return { type: GET_TOKEN };
 };
 
-export const RETREIVE_TOKEN = "RETREIVE_TOKEN";
+export const readTokenAction = (payload = { token: '', refreshToken: '' }) => {
+    return { type: READ_TOKEN, payload };
+};
 
-export const retreiveTokenAction = (payload = { token: '' }) => {
-    return { type: RETREIVE_TOKEN, payload };
+export const deleteTokenAction = () => {
+    return { type: DELETE_TOKEN };
 };
