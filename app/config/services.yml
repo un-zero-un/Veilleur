@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        autowire: true
+
     monolog.formatter.colored_line:
         class: Bramus\Monolog\Formatter\ColoredLineFormatter
 
@@ -48,6 +51,9 @@ services:
     'veilleur.auth_success':
       class: AppBundle\Security\AuthenticationSuccessHandler
       arguments: [ '@lexik_jwt_authentication.jwt_manager', '@event_dispatcher']
+
+    AppBundle\Controller\UserController:
+      arguments: [ '@doctrine.orm.entity_manager' ]
 
     AppBundle\Event\GenerateRefreshTokenListener:
       arguments: [ '@gesdinet.jwtrefreshtoken.refresh_token_manager', '2592000', '@validator', '@request_stack', 'username']

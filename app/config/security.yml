@@ -31,7 +31,7 @@ security:
               service: veilleur.userprovider
 
         authed_user:
-          pattern: ^/(watch_links/discover)|(tags/link)/
+          pattern: ^/(watch_links/discover)|(tags/link)|(users)/
           stateless: true
           guard:
             authenticators:
@@ -43,7 +43,7 @@ security:
           anonymous: true
 
     access_control:
-      - { path: ^/(watch_links/discover)|(tags/link)/, roles: ROLE_ADMIN }
+      - { path: ^/(watch_links/discover)|(tags/link)|(users)/, roles: ROLE_ADMIN }
       - { path: ^/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }

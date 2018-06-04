@@ -21,7 +21,7 @@ class AdminValidator {
      * @return bool
      */
     public function isAdmin(User $user) {
-        $domain = explode('@', trim($user->getEmail()));
+        $domain = explode('@', trim($user->getUsername()));
         return in_array($domain[1], array_values($this->allowedDomains), true);
     }
 

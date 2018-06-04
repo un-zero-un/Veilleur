@@ -1,25 +1,26 @@
-import { deleteTokenAction, getTokenAction } from "../actions/token_actions";
-import { FlatButton, FontIcon }              from "material-ui";
-import { toggleLinkingAction }               from "../actions/linkingtags_actions";
-import { NO_TOKEN_AVAILABLE }                from "../middleware/LocalStorageMiddleware";
-import { toggleDialogAction }                from "../actions/addlinks_actions";
-import { retreiveTagsAction }                from "../actions/tags_actions";
-import { bindActionCreators }                from "redux";
-import React, { Component }                  from "react";
-import { List, ListItem }                    from 'material-ui/List';
-import { filterAction }                      from "../actions/filter_actions";
-import * as jwt_decode                       from 'jwt-decode';
-import { withRouter }                        from "react-router-dom";
-import SnackbarCustom                        from "./SnackbarCustom";
-import { connect }                           from "react-redux";
-import LinkingTags                           from "./LinkingTags";
-import IconButton                            from 'material-ui/IconButton';
-import TextField                             from 'material-ui/TextField';
-import AddLink                               from "./AddLink";
-import Config                                from "../Config";
-import logo                                  from '../assets/logo.svg';
-import Tag                                   from "../model/Tag";
+import {getUsersAction, toggleDialogUserAction} from "../actions/userpromote_actions";
+import {deleteTokenAction, getTokenAction}      from "../actions/token_actions";
+import {FlatButton, FontIcon}                   from "material-ui";
+import {toggleLinkingAction}                    from "../actions/linkingtags_actions";
+import {NO_TOKEN_AVAILABLE}                     from "../middleware/LocalStorageMiddleware";
+import {toggleDialogAction}                     from "../actions/addlinks_actions";
+import {retreiveTagsAction}                     from "../actions/tags_actions";
+import {bindActionCreators}                     from "redux";
+import React, {Component}                       from "react";
+import {List, ListItem}                         from 'material-ui/List';
+import * as jwt_decode                          from 'jwt-decode';
+import SnackbarCustom                           from "./SnackbarCustom";
+import {filterAction}                           from "../actions/filter_actions";
+import UserPromotion                            from "./UserPromotion";
+import {withRouter}                             from "react-router-dom";
+import LinkingTags                              from "./LinkingTags";
+import IconButton                               from 'material-ui/IconButton';
+import TextField                                from 'material-ui/TextField';
+import {connect}                                from "react-redux";
+import AddLink                                  from "./AddLink";
+import Config                                   from "../Config";
 
+import logo from '../assets/logo.svg';
 import '../assets/scss/Tagbar.scss';
 
 class Tagbar extends Component {
@@ -34,29 +35,29 @@ class Tagbar extends Component {
         url      = url.substring(1);
         url      = url.split("tags[]=");
         for (let i = 0; i < url.length; ++i) {
-            if (url[ i ].endsWith("&")) {
-                url[ i ] = url[ i ].substring(0, url[ i ].length - 1);
+            if (url[i].endsWith("&")) {
+                url[i] = url[i].substring(0, url[i].length - 1);
             }
 
-            if (url[ i ].length !== 0) {
-                tags.push(url[ i ]);
+            if (url[i].length !== 0) {
+                tags.push(url[i]);
             }
         }
 
         if (1 === tags.length) {
-            tags = tags[ 0 ];
+            tags = tags[0];
         }
 
-        return { "tags[]": tags };
+        return {"tags[]": tags};
     }
 
     getTags() {
         let tags = Tagbar.parseURL(this.props.location.search);
-        if (undefined !== tags && undefined !== tags[ "tags[]" ] && null !== tags[ "tags[]" ]) {
-            if (Array.isArray(tags[ "tags[]" ]))
-                return tags[ "tags[]" ];
+        if (undefined !== tags && undefined !== tags["tags[]"] && null !== tags["tags[]"]) {
+            if (Array.isArray(tags["tags[]"]))
+                return tags["tags[]"];
             else
-                return [ tags[ "tags[]" ] ];
+                return [tags["tags[]"]];
         }
         return null;
     }
@@ -75,14 +76,14 @@ class Tagbar extends Component {
             let urltags = tags.map((tag) => ("tags[]=" + tag));
 
             for (let i = 0; i < urltags.length; ++i) {
-                url += urltags[ i ];
+                url += urltags[i];
                 if (i !== urltags.length - 1)
                     url += "&";
             }
         }
 
         this.props.history.push(url);
-        this.props.filter({ currPage: this.props.currPage, search, order, selectedTags: tags });
+        this.props.filter({currPage: this.props.currPage, search, order, selectedTags: tags});
     }
 
     /**
@@ -110,17 +111,9 @@ class Tagbar extends Component {
         this.updateRouter(this.getTags(), ((this.props.order === "ASC") ? "DESC" : "ASC"), this.props.search);
     }
 
-    handleAddToggle() {
-        this.props.toggleAddLink();
-    }
-
-    handleLinkTags() {
-        this.props.toggleLinking();
-    }
-
     handleLogin() {
         let browserURL = document.location.origin;
-        let url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + Config.CLIENT_ID + "&redirect_uri=" + encodeURI(browserURL + Config.CALLBACK_URL) + "&response_type=code&scope=email%20profile";
+        let url        = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + Config.CLIENT_ID + "&redirect_uri=" + encodeURI(browserURL + Config.CALLBACK_URL) + "&response_type=code&scope=email%20profile";
         window.open(url, '_self').focus();
     }
 
@@ -138,9 +131,9 @@ class Tagbar extends Component {
         this.props.retreiveTags();
         this.props.filter({
             selectedTags: this.getTags(),
-            order       : router.order,
-            search      : router.search,
-            currPage    : router.page
+            order: router.order,
+            search: router.search,
+            currPage: router.page
         });
 
         if (0 === this.props.jwt.length) {
@@ -163,15 +156,23 @@ class Tagbar extends Component {
             );
         } else {
             // Logged
-            let user = jwt_decode(token);
+            let user    = jwt_decode(token);
             let isAdmin = user.roles.includes('ROLE_ADMIN');
 
             icons.push(
-                <div className={"user_infos"}><div>Vous êtes connecté en tant que</div><div>{user.username}</div></div>,
+                <div className={"user_infos"}>
+                    <div>Vous êtes connecté en tant que</div>
+                    <div>{user.username}</div>
+                </div>,
+                <FlatButton disabled={!isAdmin} icon={<FontIcon key={"promote_bt"} className="Icon-Promote"/>}
+                            onClick={() => {
+                                this.props.getUsers();
+                                this.props.toggleUserPromote()
+                            }}/>,
                 <FlatButton disabled={!isAdmin} icon={<FontIcon key={"linktag_bt"} className="Icon-Link"/>}
-                            onClick={() => this.handleLinkTags()}/>,
+                            onClick={() => this.props.toggleLinking()}/>,
                 <FlatButton disabled={!isAdmin} icon={<FontIcon key={"addlink_bt"} className="Icon-Add"/>}
-                            onClick={() => this.handleAddToggle()}/>,
+                            onClick={() => this.props.toggleAddLink()}/>,
                 <FlatButton icon={<FontIcon key={"log-out_bt"} className="Icon-Logout"/>}
                             onClick={() => this.handleLogout()}/>
             );
@@ -205,6 +206,7 @@ class Tagbar extends Component {
 
             <AddLink params={params}/>
             <LinkingTags params={params}/>
+            <UserPromotion params={params}/>
             <SnackbarCustom/>
         </aside>;
     }
@@ -213,18 +215,20 @@ class Tagbar extends Component {
 
 export default withRouter(connect(
     state => ({
-        search  : state.filterReducer.search,
-        tags    : state.filterReducer.tags,
-        order   : state.filterReducer.order,
+        search: state.filterReducer.search,
+        tags: state.filterReducer.tags,
+        order: state.filterReducer.order,
         currPage: state.linksReducer.currPage,
-        jwt     : state.tokenReducer.token
+        jwt: state.tokenReducer.token
     }),
     dispatch => ({
-        retreiveTags : bindActionCreators(retreiveTagsAction, dispatch),
-        filter       : bindActionCreators(filterAction, dispatch),
+        retreiveTags: bindActionCreators(retreiveTagsAction, dispatch),
+        filter: bindActionCreators(filterAction, dispatch),
         toggleAddLink: bindActionCreators(toggleDialogAction, dispatch),
         toggleLinking: bindActionCreators(toggleLinkingAction, dispatch),
-        getToken     : bindActionCreators(getTokenAction, dispatch),
-        deleteToken  : bindActionCreators(deleteTokenAction, dispatch)
+        toggleUserPromote: bindActionCreators(toggleDialogUserAction, dispatch),
+        getToken: bindActionCreators(getTokenAction, dispatch),
+        deleteToken: bindActionCreators(deleteTokenAction, dispatch),
+        getUsers: bindActionCreators(getUsersAction, dispatch)
     })
 )(Tagbar));
