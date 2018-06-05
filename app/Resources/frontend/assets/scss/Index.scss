@@ -30,3 +30,11 @@ body, #root, #app {
 .frame {
   width: 50%;
 }
+
+
+#MainMenuButton {
+  position : absolute !important;
+  z-index : 98;
+  top: 20px;
+  left: 20px;
+}

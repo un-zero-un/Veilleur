@@ -1,6 +1,26 @@
 @import 'Colors';
 @import 'Icons';
 
+@keyframes slide-in {
+  0% {
+    left : -100%;
+  }
+
+  100% {
+    left : 0;
+  }
+}
+
+#MainMenuCloseButton {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.showMenu {
+  animation : slide-in .2s linear forwards;
+}
+
 #tagbar {
   width            : 25%;
   background-color : $bg-darker;
@@ -8,6 +28,15 @@
   display          : flex;
   flex-flow        : column;
   padding          : 0 20px 20px 20px;
+
+  @media (max-width : 800px) {
+    position : fixed;
+    width    : 100%;
+    height   : 100%;
+    left     : -100%;
+    z-index  : 99;
+    padding  : 0;
+  }
 
   #header {
     margin-top  : 20px;
@@ -21,6 +50,9 @@
 
     h1 {
       font-size : 1.5em;
+      @media (max-width : 800px) {
+        font-size : 1em;
+      }
     }
 
   }
@@ -53,5 +85,5 @@
 }
 
 .listItem:hover {
-  background-color: rgba(255, 255, 255, .05);
+  background-color : rgba(255, 255, 255, .05);
 }

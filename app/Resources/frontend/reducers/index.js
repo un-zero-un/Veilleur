@@ -5,7 +5,8 @@ import addlinksReducer    from './addlinks_reducer';
 import snackbarReducer    from './snackbar_reducer';
 import linkingTagsReducer from './linkingtags_reducer';
 import tokenReducer       from './token_reducer';
-import userpromoteReducer from './userspromote_reducer'
+import userpromoteReducer from './userspromote_reducer';
+import responsiveReducer from './responsive_reducers';
 
 export default combineReducers({
     linksReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
     linkingTagsReducer,
     tokenReducer,
     userpromoteReducer,
+    responsiveReducer,
 });

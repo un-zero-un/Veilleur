@@ -5,6 +5,8 @@ import LinkList           from './components/LinkList'
 import Tagbar             from "./components/Tagbar";
 
 class App extends Component {
+
+
     render() {
         const theme = createMuiTheme({
             palette: {
@@ -19,8 +21,7 @@ class App extends Component {
                     <LinkList {...this.props} />
                 </div>
             </MuiThemeProvider>
-        )
-            ;
+        );
     }
 }
 

@@ -1,12 +1,12 @@
 import {getUsersAction, toggleDialogUserAction} from "../actions/userpromote_actions";
 import {deleteTokenAction, getTokenAction}      from "../actions/token_actions";
-import {Button, List, ListItem}                 from "@material-ui/core";
 import {toggleLinkingAction}                    from "../actions/linkingtags_actions";
 import {NO_TOKEN_AVAILABLE}                     from "../middleware/LocalStorageMiddleware";
 import {toggleDialogAction}                     from "../actions/addlinks_actions";
 import {retreiveTagsAction}                     from "../actions/tags_actions";
 import {bindActionCreators}                     from "redux";
 import React, {Component}                       from "react";
+import {List, ListItem}                         from "@material-ui/core";
 import * as jwt_decode                          from "jwt-decode";
 import SnackbarCustom                           from "./SnackbarCustom";
 import {filterAction}                           from "../actions/filter_actions";
@@ -18,6 +18,7 @@ import AddLink                                  from "./AddLink";
 import Config                                   from "../Config";
 import Tag                                      from "../model/Tag";
 
+import CloseIcon   from "@material-ui/icons/Close";
 import LinkIcon   from "@material-ui/icons/Link";
 import AddIcon    from "@material-ui/icons/Add";
 import LoginIcon  from "@material-ui/icons/Launch";
@@ -27,11 +28,12 @@ import ClearIcon  from "@material-ui/icons/ClearAll";
 import AscIcon    from "@material-ui/icons/ArrowUpward";
 import DescIcon   from "@material-ui/icons/ArrowDownward";
 
-import logo         from '../assets/logo.svg';
+import logo             from '../assets/logo.svg';
 import '../assets/scss/Tagbar.scss';
-import TextField    from "@material-ui/core/es/TextField/TextField";
-import IconButton   from "@material-ui/core/es/IconButton/IconButton";
-import ListItemText from "@material-ui/core/es/ListItemText/ListItemText";
+import TextField        from "@material-ui/core/es/TextField/TextField";
+import IconButton       from "@material-ui/core/es/IconButton/IconButton";
+import ListItemText     from "@material-ui/core/es/ListItemText/ListItemText";
+import {hideMenuAction} from "../actions/responsive_actions";
 
 class Tagbar extends Component {
 
@@ -135,6 +137,12 @@ class Tagbar extends Component {
         this.updateRouter(this.getTags(), this.props.order, e);
     }
 
+    keypressed(e) {
+        if (13 === e.keyCode) {
+            this.props.closeMenu();
+        }
+    }
+
     componentDidMount() {
         let router = this.props.match.params;
 
@@ -193,16 +201,26 @@ class Tagbar extends Component {
             );
         }
 
-        return <aside id="tagbar">
+        return <aside id="tagbar" className={this.props.isShown ? "showMenu" : "hideMenu"}>
+            <IconButton id="MainMenuCloseButton" onClick={() => {
+                this.props.closeMenu();
+            }}>
+                <CloseIcon />
+            </IconButton>
             <div id="header">
                 <img src={logo} alt="logo-unzeroun"/>
                 <h1 className="app-title">Veilleur</h1>
-                <TextField placeholder="Recherche" value={router.search} onChange={(a) => this.onChange(a.target.value)}/>
-                <IconButton onClick={() => this.handleOrderToggle()}>
+                <TextField className="search_bar" placeholder="Recherche" value={router.search} onKeyDown={(e) => this.keypressed(e)}
+                           onChange={(a) => this.onChange(a.target.value)}/>
+                <IconButton onClick={() => {
+                    this.handleOrderToggle();
+                    this.props.closeMenu();
+                }}>
                     {(router.order === "DESC") ? <AscIcon/> : <DescIcon/>}
                 </IconButton>
                 <IconButton onClick={() => {
                     this.updateRouter([], "DESC", "");
+                    this.props.closeMenu();
                 }}>
                     <ClearIcon/>
                 </IconButton>
@@ -212,8 +230,11 @@ class Tagbar extends Component {
                 {
                     this.props.tags.map((tag) => {
                         let cName = (null !== params) && (params.includes(tag.name)) ? "selected" : "";
-                        return <ListItem className={"listItem " + cName} key={tag.id} onClick={() => this.handleClick(tag)}>
-                                <ListItemText className="text" primary={"#" + tag.name} />
+                        return <ListItem className={"listItem " + cName} key={tag.id}
+                                         onClick={() => {
+                                             this.handleClick(tag);
+                                         }}>
+                            <ListItemText className="text" primary={"#" + tag.name}/>
                         </ListItem>;
                     })
                 }
@@ -238,7 +259,8 @@ export default withRouter(connect(
         tags: state.filterReducer.tags,
         order: state.filterReducer.order,
         currPage: state.linksReducer.currPage,
-        jwt: state.tokenReducer.token
+        jwt: state.tokenReducer.token,
+        isShown: state.responsiveReducer.menuShown
     }),
     dispatch => ({
         retreiveTags: bindActionCreators(retreiveTagsAction, dispatch),
@@ -248,6 +270,7 @@ export default withRouter(connect(
         toggleUserPromote: bindActionCreators(toggleDialogUserAction, dispatch),
         getToken: bindActionCreators(getTokenAction, dispatch),
         deleteToken: bindActionCreators(deleteTokenAction, dispatch),
-        getUsers: bindActionCreators(getUsersAction, dispatch)
+        getUsers: bindActionCreators(getUsersAction, dispatch),
+        closeMenu: bindActionCreators(hideMenuAction, dispatch)
     })
 )(Tagbar));
