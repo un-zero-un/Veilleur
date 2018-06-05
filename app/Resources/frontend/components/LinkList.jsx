@@ -2,7 +2,7 @@ import React, { Component }   from 'react';
 import { withRouter }         from "react-router-dom";
 import { connect }            from "react-redux";
 import LinkItem               from "./LinkItem";
-import { List }               from "material-ui";
+import { List }               from "@material-ui/core";
 import Pager                  from "./Pager";
 
 import '../assets/scss/LinkList.scss';

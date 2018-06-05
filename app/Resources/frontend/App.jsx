@@ -1,21 +1,26 @@
-import { MuiThemeProvider } from "material-ui";
-import React, { Component } from 'react';
-import darkBaseTheme        from 'material-ui/styles/baseThemes/darkBaseTheme';
-import getMuiTheme          from 'material-ui/styles/getMuiTheme';
-import LinkList             from './components/LinkList'
-import Tagbar               from "./components/Tagbar";
+import {MuiThemeProvider} from "@material-ui/core";
+import React, {Component} from 'react';
+import {createMuiTheme}   from '@material-ui/core/styles';
+import LinkList           from './components/LinkList'
+import Tagbar             from "./components/Tagbar";
 
 class App extends Component {
     render() {
+        const theme = createMuiTheme({
+            palette: {
+                type: 'dark',
+            },
+        });
+
         return (
-            <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+            <MuiThemeProvider theme={createMuiTheme(theme)}>
                 <div id="app">
                     <Tagbar {...this.props} />
                     <LinkList {...this.props} />
                 </div>
             </MuiThemeProvider>
-    )
-        ;
+        )
+            ;
     }
 }
 

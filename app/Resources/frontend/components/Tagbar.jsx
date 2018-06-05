@@ -1,27 +1,37 @@
 import {getUsersAction, toggleDialogUserAction} from "../actions/userpromote_actions";
 import {deleteTokenAction, getTokenAction}      from "../actions/token_actions";
-import {FlatButton, FontIcon}                   from "material-ui";
+import {Button, List, ListItem}                 from "@material-ui/core";
 import {toggleLinkingAction}                    from "../actions/linkingtags_actions";
 import {NO_TOKEN_AVAILABLE}                     from "../middleware/LocalStorageMiddleware";
 import {toggleDialogAction}                     from "../actions/addlinks_actions";
 import {retreiveTagsAction}                     from "../actions/tags_actions";
 import {bindActionCreators}                     from "redux";
 import React, {Component}                       from "react";
-import {List, ListItem}                         from 'material-ui/List';
-import * as jwt_decode                          from 'jwt-decode';
+import * as jwt_decode                          from "jwt-decode";
 import SnackbarCustom                           from "./SnackbarCustom";
 import {filterAction}                           from "../actions/filter_actions";
 import UserPromotion                            from "./UserPromotion";
 import {withRouter}                             from "react-router-dom";
 import LinkingTags                              from "./LinkingTags";
-import IconButton                               from 'material-ui/IconButton';
-import TextField                                from 'material-ui/TextField';
 import {connect}                                from "react-redux";
 import AddLink                                  from "./AddLink";
 import Config                                   from "../Config";
+import Tag                                      from "../model/Tag";
 
-import logo from '../assets/logo.svg';
+import LinkIcon   from "@material-ui/icons/Link";
+import AddIcon    from "@material-ui/icons/Add";
+import LoginIcon  from "@material-ui/icons/Launch";
+import LogoutIcon from "@material-ui/icons/ExitToApp";
+import AdminIcon  from "@material-ui/icons/Portrait";
+import ClearIcon  from "@material-ui/icons/ClearAll";
+import AscIcon    from "@material-ui/icons/ArrowUpward";
+import DescIcon   from "@material-ui/icons/ArrowDownward";
+
+import logo         from '../assets/logo.svg';
 import '../assets/scss/Tagbar.scss';
+import TextField    from "@material-ui/core/es/TextField/TextField";
+import IconButton   from "@material-ui/core/es/IconButton/IconButton";
+import ListItemText from "@material-ui/core/es/ListItemText/ListItemText";
 
 class Tagbar extends Component {
 
@@ -151,8 +161,9 @@ class Tagbar extends Component {
         if (NO_TOKEN_AVAILABLE === token || token.length < 1) {
             //Login
             icons.push(
-                <FlatButton icon={<FontIcon key={"log_bt"} className="Icon-Login"/>}
-                            onClick={() => this.handleLogin()}/>
+                <IconButton onClick={() => this.handleLogin()}>
+                    <LoginIcon/>
+                </IconButton>
             );
         } else {
             // Logged
@@ -164,17 +175,21 @@ class Tagbar extends Component {
                     <div>Vous êtes connecté en tant que</div>
                     <div>{user.username}</div>
                 </div>,
-                <FlatButton disabled={!isAdmin} icon={<FontIcon key={"promote_bt"} className="Icon-Promote"/>}
-                            onClick={() => {
-                                this.props.getUsers();
-                                this.props.toggleUserPromote()
-                            }}/>,
-                <FlatButton disabled={!isAdmin} icon={<FontIcon key={"linktag_bt"} className="Icon-Link"/>}
-                            onClick={() => this.props.toggleLinking()}/>,
-                <FlatButton disabled={!isAdmin} icon={<FontIcon key={"addlink_bt"} className="Icon-Add"/>}
-                            onClick={() => this.props.toggleAddLink()}/>,
-                <FlatButton icon={<FontIcon key={"log-out_bt"} className="Icon-Logout"/>}
-                            onClick={() => this.handleLogout()}/>
+                <IconButton disabled={!isAdmin} onClick={() => {
+                    this.props.getUsers();
+                    this.props.toggleUserPromote()
+                }}>
+                    <AdminIcon/>
+                </IconButton>,
+                <IconButton disabled={!isAdmin} onClick={() => this.props.toggleLinking()} aria-label="Link tags">
+                    <LinkIcon/>
+                </IconButton>,
+                <IconButton disabled={!isAdmin} onClick={() => this.props.toggleAddLink()}>
+                    <AddIcon/>
+                </IconButton>,
+                <IconButton onClick={() => this.handleLogout()}>
+                    <LogoutIcon/>
+                </IconButton>
             );
         }
 
@@ -182,20 +197,24 @@ class Tagbar extends Component {
             <div id="header">
                 <img src={logo} alt="logo-unzeroun"/>
                 <h1 className="app-title">Veilleur</h1>
-                <TextField floatingLabelText={"Recherche"} value={router.search}
-                           onChange={(a) => this.onChange(a.target.value)}/>
-                <IconButton iconClassName={"Icon-" + router.order} onClick={() => this.handleOrderToggle()}/>
-                <IconButton iconClassName="Icon-Clear" onClick={() => {
+                <TextField placeholder="Recherche" value={router.search} onChange={(a) => this.onChange(a.target.value)}/>
+                <IconButton onClick={() => this.handleOrderToggle()}>
+                    {(router.order === "DESC") ? <AscIcon/> : <DescIcon/>}
+                </IconButton>
+                <IconButton onClick={() => {
                     this.updateRouter([], "DESC", "");
-                }}/>
+                }}>
+                    <ClearIcon/>
+                </IconButton>
             </div>
 
             <List id="taglist">
                 {
                     this.props.tags.map((tag) => {
                         let cName = (null !== params) && (params.includes(tag.name)) ? "selected" : "";
-                        return <ListItem className={cName} primaryText={"#" + tag.name} key={tag.id}
-                                         onClick={() => this.handleClick(tag)}/>;
+                        return <ListItem className={"listItem " + cName} key={tag.id} onClick={() => this.handleClick(tag)}>
+                                <ListItemText className="text" primary={"#" + tag.name} />
+                        </ListItem>;
                     })
                 }
             </List>

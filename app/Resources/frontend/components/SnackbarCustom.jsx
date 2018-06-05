@@ -2,7 +2,7 @@ import {updateSnackbarAction} from "../actions/snackbar_actions";
 import {bindActionCreators}   from "redux";
 import React, {Component}     from 'react';
 import {withRouter}           from "react-router-dom";
-import {Snackbar}             from "material-ui";
+import {Snackbar}             from "@material-ui/core";
 import {connect}              from "react-redux";
 
 class SnackbarCustom extends Component {
@@ -16,7 +16,7 @@ class SnackbarCustom extends Component {
             open={this.props.open}
             message={this.props.message}
             autoHideDuration={4000}
-            onRequestClose={() => this.handleRequestClose() }
+            onRequestClose={() => this.handleRequestClose()}
         />
     }
 

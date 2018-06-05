@@ -1,14 +1,17 @@
-import {toggleDialogUserAction, toggleAdminAction} from "../actions/userpromote_actions";
-import {Dialog, FlatButton, List, ListItem} from "material-ui";
-import {updateSnackbarAction}               from "../actions/snackbar_actions";
-import {NO_TOKEN_AVAILABLE}                 from "../middleware/LocalStorageMiddleware";
-import {bindActionCreators}                 from "redux";
-import React, {Component}                   from 'react';
-import * as jwt_decode                      from 'jwt-decode';
-import {withRouter}                         from "react-router-dom";
-import {connect}                            from "react-redux";
+import {toggleDialogUserAction, toggleAdminAction}    from "../actions/userpromote_actions";
+import {Dialog, Button, List, ListItem, ListItemText} from "@material-ui/core";
+import {updateSnackbarAction}                         from "../actions/snackbar_actions";
+import {NO_TOKEN_AVAILABLE}                           from "../middleware/LocalStorageMiddleware";
+import {bindActionCreators}                           from "redux";
+import React, {Component}                             from 'react';
+import * as jwt_decode                                from 'jwt-decode';
+import {withRouter}                                   from "react-router-dom";
+import {connect}                                      from "react-redux";
 
 import '../assets/scss/UserPromotion.scss';
+import DialogTitle                                    from "@material-ui/core/es/DialogTitle/DialogTitle";
+import DialogContent                                  from "@material-ui/core/es/DialogContent/DialogContent";
+import DialogActions                                  from "@material-ui/core/es/DialogActions/DialogActions";
 
 class UserPromotion extends Component {
 
@@ -16,38 +19,37 @@ class UserPromotion extends Component {
         let mainUser = '';
 
         if (undefined !== this.props.jwt && NO_TOKEN_AVAILABLE !== this.props.jwt && this.props.jwt.length > 0) {
-            console.log("JWT",this.props.jwt);
             mainUser = (jwt_decode(this.props.jwt)).username;
         }
 
-        let actions = [
-            <FlatButton
-                label="Quitter"
-                primary={true}
-                onClick={() => this.props.toggleDialog()}
-            />,
-        ];
+        return <Dialog open={this.props.dialogOpen} onClose={() => this.props.toggleDialog()}>
+            <DialogTitle>Gestion des utilisateurs</DialogTitle>
 
+            <DialogContent>
+                <span>Les utilisateurs sélectionnés sont administrateurs</span>
 
-        return <Dialog title="Gestion des utilisateurs" actions={actions} modal={false} open={this.props.dialogOpen}
-                       onRequestClose={() => this.props.toggleDialog()}>
+                <List className="UserList">
+                    {
+                        this.props.users.map((user) => {
+                            let cName = ((null !== user) && (user.isAdmin())) ? "selected" : "";
+                            return <ListItem className={"listItem " + cName} key={user.name} onClick={() => {
+                                if (user.name !== mainUser) {
+                                    let isAdmin = user.isAdmin();
+                                    this.props.toggleAdmin({'user': user.id, 'val': !isAdmin});
+                                }
+                            }}>
+                                <ListItemText className="text" primary={user.name}/>
+                            </ListItem>;
 
-            <span>Les utilisateurs sélectionnés sont administrateurs</span>
-
-            <List className="UserList">
-                {
-                    this.props.users.map((user) => {
-                        let cName = ((null !== user) && (user.isAdmin())) ? "selected" : "";
-                        return <ListItem className={cName} key={user.name} primaryText={user.name} onClick={() => {
-                            if (user.name !== mainUser) {
-                                let isAdmin = user.isAdmin();
-                                this.props.toggleAdmin({'user': user.id, 'val': !isAdmin});
-                            }
-                        }
-                        }/>
-                    })
-                }
-            </List>
+                        })
+                    }
+                </List>
+            </DialogContent>
+            <DialogActions>
+                <Button color="primary" onClick={() => this.props.toggleDialog()}>
+                    Quitter
+                </Button>
+            </DialogActions>
         </Dialog>
     }
 

@@ -4,26 +4,12 @@
   flex-basis: 50px;
 }
 
-.addLinkURL {
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-
-  div {
-    flex-grow: 1;
-    flex-shrink: 1;
-  }
-
-  button {
-    margin-top: 14px;
-  }
-
-}
-
 #addLinkTaglist {
   text-align: center;
   height: 200px;
   overflow-y: scroll;
+}
+
+#AddLink__Dialog {
+  width: 400px;
 }
