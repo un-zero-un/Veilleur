@@ -7,7 +7,7 @@ import {call, put, takeEvery, select}                            from "redux-sag
 import {updateSnackbarAction}                                    from "../actions/snackbar_actions";
 import {receivedLinksAction}                                     from "../actions/links_actions";
 import {readTokenAction}                                         from "../actions/token_actions";
-import * as jwt_decode                                           from "jwt-decode";
+import jwt_decode                                                from "jwt-decode";
 import Config                                                    from "../Config";
 import Link                                                      from "../model/Link";
 import User                                                      from "../model/User";
@@ -121,8 +121,9 @@ function* linkTag(action) {
     let url = Config.API_HOST + 'tags/link/' + action.payload.masterTag.name + '/' + action.payload.slaveTag.name;
 
     const token = yield select((item) => (item.tokenReducer));
+    const hasToken = checkToken(token.token, token.refreshToken);
 
-    if (yield checkToken(token.token, token.refreshToken)) {
+    if (hasToken) {
         // Getting tokenreducer's content again so that if the token was refreshed it is now the good one
         const token = yield select((item) => (item.tokenReducer));
         try {
@@ -186,10 +187,10 @@ function* checkToken(token, refresh) {
     return true;
 }
 
-function* retreiveUsers(payload) {
+function* retreiveUsers() {
     const token = yield select((item) => (item.tokenReducer));
 
-    if (yield checkToken(token.token, token.refreshToken)) {
+    if (checkToken(token.token, token.refreshToken)) {
         const res = yield call(fetch, Config.API_HOST + "users", {
                 headers: {
                     'Accept': 'application/ld+json',

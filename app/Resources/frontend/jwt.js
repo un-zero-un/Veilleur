@@ -1,4 +1,4 @@
-import * as jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 
 export default function (token) {
     console.log("Token: ", token);

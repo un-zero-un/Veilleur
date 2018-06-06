@@ -1,17 +1,17 @@
 import {toggleDialogUserAction, toggleAdminAction}    from "../actions/userpromote_actions";
-import {Dialog, Button, List, ListItem, ListItemText} from "@material-ui/core";
+import {Dialog, Button, List, ListItem, ListItemText} from "@material-ui/core/index.js";
 import {updateSnackbarAction}                         from "../actions/snackbar_actions";
 import {NO_TOKEN_AVAILABLE}                           from "../middleware/LocalStorageMiddleware";
 import {bindActionCreators}                           from "redux";
 import React, {Component}                             from 'react';
-import * as jwt_decode                                from 'jwt-decode';
+import jwt_decode                                     from 'jwt-decode';
 import {withRouter}                                   from "react-router-dom";
 import {connect}                                      from "react-redux";
 
 import '../assets/scss/UserPromotion.scss';
-import DialogTitle                                    from "@material-ui/core/es/DialogTitle/DialogTitle";
-import DialogContent                                  from "@material-ui/core/es/DialogContent/DialogContent";
-import DialogActions                                  from "@material-ui/core/es/DialogActions/DialogActions";
+import DialogTitle                                    from "@material-ui/core/DialogTitle/DialogTitle";
+import DialogContent                                  from "@material-ui/core/DialogContent/DialogContent";
+import DialogActions                                  from "@material-ui/core/DialogActions/DialogActions";
 
 class UserPromotion extends Component {
 

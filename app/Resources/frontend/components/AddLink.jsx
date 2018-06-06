@@ -4,7 +4,7 @@ import {
     updateTypedAction,
     discoverDialogAction
 }                                                              from "../actions/addlinks_actions";
-import {Dialog, Button, IconButton, List, ListItem, TextField} from "@material-ui/core";
+import {Dialog, Button, IconButton, List, ListItem, TextField} from "@material-ui/core/index.js";
 import {updateSnackbarAction}                                  from "../actions/snackbar_actions";
 import {bindActionCreators}                                    from "redux";
 import React, {Component}                                      from 'react';
@@ -14,10 +14,10 @@ import {connect}                                               from "react-redux
 import AddIcon       from "@material-ui/icons/Add";
 
 import '../assets/scss/AddLink.scss';
-import DialogTitle   from "@material-ui/core/es/DialogTitle/DialogTitle";
-import ListItemText  from "@material-ui/core/es/ListItemText/ListItemText";
-import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
-import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
+import DialogTitle   from "@material-ui/core/DialogTitle/DialogTitle";
+import ListItemText  from "@material-ui/core/ListItemText/ListItemText";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 
 class AddLink extends Component {
 

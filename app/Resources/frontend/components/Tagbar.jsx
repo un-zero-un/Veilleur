@@ -6,34 +6,35 @@ import {toggleDialogAction}                     from "../actions/addlinks_action
 import {retreiveTagsAction}                     from "../actions/tags_actions";
 import {bindActionCreators}                     from "redux";
 import React, {Component}                       from "react";
-import {List, ListItem}                         from "@material-ui/core";
-import * as jwt_decode                          from "jwt-decode";
+import {hideMenuAction}                         from "../actions/responsive_actions";
+import {List, ListItem}                         from "@material-ui/core/index.js";
+import jwt_decode                               from "jwt-decode";
 import SnackbarCustom                           from "./SnackbarCustom";
 import {filterAction}                           from "../actions/filter_actions";
 import UserPromotion                            from "./UserPromotion";
+import ListItemText                             from "@material-ui/core/ListItemText/ListItemText";
 import {withRouter}                             from "react-router-dom";
 import LinkingTags                              from "./LinkingTags";
+import IconButton                               from "@material-ui/core/IconButton/IconButton";
+import TextField                                from "@material-ui/core/TextField/TextField";
 import {connect}                                from "react-redux";
 import AddLink                                  from "./AddLink";
 import Config                                   from "../Config";
 import Tag                                      from "../model/Tag";
 
-import CloseIcon   from "@material-ui/icons/Close";
-import LinkIcon   from "@material-ui/icons/Link";
-import AddIcon    from "@material-ui/icons/Add";
-import LoginIcon  from "@material-ui/icons/Launch";
 import LogoutIcon from "@material-ui/icons/ExitToApp";
+import LoginIcon  from "@material-ui/icons/Launch";
 import AdminIcon  from "@material-ui/icons/Portrait";
 import ClearIcon  from "@material-ui/icons/ClearAll";
-import AscIcon    from "@material-ui/icons/ArrowUpward";
+import CloseIcon  from "@material-ui/icons/Close";
+import LinkIcon   from "@material-ui/icons/Link";
 import DescIcon   from "@material-ui/icons/ArrowDownward";
+import AddIcon    from "@material-ui/icons/Add";
+import AscIcon    from "@material-ui/icons/ArrowUpward";
 
-import logo             from '../assets/logo.svg';
+
 import '../assets/scss/Tagbar.scss';
-import TextField        from "@material-ui/core/es/TextField/TextField";
-import IconButton       from "@material-ui/core/es/IconButton/IconButton";
-import ListItemText     from "@material-ui/core/es/ListItemText/ListItemText";
-import {hideMenuAction} from "../actions/responsive_actions";
+import logo       from '../assets/logo.svg';
 
 class Tagbar extends Component {
 
@@ -167,35 +168,34 @@ class Tagbar extends Component {
         let icons = [];
         let token = this.props.jwt;
         if (NO_TOKEN_AVAILABLE === token || token.length < 1) {
-            //Login
             icons.push(
-                <IconButton onClick={() => this.handleLogin()}>
+                <IconButton onClick={() => this.handleLogin()} key="IconButton-Login">
                     <LoginIcon/>
                 </IconButton>
             );
         } else {
-            // Logged
             let user    = jwt_decode(token);
             let isAdmin = user.roles.includes('ROLE_ADMIN');
 
             icons.push(
-                <div className={"user_infos"}>
+                <div className={"user_infos"} key="UserInfos">
                     <div>Vous êtes connecté en tant que</div>
                     <div>{user.username}</div>
                 </div>,
-                <IconButton disabled={!isAdmin} onClick={() => {
+                <IconButton disabled={!isAdmin} key="IconButton-Promote" onClick={() => {
                     this.props.getUsers();
                     this.props.toggleUserPromote()
                 }}>
                     <AdminIcon/>
                 </IconButton>,
-                <IconButton disabled={!isAdmin} onClick={() => this.props.toggleLinking()} aria-label="Link tags">
+                <IconButton disabled={!isAdmin} onClick={() => this.props.toggleLinking()} key="IconButton-LinkTags"
+                            aria-label="Link tags">
                     <LinkIcon/>
                 </IconButton>,
-                <IconButton disabled={!isAdmin} onClick={() => this.props.toggleAddLink()}>
+                <IconButton disabled={!isAdmin} onClick={() => this.props.toggleAddLink()} key="IconButton-AddLink">
                     <AddIcon/>
                 </IconButton>,
-                <IconButton onClick={() => this.handleLogout()}>
+                <IconButton onClick={() => this.handleLogout()} key="IconButton-Logout">
                     <LogoutIcon/>
                 </IconButton>
             );
@@ -205,12 +205,13 @@ class Tagbar extends Component {
             <IconButton id="MainMenuCloseButton" onClick={() => {
                 this.props.closeMenu();
             }}>
-                <CloseIcon />
+                <CloseIcon/>
             </IconButton>
             <div id="header">
                 <img src={logo} alt="logo-unzeroun"/>
                 <h1 className="app-title">Veilleur</h1>
-                <TextField className="search_bar" placeholder="Recherche" value={router.search} onKeyDown={(e) => this.keypressed(e)}
+                <TextField className="search_bar" placeholder="Recherche" value={router.search}
+                           onKeyDown={(e) => this.keypressed(e)}
                            onChange={(a) => this.onChange(a.target.value)}/>
                 <IconButton onClick={() => {
                     this.handleOrderToggle();

@@ -1,5 +1,5 @@
 import {linkingClickAction, linkTagAction, toggleLinkingAction} from "../actions/linkingtags_actions";
-import {Dialog, Button, List, ListItem} from "@material-ui/core";
+import {Dialog, Button, List, ListItem} from "@material-ui/core/index.js";
 import {updateSnackbarAction} from "../actions/snackbar_actions";
 import {bindActionCreators}   from "redux";
 import React, {Component}     from 'react';
@@ -7,10 +7,10 @@ import {withRouter}           from "react-router-dom";
 import {connect}              from "react-redux";
 
 import '../assets/scss/LinkTags.scss';
-import DialogActions          from "@material-ui/core/es/DialogActions/DialogActions";
-import DialogTitle            from "@material-ui/core/es/DialogTitle/DialogTitle";
-import DialogContent          from "@material-ui/core/es/DialogContent/DialogContent";
-import ListItemText           from "@material-ui/core/es/ListItemText/ListItemText";
+import DialogActions          from "@material-ui/core/DialogActions/DialogActions";
+import DialogTitle            from "@material-ui/core/DialogTitle/DialogTitle";
+import DialogContent          from "@material-ui/core/DialogContent/DialogContent";
+import ListItemText           from "@material-ui/core/ListItemText/ListItemText";
 
 class LinkingTags extends Component {
 
@@ -57,7 +57,7 @@ class LinkingTags extends Component {
     }
 
     render() {
-        return <Dialog open={this.props.dialogOpen} onRequestClose={() => this.props.toggleDialog()}>
+        return <Dialog open={this.props.dialogOpen} onClose={() => this.props.toggleDialog()}>
             <DialogTitle>
                 Lier des tags
             </DialogTitle>

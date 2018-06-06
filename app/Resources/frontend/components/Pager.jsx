@@ -2,7 +2,7 @@ import { bindActionCreators } from "redux";
 import React, { Component }   from "react";
 import { filterAction }       from "../actions/filter_actions";
 import { withRouter }         from "react-router-dom";
-import { IconButton }         from "@material-ui/core";
+import { IconButton }         from "@material-ui/core/index";
 import { connect }            from "react-redux";
 
 import FirstIcon from "@material-ui/icons/FirstPage";
