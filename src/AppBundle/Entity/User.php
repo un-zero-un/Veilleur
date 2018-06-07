@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="veilleur_user")
  * @ApiResource(
  *    collectionOperations={ "get" },
- *    itemOperations={"get", "toggleAdmin"={
+ *    itemOperations={"get", "delete", "toggleAdmin"={
  *              "method"="PUT",
  *              "path"="/users/{id}/admin/{val}",
  *              "controller"=AppBundle\Controller\UserController::class

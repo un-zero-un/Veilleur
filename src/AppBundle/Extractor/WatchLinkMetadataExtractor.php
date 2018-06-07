@@ -43,7 +43,7 @@ class WatchLinkMetadataExtractor
 
     public function bounds($text, $length = 255) {
         if (strlen($text) > $length) {
-            return substr($text, $length);
+            return substr($text, 0, $length);
         }
         return $text;
     }

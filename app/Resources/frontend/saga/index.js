@@ -1,4 +1,4 @@
-import {GET_USERS, getUsersAction, gotUsersAction, TOGGLE_ADMIN} from "../actions/userpromote_actions";
+import {GET_USERS, getUsersAction, gotUsersAction, TOGGLE_ADMIN, FULLY_REMOVE_USER} from "../actions/userpromote_actions";
 import {RETREIVE_TAGS, retreivedTagsAction, retreiveTagsAction}  from "../actions/tags_actions";
 import {clearDialogAction, DISCOVER_DIALOG, toggleDialogAction}  from "../actions/addlinks_actions";
 import {LINK_TAG_ACTION, linkingClickAction}                     from "../actions/linkingtags_actions";
@@ -189,7 +189,7 @@ function* retreiveUsers() {
 
     if (yield checkToken(token.token, token.refreshToken)) {
         const newToken = yield select((item) => (item.tokenReducer));
-        const res = yield call(fetch, "/users", {
+        const res      = yield call(fetch, "/users", {
                 headers: {
                     'Accept': 'application/ld+json',
                     'Authorization': 'Bearer ' + newToken.token
@@ -222,7 +222,7 @@ function* toggleAdmin(action) {
 
     if (yield checkToken(token.token, token.refreshToken)) {
         const newToken = yield select((item) => (item.tokenReducer));
-        const res = yield call(fetch, "/users/" + action.payload.user + '/admin/' + action.payload.val, {
+        const res      = yield call(fetch, "/users/" + action.payload.user + '/admin/' + action.payload.val, {
                 headers: {
                     'Accept': 'application/ld+json',
                     'Authorization': 'Bearer ' + newToken.token
@@ -243,6 +243,33 @@ function* toggleAdmin(action) {
     }
 }
 
+function* removeUser(action) {
+
+    const token = yield select((item) => (item.tokenReducer));
+
+    if (yield checkToken(token.token, token.refreshToken)) {
+        const newToken = yield select((item) => (item.tokenReducer));
+        const res      = yield call(fetch, "/users/" + action.payload.id, {
+                headers: {
+                    'Accept': 'application/ld+json',
+                    'Authorization': 'Bearer ' + newToken.token
+                },
+                method: 'DELETE'
+            }
+        );
+
+        if (204 === res.status) {
+            yield put(getUsersAction());
+        } else {
+            yield put(updateSnackbarAction({
+                open: true,
+                message: 'Une erreur est survenue! (' + res.status + ')'
+            }));
+            console.log(res);
+        }
+    }
+}
+
 export default function* vsaga() {
     yield takeEvery(UPDATE_FILTER_ACTION, fetchFromFilter);
     yield takeEvery(RETREIVE_TAGS, fetchTags);
@@ -250,4 +277,5 @@ export default function* vsaga() {
     yield takeEvery(LINK_TAG_ACTION, linkTag);
     yield takeEvery(GET_USERS, retreiveUsers);
     yield takeEvery(TOGGLE_ADMIN, toggleAdmin);
+    yield takeEvery(FULLY_REMOVE_USER, removeUser);
 }
