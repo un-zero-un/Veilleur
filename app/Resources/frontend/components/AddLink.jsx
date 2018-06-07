@@ -68,14 +68,16 @@ class AddLink extends Component {
     }
 
     render() {
-        return <Dialog className="frame" aria-labelledby="addlink-title" open={this.props.dialogOpen}
+        return <Dialog id="AddLink__Dialog" className="frame" aria-labelledby="addlink-title" open={this.props.dialogOpen}
                        onClose={() => this.props.toggleDialog()}>
             <DialogTitle id="addlink-title">Ajouter un lien</DialogTitle>
-            <DialogContent>
-                <TextField label={"URL"} onChange={(val) => this.props.updateTyped({url: val.target.value})}/>
-                <div>
-                    <TextField label={"Tags"} value={this.props.typedTag} onKeyDown={(e) => this.keypressed(e)}
+            <DialogContent id="AddLinkDialog__Content">
+                <TextField fullWidth label={"URL"} onChange={(val) => this.props.updateTyped({url: val.target.value})}/>
+                <div id="AddLinkDialog__TagFields">
+                    <div>
+                        <TextField fullWidth label={"Tags"} value={this.props.typedTag} onKeyDown={(e) => this.keypressed(e)}
                                onChange={(elt) => (this.props.updateTyped({typedTag: elt.target.value}))}/>
+                    </div>
                     <IconButton onClick={() => this.handleTagAdd()}>
                         <AddIcon/>
                     </IconButton>

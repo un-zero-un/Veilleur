@@ -1,7 +1,7 @@
 import {MuiThemeProvider} from "@material-ui/core/index.js";
 import React, {Component} from 'react';
 import {createMuiTheme}   from '@material-ui/core/styles';
-import LinkList           from './components/LinkList'
+import MainPanel          from './components/MainPanel'
 import Tagbar             from "./components/Tagbar";
 import red from '@material-ui/core/colors/red';
 
@@ -20,7 +20,7 @@ class App extends Component {
             <MuiThemeProvider theme={createMuiTheme(theme)}>
                 <div id="app">
                     <Tagbar {...this.props} />
-                    <LinkList {...this.props} />
+                    <MainPanel {...this.props} />
                 </div>
             </MuiThemeProvider>
         );

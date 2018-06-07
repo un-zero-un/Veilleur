@@ -10,6 +10,18 @@
   overflow-y: scroll;
 }
 
-#AddLink__Dialog {
-  width: 400px;
+#AddLinkDialog__Content {
+  width: 530px;
+  @media (max-width: 900px) {
+    width: auto;
+  }
+
+  #AddLinkDialog__TagFields {
+    display: flex;
+    margin-top: 10px;
+  }
+
+  #AddLinkDialog__TagFields>div {
+    flex: 1 1 0;
+  }
 }

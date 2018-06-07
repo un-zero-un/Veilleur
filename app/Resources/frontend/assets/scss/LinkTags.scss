@@ -22,7 +22,10 @@
 }
 
 #TagLink__Dialog {
-  width: 400px;
+  width: 530px;
+  @media (max-width: 900px){
+      width: auto;
+  }
 }
 
 #addLinkTaglist {
