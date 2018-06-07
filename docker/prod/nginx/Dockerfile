@@ -1,7 +1,7 @@
 FROM veilleur_php AS assets
 RUN php bin/console assets:install
 
-FROM node:9-alpine AS node
+FROM node:9.11.1-alpine AS node
 FROM nginx:1.13.12-alpine
 
 RUN apk update \
@@ -40,6 +40,7 @@ COPY --from=assets /www/webpack.config.js /build/webpack.config.js
 COPY --from=assets /www/package.json /build/package.json
 COPY --from=assets /www/package-lock.json /build/package-lock.json
 COPY --from=assets /www/yarn.lock /build/yarn.lock
+COPY --from=assets /www/.babelrc /build/.babelrc
 
 RUN yarn
 RUN yarn run encore production
