@@ -16,6 +16,7 @@ import './assets/css/Index.css';
 const sagaMiddleware = createSagaMiddleware();
 let middleware       = [sagaMiddleware, LocalStorageMiddleware];
 
+/** !== */
 if (process.env.NODE_ENV !== 'production') {
     middleware.push(createLogger());
 }

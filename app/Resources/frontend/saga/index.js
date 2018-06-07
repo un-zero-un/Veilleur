@@ -120,10 +120,8 @@ function* linkTag(action) {
     let url = '/tags/link/' + action.payload.masterTag.name + '/' + action.payload.slaveTag.name;
 
     const token = yield select((item) => (item.tokenReducer));
-    const hasToken = checkToken(token.token, token.refreshToken);
 
-    if (hasToken) {
-        // Getting tokenreducer's content again so that if the token was refreshed it is now the good one
+    if (yield checkToken(token.token, token.refreshToken)) {
         const token = yield select((item) => (item.tokenReducer));
         try {
             const res = yield call(fetch, url, {
@@ -189,11 +187,12 @@ function* checkToken(token, refresh) {
 function* retreiveUsers() {
     const token = yield select((item) => (item.tokenReducer));
 
-    if (checkToken(token.token, token.refreshToken)) {
+    if (yield checkToken(token.token, token.refreshToken)) {
+        const newToken = yield select((item) => (item.tokenReducer));
         const res = yield call(fetch, "/users", {
                 headers: {
                     'Accept': 'application/ld+json',
-                    'Authorization': 'Bearer ' + token.token
+                    'Authorization': 'Bearer ' + newToken.token
                 },
                 method: 'GET'
             }
@@ -222,10 +221,11 @@ function* toggleAdmin(action) {
     const token = yield select((item) => (item.tokenReducer));
 
     if (yield checkToken(token.token, token.refreshToken)) {
+        const newToken = yield select((item) => (item.tokenReducer));
         const res = yield call(fetch, "/users/" + action.payload.user + '/admin/' + action.payload.val, {
                 headers: {
                     'Accept': 'application/ld+json',
-                    'Authorization': 'Bearer ' + token.token
+                    'Authorization': 'Bearer ' + newToken.token
                 },
                 method: 'PUT'
             }
@@ -238,6 +238,7 @@ function* toggleAdmin(action) {
                 open: true,
                 message: 'Une erreur est survenue! (' + res.status + ')'
             }));
+            console.log(res);
         }
     }
 }

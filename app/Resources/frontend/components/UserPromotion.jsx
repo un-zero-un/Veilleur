@@ -1,17 +1,19 @@
+import {Dialog, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton} from "@material-ui/core/index.js";
 import {toggleDialogUserAction, toggleAdminAction}    from "../actions/userpromote_actions";
-import {Dialog, Button, List, ListItem, ListItemText} from "@material-ui/core/index.js";
 import {updateSnackbarAction}                         from "../actions/snackbar_actions";
 import {NO_TOKEN_AVAILABLE}                           from "../middleware/LocalStorageMiddleware";
 import {bindActionCreators}                           from "redux";
 import React, {Component}                             from 'react';
-import jwt_decode                                     from 'jwt-decode';
-import {withRouter}                                   from "react-router-dom";
-import {connect}                                      from "react-redux";
-
-import '../assets/scss/UserPromotion.scss';
-import DialogTitle                                    from "@material-ui/core/DialogTitle/DialogTitle";
 import DialogContent                                  from "@material-ui/core/DialogContent/DialogContent";
 import DialogActions                                  from "@material-ui/core/DialogActions/DialogActions";
+import {withRouter}                                   from "react-router-dom";
+import DialogTitle                                    from "@material-ui/core/DialogTitle/DialogTitle";
+import jwt_decode                                     from 'jwt-decode';
+import {connect}                                      from "react-redux";
+import Switch                                         from '@material-ui/core/Switch';
+
+
+import '../assets/scss/UserPromotion.scss';
 
 class UserPromotion extends Component {
 
@@ -22,6 +24,29 @@ class UserPromotion extends Component {
             mainUser = (jwt_decode(this.props.jwt)).username;
         }
 
+        let users = [];
+
+        let tempThis = this;
+        this.props.users.forEach(function(elt) {
+            let isAdmin = elt.isAdmin();
+            let action = () => {
+                if (elt.name !== mainUser) {
+                    tempThis.props.toggleAdmin({ 'user': elt.id, 'val': !isAdmin });
+                }
+            }
+
+            let cName = (null !== elt && isAdmin) ? "selected" : "";
+
+            let item = <ListItem className={"listItem " + cName} key={elt.name}>
+                            <ListItemText className="text" primary={elt.name}/>
+                            <ListItemSecondaryAction>
+                                <Switch onChange={action} checked={isAdmin} />
+                            </ListItemSecondaryAction>
+            </ListItem>;
+
+            users.push(item);
+        });
+
         return <Dialog open={this.props.dialogOpen} onClose={() => this.props.toggleDialog()}>
             <DialogTitle>Gestion des utilisateurs</DialogTitle>
 
@@ -29,20 +54,7 @@ class UserPromotion extends Component {
                 <span>Les utilisateurs sélectionnés sont administrateurs</span>
 
                 <List className="UserList">
-                    {
-                        this.props.users.map((user) => {
-                            let cName = ((null !== user) && (user.isAdmin())) ? "selected" : "";
-                            return <ListItem className={"listItem " + cName} key={user.name} onClick={() => {
-                                if (user.name !== mainUser) {
-                                    let isAdmin = user.isAdmin();
-                                    this.props.toggleAdmin({'user': user.id, 'val': !isAdmin});
-                                }
-                            }}>
-                                <ListItemText className="text" primary={user.name}/>
-                            </ListItem>;
-
-                        })
-                    }
+                    { users }
                 </List>
             </DialogContent>
             <DialogActions>
