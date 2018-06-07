@@ -23,9 +23,9 @@ reset:
 ######################
 
 build:
-    docker-compose -f docker-compose.prod.yml build php
-    docker-compose -f docker-compose.prod.yml build nginx
-    docker-compose -f docker-compose.prod.yml build veilleur
+	docker-compose -f docker-compose.prod.yml build php
+	docker-compose -f docker-compose.prod.yml build nginx
+	docker-compose -f docker-compose.prod.yml build veilleur
 
 assets_prod:
 	docker-compose exec nginx yarn run encore production
