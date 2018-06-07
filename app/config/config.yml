@@ -1,6 +1,13 @@
 parameters:
     locale: en
+
+    env(PRIVATE_KEY_PATH): '/www/var/jwt/private.pem'
+    env(PUBLIC_KEY_PATH): '/www/var/jwt/public.pem'
+    env(PASSPHRASE_KEY): ''
+    env(TOKEN_TTL): '60'
+
     slack_web_channel: '%env(SLACK_WEB_CHANNEL)%'
+    google_client_id: '%env(GOOGLE_CLIENT_ID)%'
 
 imports:
     - { resource: services.yml }

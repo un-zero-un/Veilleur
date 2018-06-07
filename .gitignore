@@ -3,6 +3,8 @@
 /var/*
 !/var/cache
 /var/cache/*
+!/var/jwt
+/var/jwt/*
 !var/cache/.gitkeep
 !/var/logs
 /var/logs/*

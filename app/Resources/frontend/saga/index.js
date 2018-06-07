@@ -8,7 +8,6 @@ import {updateSnackbarAction}                                    from "../action
 import {receivedLinksAction}                                     from "../actions/links_actions";
 import {readTokenAction}                                         from "../actions/token_actions";
 import jwt_decode                                                from "jwt-decode";
-import Config                                                    from "../Config";
 import Link                                                      from "../model/Link";
 import User                                                      from "../model/User";
 import Tag                                                       from '../model/Tag';

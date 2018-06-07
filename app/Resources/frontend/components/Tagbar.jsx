@@ -19,7 +19,6 @@ import IconButton                               from "@material-ui/core/IconButt
 import TextField                                from "@material-ui/core/TextField/TextField";
 import {connect}                                from "react-redux";
 import AddLink                                  from "./AddLink";
-import Config                                   from "../Config";
 import Tag                                      from "../model/Tag";
 
 import LogoutIcon from "@material-ui/icons/ExitToApp";
@@ -120,18 +119,11 @@ class Tagbar extends Component {
         this.updateRouter(tags);
     }
 
-    handleOrderToggle() {
-        this.updateRouter(this.getTags(), ((this.props.order === "ASC") ? "DESC" : "ASC"), this.props.search);
-    }
-
     handleLogin() {
-        let browserURL = document.location.origin;
-        let url        = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + Config.CLIENT_ID + "&redirect_uri=" + encodeURI(browserURL + Config.CALLBACK_URL) + "&response_type=code&scope=email%20profile";
+        let browserURL = document.location.origin + '/login/check-google';
+        let googleID   = document.getElementById("root").getAttribute("data-google-id");
+        let url        = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleID  + "&redirect_uri=" + encodeURI(browserURL) + "&response_type=code&scope=email%20profile";
         window.open(url, '_self').focus();
-    }
-
-    handleLogout() {
-        this.props.deleteToken();
     }
 
     onChange(e) {
@@ -195,7 +187,7 @@ class Tagbar extends Component {
                 <IconButton disabled={!isAdmin} onClick={() => this.props.toggleAddLink()} key="IconButton-AddLink">
                     <AddIcon/>
                 </IconButton>,
-                <IconButton onClick={() => this.handleLogout()} key="IconButton-Logout">
+                <IconButton onClick={() => this.props.deleteToken()} key="IconButton-Logout">
                     <LogoutIcon/>
                 </IconButton>
             );
@@ -214,7 +206,7 @@ class Tagbar extends Component {
                            onKeyDown={(e) => this.keypressed(e)}
                            onChange={(a) => this.onChange(a.target.value)}/>
                 <IconButton onClick={() => {
-                    this.handleOrderToggle();
+                    this.updateRouter(this.getTags(), ((this.props.order === "ASC") ? "DESC" : "ASC"), this.props.search);
                     this.props.closeMenu();
                 }}>
                     {(router.order === "DESC") ? <AscIcon/> : <DescIcon/>}

@@ -17,7 +17,7 @@ react_token:
 
 react_app:
   path: '{uri}'
-  defaults: { _controller: 'FrameworkBundle:Template:template', template: 'react_app.html.twig' }
+  controller: AppBundle\Controller\MainController::login
   condition: "request !== null and request.headers.get('Accept') matches '/html/i'"
   requirements: { uri: '.*' }
 

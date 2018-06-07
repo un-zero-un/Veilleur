@@ -2,7 +2,8 @@ import { GET_TOKEN, READ_TOKEN, DELETE_TOKEN } from "../actions/token_actions";
 
 const initialState = {
     token: '',
-    refreshToken: ''
+    refreshToken: '',
+    GOOGLE_ID: ''
 };
 
 export default function (state = initialState, action) {
