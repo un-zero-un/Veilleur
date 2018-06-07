@@ -24,7 +24,7 @@ function parseURL(url) {
 
 function* fetchFromFilter(action) {
     let pl  = action.payload;
-    let url = Config.API_HOST + "watch_links?page=" + pl.currPage + "&order[createdAt]=" + pl.order;
+    let url = "/watch_links?page=" + pl.currPage + "&order[createdAt]=" + pl.order;
 
     if (undefined !== pl.selectedTags && null !== pl.selectedTags) {
         for (let i = 0; i < pl.selectedTags.length; ++i) {
@@ -55,7 +55,7 @@ function* fetchFromFilter(action) {
 }
 
 function* fetchTags() {
-    let url = Config.API_HOST + 'tags?show_duplicates=false';
+    let url = '/tags?show_duplicates=false';
 
     try {
         const res = yield call(fetch, url);
@@ -70,7 +70,7 @@ function* fetchTags() {
 }
 
 function* discover(action) {
-    let url = Config.API_HOST + 'watch_links/discover';
+    let url = '/watch_links/discover';
 
     try {
         let tags = [];
@@ -117,7 +117,7 @@ function* discover(action) {
 }
 
 function* linkTag(action) {
-    let url = Config.API_HOST + 'tags/link/' + action.payload.masterTag.name + '/' + action.payload.slaveTag.name;
+    let url = '/tags/link/' + action.payload.masterTag.name + '/' + action.payload.slaveTag.name;
 
     const token = yield select((item) => (item.tokenReducer));
     const hasToken = checkToken(token.token, token.refreshToken);
@@ -158,7 +158,7 @@ function* checkToken(token, refresh) {
     let decoded_token = jwt_decode(token);
     if (undefined !== decoded_token.exp) {
         if (decoded_token.exp < Date.now().valueOf() / 1000) {
-            const res = yield call(fetch, Config.API_HOST + 'token/refresh', {
+            const res = yield call(fetch, '/token/refresh', {
                 headers: {
                     'Accept': 'application/ld+json',
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -190,7 +190,7 @@ function* retreiveUsers() {
     const token = yield select((item) => (item.tokenReducer));
 
     if (checkToken(token.token, token.refreshToken)) {
-        const res = yield call(fetch, Config.API_HOST + "users", {
+        const res = yield call(fetch, "/users", {
                 headers: {
                     'Accept': 'application/ld+json',
                     'Authorization': 'Bearer ' + token.token
@@ -222,7 +222,7 @@ function* toggleAdmin(action) {
     const token = yield select((item) => (item.tokenReducer));
 
     if (yield checkToken(token.token, token.refreshToken)) {
-        const res = yield call(fetch, Config.API_HOST + "users/" + action.payload.user + '/admin/' + action.payload.val, {
+        const res = yield call(fetch, "/users/" + action.payload.user + '/admin/' + action.payload.val, {
                 headers: {
                     'Accept': 'application/ld+json',
                     'Authorization': 'Bearer ' + token.token
