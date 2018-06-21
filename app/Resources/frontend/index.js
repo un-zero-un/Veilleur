@@ -1,5 +1,5 @@
 import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
-import {createStore, applyMiddleware}           from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import LocalStorageMiddleware                   from "./middleware/LocalStorageMiddleware";
 import registerServiceWorker                    from './registerServiceWorker';
 import createSagaMiddleware                     from 'redux-saga';
@@ -17,11 +17,12 @@ const sagaMiddleware = createSagaMiddleware();
 let middleware       = [sagaMiddleware, LocalStorageMiddleware];
 
 /** !== */
-if (process.env.NODE_ENV !== 'production') {
-    middleware.push(createLogger());
-}
+// if (process.env.NODE_ENV !== 'production') {
+    // middleware.push(createLogger());
+// }
 
-const store = createStore(reducers, applyMiddleware(...middleware));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));
 
 sagaMiddleware.run(vsaga);
 

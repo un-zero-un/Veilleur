@@ -31,7 +31,8 @@ security:
               service: veilleur.userprovider
 
         authed_user:
-          pattern: ^/(watch_links/discover)|(tags/link)|(users)/
+          pattern: ^/(watch_links|tags)/
+          methods: [ 'POST', 'DELETE', 'PUT' ]
           stateless: true
           guard:
             authenticators:
@@ -43,7 +44,7 @@ security:
           anonymous: true
 
     access_control:
-      - { path: ^/(watch_links/discover)|(tags/link)|(users)/, roles: ROLE_ADMIN }
+      - { path: ^/(watch_links|tags), roles: ROLE_ADMIN, methods: [POST, DELETE, PUT] }
       - { path: ^/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -8,7 +8,6 @@ import {bindActionCreators}                     from "redux";
 import React, {Component}                       from "react";
 import {hideMenuAction}                         from "../actions/responsive_actions";
 import {List, ListItem}                         from "@material-ui/core/index.js";
-import jwt_decode                               from "jwt-decode";
 import SnackbarCustom                           from "./SnackbarCustom";
 import {filterAction}                           from "../actions/filter_actions";
 import UserPromotion                            from "./UserPromotion";
@@ -122,7 +121,7 @@ class Tagbar extends Component {
     handleLogin() {
         let browserURL = document.location.origin + '/login/check-google';
         let googleID   = document.getElementById("root").getAttribute("data-google-id");
-        let url        = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleID  + "&redirect_uri=" + encodeURI(browserURL) + "&response_type=code&scope=email%20profile";
+        let url        = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleID + "&redirect_uri=" + encodeURI(browserURL) + "&response_type=code&scope=email%20profile";
         window.open(url, '_self').focus();
     }
 
@@ -147,7 +146,7 @@ class Tagbar extends Component {
             currPage: router.page
         });
 
-        if (0 === this.props.jwt.length) {
+        if (null === this.props.user) {
             this.props.getToken();
         }
 
@@ -158,33 +157,29 @@ class Tagbar extends Component {
         let params = this.getTags();
 
         let icons = [];
-        let token = this.props.jwt;
-        if (NO_TOKEN_AVAILABLE === token || token.length < 1) {
+        if (null === this.props.user) {
             icons.push(
                 <IconButton onClick={() => this.handleLogin()} key="IconButton-Login">
                     <LoginIcon/>
                 </IconButton>
             );
         } else {
-            let user    = jwt_decode(token);
-            let isAdmin = user.roles.includes('ROLE_ADMIN');
-
             icons.push(
                 <div className={"user_infos"} key="UserInfos">
                     <div>Vous êtes connecté en tant que</div>
-                    <div>{user.username}</div>
+                    <div>{this.props.user.name}</div>
                 </div>,
-                <IconButton disabled={!isAdmin} key="IconButton-Promote" onClick={() => {
+                <IconButton disabled={!this.props.user.isAdmin()} key="IconButton-Promote" onClick={() => {
                     this.props.getUsers();
                     this.props.toggleUserPromote()
                 }}>
                     <AdminIcon/>
                 </IconButton>,
-                <IconButton disabled={!isAdmin} onClick={() => this.props.toggleLinking()} key="IconButton-LinkTags"
+                <IconButton disabled={!this.props.user.isAdmin()} onClick={() => this.props.toggleLinking()} key="IconButton-LinkTags"
                             aria-label="Link tags">
                     <LinkIcon/>
                 </IconButton>,
-                <IconButton disabled={!isAdmin} onClick={() => this.props.toggleAddLink()} key="IconButton-AddLink">
+                <IconButton disabled={!this.props.user.isAdmin()} onClick={() => this.props.toggleAddLink()} key="IconButton-AddLink">
                     <AddIcon/>
                 </IconButton>,
                 <IconButton onClick={() => this.props.deleteToken()} key="IconButton-Logout">
@@ -252,8 +247,8 @@ export default withRouter(connect(
         tags: state.filterReducer.tags,
         order: state.filterReducer.order,
         currPage: state.linksReducer.currPage,
-        jwt: state.tokenReducer.token,
-        isShown: state.responsiveReducer.menuShown
+        isShown: state.responsiveReducer.menuShown,
+        user: state.tokenReducer.user
     }),
     dispatch => ({
         retreiveTags: bindActionCreators(retreiveTagsAction, dispatch),

@@ -1,14 +1,15 @@
-import React, {Component}   from 'react';
-import {withRouter}         from "react-router-dom";
-import {connect}            from "react-redux";
-import LinkList             from "./LinkList";
-import Pager                from "./Pager";
+import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import LinkList from "./LinkList";
+import Pager from "./Pager";
 
 import '../assets/scss/LinkList.scss';
-import IconButton           from "@material-ui/core/IconButton/IconButton";
-import {bindActionCreators} from "redux";
-import BurgerIcon           from "@material-ui/icons/Menu";
-import {showMenuAction}     from "../actions/responsive_actions";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import { bindActionCreators } from "redux";
+import BurgerIcon from "@material-ui/icons/Menu";
+import { showMenuAction } from "../actions/responsive_actions";
+import DeleteDialog from "./DeleteDialog";
 
 class MainPanel extends Component {
 
@@ -16,15 +17,15 @@ class MainPanel extends Component {
         return <div id="linkslist">
             <div id="upper">
                 <IconButton id="MainMenuButton" onClick={() => {
-                    this.props.toggleMenu()
+                    this.props.toggleMenu();
                 }}>
                     <BurgerIcon/>
                 </IconButton>
                 <h1>Liste des liens</h1>
             </div>
 
-            <LinkList />
-
+            <LinkList/>
+            <DeleteDialog/>
             <Pager/>
 
         </div>;

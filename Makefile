@@ -12,6 +12,8 @@ import:
 assets:
 	docker-compose exec nginx yarn run encore dev --watch
 
+cli:
+	docker-compose exec php ash
 
 reset:
 	docker-compose exec php ./reset.sh

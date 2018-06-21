@@ -22,7 +22,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @author Yohan Giarelli <yohan@giarel.li>
  * @ApiResource(
  *    collectionOperations={"get", "special"={ "route_name"="watchlink_discover"} },
- *    itemOperations={"get"},
+ *    itemOperations={
+ *         "get",
+ *         "delete",
+ *     },
  *    attributes={
  *        "normalization_context"={"groups"={"WatchLink"}},
  *        "denormalization_context"={"groups"={"WatchLink"}},
