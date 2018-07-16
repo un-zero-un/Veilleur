@@ -25,5 +25,4 @@ RUN ln -vs /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
 
 WORKDIR /www
 
-
 ENTRYPOINT ["nginx"]

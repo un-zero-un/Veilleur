@@ -10,6 +10,8 @@ import:
 	docker-compose exec php php bin/console veilleur:slack:import
 
 assets:
+	docker-compose exec php composer install
+	docker-compose exec nginx yarn
 	docker-compose exec nginx yarn run encore dev --watch
 
 
@@ -31,6 +33,7 @@ assets_prod:
 	docker-compose exec nginx yarn run encore production
 
 genkeys:
+	mdkir -p var/jwt
 	openssl genrsa -out var/jwt/private.pem -aes256 4096
 	openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
 
