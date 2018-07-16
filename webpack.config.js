@@ -6,7 +6,6 @@ Encore
     .cleanupOutputBeforeBuild()
 
     .addEntry('main', './app/Resources/frontend/index.js')
-    .addEntry('logo', './app/Resources/frontend/assets/logo.svg')
 
     .enableSassLoader()
     .autoProvidejQuery()

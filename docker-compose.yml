@@ -12,6 +12,7 @@ services:
       - php
     volumes:
       - .:/www
+#      - ./mylogo.png:/www/web/static/logo.png # If you want to load your own logo
 
   php:
     build:

@@ -17,6 +17,7 @@ export default function (state = initialState, action) {
         case CLEAR_DIALOG:
             return { ...state, url: '', typedTag: '', tags: [] };
         case UPDATE_TYPED_DIALOG:
+            console.log("UPDATE=> ", action);
             return { ...state, ...action.payload };
         default:
             return state;

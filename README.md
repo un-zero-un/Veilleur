@@ -47,9 +47,10 @@ Doing so, we'll need to run the project once
 ```bash
 $ docker-compose -f docker-compose.prod.yml up php database -d
 $ make gendb
+$ docker-compose stop
 ```
 
-Now that everything is ready, let's start the app
+Now that everything is ready, you can start the app, or deploy it to your docker swarm
 ```bash
 $ docker-compose -f docker-compose.prod.yml up -d
 ```
