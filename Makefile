@@ -1,6 +1,6 @@
-dev: run assets
+dev: run reset
 
-run:
+run: assets
 	docker-compose up -d
 
 veilleur:
@@ -38,5 +38,4 @@ genkeys:
 	openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
 
 gendb:
-	mkdir -p var/jwt
 	docker-compose -f docker-compose.prod.yml exec php ./reset.sh
