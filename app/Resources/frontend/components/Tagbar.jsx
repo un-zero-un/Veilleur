@@ -33,7 +33,6 @@ import AscIcon    from "@material-ui/icons/ArrowUpward";
 
 
 import '../assets/scss/Tagbar.scss';
-import logo       from '../assets/logo.svg';
 
 class Tagbar extends Component {
 
@@ -200,7 +199,7 @@ class Tagbar extends Component {
                 <CloseIcon/>
             </IconButton>
             <div id="header">
-                <img src={logo} alt="logo-unzeroun"/>
+                <img src="/static/logo.png" alt="logo"/>
                 <h1 className="app-title">Veilleur</h1>
                 <TextField className="search_bar" placeholder="Recherche" value={router.search}
                            onKeyDown={(e) => this.keypressed(e)}

@@ -1,6 +1,6 @@
 dev: run reset
 
-run: assets
+run: packages assets
 	docker-compose up -d
 
 veilleur:
@@ -9,9 +9,11 @@ veilleur:
 import:
 	docker-compose exec php php bin/console veilleur:slack:import
 
-assets:
+packages:
 	docker-compose exec php composer install
 	docker-compose exec nginx yarn
+
+assets:
 	docker-compose exec nginx yarn run encore dev --watch
 
 
