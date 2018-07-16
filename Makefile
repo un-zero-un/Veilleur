@@ -2,13 +2,6 @@ dev: run reset
 
 run: packages assets
 	docker-compose up -d
-
-veilleur:
-	docker-compose exec php php bin/console veilleur:slack:receive
-
-import:
-	docker-compose exec php php bin/console veilleur:slack:import
-
 packages:
 	docker-compose exec php composer install
 	docker-compose exec nginx yarn
@@ -31,8 +24,14 @@ build:
 	docker-compose -f docker-compose.prod.yml build nginx
 	docker-compose -f docker-compose.prod.yml build veilleur
 
+veilleur:
+	docker-compose -f docker-compose.prod.yml exec php php bin/console veilleur:slack:receive
+
+import:
+	docker-compose -f docker-compose.prod.yml exec php php bin/console veilleur:slack:import
+
 assets_prod:
-	docker-compose exec nginx yarn run encore production
+	docker-compose -f docker-compose.prod.yml exec nginx yarn run encore production
 
 genkeys:
 	mdkir -p var/jwt
