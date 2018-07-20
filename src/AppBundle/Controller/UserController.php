@@ -4,6 +4,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @author Nathan JANCZEWSKI <nathan@janczewski.fr>
+ */
 class UserController
 {
 

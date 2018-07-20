@@ -1,6 +1,8 @@
 dev: run reset
 
-run: packages assets
+run: up packages assets
+
+up:
 	docker-compose up -d
 
 packages:

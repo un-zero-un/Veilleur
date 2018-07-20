@@ -25,10 +25,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *    itemOperations={
  *         "get",
  *         "delete",
+ *         "special"={ "route_name"="watchlink_update"}
  *     },
  *    attributes={
  *        "normalization_context"={"groups"={"WatchLink"}},
- *        "denormalization_context"={"groups"={"WatchLink"}},
+ *        "denormalization_context"={"groups"={"WatchLink", "Tag"}},
  *        "order"={"createdAt": "DESC"}
  *    },
  * )
@@ -62,7 +63,7 @@ class WatchLink extends Thing
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
-        $this->tags       = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->overridden = false;
     }
 
@@ -77,6 +78,11 @@ class WatchLink extends Thing
     public function addTag(Tag $tag)
     {
         $this->tags[] = $tag;
+    }
+
+    public function clearTags()
+    {
+        $this->tags = [];
     }
 
     /**

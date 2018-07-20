@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @author Nathan JANCZEWSKI
+ * @author Nathan JANCZEWSKI <nathan@janczewski.fr>
  */
 class TagController extends Controller
 {

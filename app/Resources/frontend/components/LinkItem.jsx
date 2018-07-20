@@ -1,24 +1,30 @@
-import { ContextMenu, Item, theme, ContextMenuProvider } from 'react-contexify';
-import React, { Component }                              from 'react';
-import { withRouter }                                    from "react-router-dom";
-import { connect }                                       from "react-redux";
+import {ContextMenu, Item, theme, ContextMenuProvider} from 'react-contexify';
+import React, {Component}                              from 'react';
+import {withRouter}                                    from "react-router-dom";
+import {connect}                                       from "react-redux";
 
 import 'react-contexify/dist/ReactContexify.min.css';
-import { bindActionCreators }   from "redux";
-import { askRemoveLinkAction } from "../actions/links_actions";
+import {bindActionCreators}                            from "redux";
+import {askRemoveLinkAction, modifyLinkAction}         from "../actions/links_actions";
 
 class LinkItem extends Component {
 
-    handleClick(eltRemove) {
-        this.props.togglePopup({ eltRemove });
+    handleRemove(eltRemove) {
+        this.props.toggleRemove({eltRemove});
+    }
+
+    handleEdit(eltEdit) {
+        this.props.toggleEdit({eltEdit});
     }
 
     generateMenu() {
         let tempThis = this;
         return <ContextMenu id={this.props.link.id} theme={theme.dark}>
-            <Item>Modifier</Item>
             <Item onClick={() => {
-                tempThis.handleClick(this.props.link);
+                tempThis.handleEdit(this.props.link);
+            }}>Modifier</Item>
+            <Item onClick={() => {
+                tempThis.handleRemove(this.props.link);
             }}>Supprimer</Item>
         </ContextMenu>;
     }
@@ -60,10 +66,11 @@ class LinkItem extends Component {
 
 export default withRouter(connect(
     state => ({
-        user         : state.tokenReducer.user,
-        elementRemove: state.linksReducer.elementRemove
+        user: state.tokenReducer.user,
+        elementRemove: state.linksReducer.elementRemove,
     }),
     dispatch => ({
-        togglePopup : bindActionCreators(askRemoveLinkAction, dispatch)
-    })
+        toggleRemove: bindActionCreators(askRemoveLinkAction, dispatch),
+        toggleEdit: bindActionCreators(modifyLinkAction, dispatch),
+    }),
 )(LinkItem));

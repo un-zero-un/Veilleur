@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import LinkList from "./LinkList";
-import Pager from "./Pager";
+import React, {Component}   from 'react';
+import {withRouter}         from "react-router-dom";
+import {connect}            from "react-redux";
+import LinkList             from "./LinkList";
+import Pager                from "./Pager";
 
 import '../assets/scss/LinkList.scss';
-import IconButton from "@material-ui/core/IconButton/IconButton";
-import { bindActionCreators } from "redux";
-import BurgerIcon from "@material-ui/icons/Menu";
-import { showMenuAction } from "../actions/responsive_actions";
-import DeleteDialog from "./DeleteDialog";
+import IconButton           from "@material-ui/core/IconButton/IconButton";
+import {bindActionCreators} from "redux";
+import BurgerIcon           from "@material-ui/icons/Menu";
+import {showMenuAction}     from "../actions/responsive_actions";
+import DeleteDialog         from "./DeleteDialog";
+import EditDialog           from "./EditDialog";
 
 class MainPanel extends Component {
 
@@ -26,6 +27,7 @@ class MainPanel extends Component {
 
             <LinkList/>
             <DeleteDialog/>
+            <EditDialog/>
             <Pager/>
 
         </div>;
@@ -37,5 +39,5 @@ export default withRouter(connect(
     state => ({}),
     dispatch => ({
         toggleMenu: bindActionCreators(showMenuAction, dispatch),
-    })
+    }),
 )(MainPanel));

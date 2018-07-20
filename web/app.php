@@ -15,6 +15,8 @@ if ($config['debug']) {
     include_once __DIR__.'/../app/bootstrap.php.cache';
 }
 
+$config = ['env' => 'dev', 'debug' => true];
+
 $kernel = new AppKernel($config['env'], $config['debug']);
 $kernel->loadClassCache();
 $request = Request::createFromGlobals();

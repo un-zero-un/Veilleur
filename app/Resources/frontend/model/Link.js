@@ -6,6 +6,7 @@ export default class Link {
         this.description = hydra['description'];
         this.url         = hydra['url'];
         this.image       = hydra['image'];
+        this.tags        = hydra['tags'].map((tag) => tag.name);
 
         this.createdAt   = new Date(hydra['createdAt']);
     }
