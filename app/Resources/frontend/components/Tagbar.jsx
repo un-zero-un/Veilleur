@@ -1,7 +1,6 @@
 import {getUsersAction, toggleDialogUserAction} from "../actions/userpromote_actions";
 import {deleteTokenAction, getTokenAction}      from "../actions/token_actions";
 import {toggleLinkingAction}                    from "../actions/linkingtags_actions";
-import {NO_TOKEN_AVAILABLE}                     from "../middleware/LocalStorageMiddleware";
 import {toggleDialogAction}                     from "../actions/addlinks_actions";
 import {retreiveTagsAction}                     from "../actions/tags_actions";
 import {bindActionCreators}                     from "redux";

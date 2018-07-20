@@ -9,7 +9,7 @@ import {connect}                                                   from "react-r
 import Button                                                      from '@material-ui/core/Button';
 import Dialog                                                      from '@material-ui/core/Dialog';
 import React                                                       from 'react';
-
+import "../assets/scss/EditLink.scss";
 
 class EditDialog extends React.Component {
 
@@ -22,7 +22,7 @@ class EditDialog extends React.Component {
     }
 
     handleTagAdd(tag) {
-        this.props.updateTyped({ tags: [ ...this.props.editingFrame.tags, tag ]});
+        this.props.updateTyped({tags: [...this.props.editingFrame.tags, tag]});
     }
 
     handleTagRemove(tag) {
@@ -45,11 +45,11 @@ class EditDialog extends React.Component {
                 <DialogContent>
                     <TextField fullWidth label={"URL"} value={this.props.editingFrame.url}
                                onChange={(val) => this.props.updateTyped({url: val.target.value})}/>
-                    <TextField fullWidth label={"Titre"} value={this.props.editingFrame.name}
+                    <TextField fullWidth className="mt-10" label={"Titre"} value={this.props.editingFrame.name}
                                onChange={(val) => this.props.updateTyped({name: val.target.value})}/>
-                    <TextField fullWidth label={"Description"} value={this.props.editingFrame.description}
+                    <TextField fullWidth className="mt-10" label={"Description"} value={this.props.editingFrame.description}
                                onChange={(val) => this.props.updateTyped({description: val.target.value})} multiline/>
-                    <ChipInput label="Tags" onAdd={(tag) => this.handleTagAdd(tag)}
+                    <ChipInput fullWidth className="mt-10" label="Tags" onAdd={(tag) => this.handleTagAdd(tag)}
                                onDelete={(tag) => this.handleTagRemove(tag)}
                                value={this.props.editingFrame.tags}/>
                 </DialogContent>
