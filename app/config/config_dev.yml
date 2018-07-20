@@ -33,3 +33,7 @@ monolog:
                 VERBOSITY_VERY_VERBOSE: NOTICE
                 VERBOSITY_DEBUG: DEBUG
             channels: ["doctrine"]
+
+httplug:
+    profiling:
+        captured_body_length: 1000

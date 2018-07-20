@@ -1,0 +1,27 @@
+#addLink {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 50px;
+}
+
+#addLinkTaglist {
+  text-align: center;
+  height: 200px;
+  overflow-y: scroll;
+}
+
+#AddLinkDialog__Content {
+  width: 530px;
+  @media (max-width: 900px) {
+    width: auto;
+  }
+
+  #AddLinkDialog__TagFields {
+    display: flex;
+    margin-top: 10px;
+  }
+
+  #AddLinkDialog__TagFields>div {
+    flex: 1 1 0;
+  }
+}

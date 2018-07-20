@@ -4,6 +4,7 @@ namespace AppBundle\Extractor;
 
 use AppBundle\Entity\Repository\TagRepository;
 use AppBundle\Entity\WatchLink;
+use AppBundle\Parser\UrlParser;
 use AppBundle\Fetcher\Fetcher;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -12,6 +13,11 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class WatchLinkMetadataExtractor
 {
+    /**
+     * @var UrlParser
+     */
+    private $urlParser;
+
     /**
      * @var Fetcher
      */
@@ -27,17 +33,26 @@ class WatchLinkMetadataExtractor
      */
     private $crawler;
 
-    public function __construct(Fetcher $fetcher, TagRepository $tagRepository, Crawler $crawler = null)
+    public function __construct(UrlParser $urlParser, Fetcher $fetcher, TagRepository $tagRepository, Crawler $crawler = null)
     {
+        $this->urlParser = $urlParser;
         $this->fetcher = $fetcher;
         $this->tagRepository = $tagRepository;
         $this->crawler = $crawler ?: new Crawler();
     }
 
+    public function bounds($text, $length = 255) {
+        if (strlen($text) > $length) {
+            return substr($text, 0, $length);
+        }
+        return $text;
+    }
+
     /**
      * @param string $url
-     * @param array  $tags
+     * @param array $tags
      *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      * @return WatchLink
      */
     public function extract(string $url, array $tags): WatchLink
@@ -48,9 +63,18 @@ class WatchLinkMetadataExtractor
         $this->crawler->clear();
         $this->crawler->addHtmlContent($this->fetcher->fetch($url));
 
-        $watchLink->setName($this->extractTitle());
-        $watchLink->setDescription($this->extractDescription());
-        $watchLink->setImage($this->extractImage());
+        $watchLink->setName($this->bounds($this->extractTitle()));
+
+        $watchLink->setDescription($this->bounds($this->extractDescription()));
+
+        $imageURL = $this->extractImage();
+        if (null !== $imageURL) {
+            $imageURL = $this->urlParser->getAbsolutePath($url, $imageURL);
+            $imageURL = $this->bounds($imageURL, 1024);
+        }
+
+        $watchLink->setImage($imageURL);
+
 
         foreach ($tags as $tag) {
             $watchLink->addTag($this->tagRepository->findOrCreate($tag));

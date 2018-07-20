@@ -1,7 +1,34 @@
-api:
-    resource: "."
-    type:     "api"
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
 
-NelmioApiDocBundle:
-    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
-    prefix:   "/doc"
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /connect
+
+gesdinet_jwt_refresh_token:
+    path:     /token/refresh
+    defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
+
+react_token:
+  path: /login/check-google
+  condition: "request !== null and request.headers.get('Accept') matches '/html/i'"
+  controller: AppBundle\Controller\MainController::login
+
+react_app:
+  path: '{uri}'
+  controller: AppBundle\Controller\MainController::login
+  condition: "request !== null and request.headers.get('Accept') matches '/html/i'"
+  requirements: { uri: '.*' }
+
+api_platform:
+    resource: .
+    type: api_platform
+
+swagger_ui:
+  path: /docs/api
+  controller: api_platform.swagger.action.ui
+
+app:
+    resource: '../../src/AppBundle/Controller'
+    type: annotation

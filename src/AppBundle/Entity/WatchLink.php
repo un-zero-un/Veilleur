@@ -2,8 +2,13 @@
 
 namespace AppBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use AppBundle\Filter\OverriddenFilter;
+use AppBundle\Filter\SearchFilter;
+use AppBundle\Filter\TagFilter;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -15,6 +20,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  *
  * @author Yohan Giarelli <yohan@giarel.li>
+ * @ApiResource(
+ *    collectionOperations={"get", "special"={ "route_name"="watchlink_discover"} },
+ *    itemOperations={
+ *         "get",
+ *         "delete",
+ *         "special"={ "route_name"="watchlink_update"}
+ *     },
+ *    attributes={
+ *        "normalization_context"={"groups"={"WatchLink"}},
+ *        "denormalization_context"={"groups"={"WatchLink", "Tag"}},
+ *        "order"={"createdAt": "DESC"}
+ *    },
+ * )
+ * @ApiFilter(OrderFilter::class, properties={"createdAt"}, arguments={"orderParameterName"="order"})
+ * @ApiFilter(TagFilter::class)
+ * @ApiFilter(OverriddenFilter::class)
+ * @ApiFilter(SearchFilter::class)
  */
 class WatchLink extends Thing
 {
@@ -41,7 +63,7 @@ class WatchLink extends Thing
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
-        $this->tags       = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->overridden = false;
     }
 
@@ -56,6 +78,11 @@ class WatchLink extends Thing
     public function addTag(Tag $tag)
     {
         $this->tags[] = $tag;
+    }
+
+    public function clearTags()
+    {
+        $this->tags = [];
     }
 
     /**

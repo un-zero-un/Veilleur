@@ -3,9 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Dunglas\ApiBundle\Annotation\Iri;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * The most generic type of item.
@@ -13,7 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @see http://schema.org/Thing Documentation on Schema.org
  *
  * @ORM\MappedSuperclass
- * @Iri("http://schema.org/Thing")
  */
 abstract class Thing
 {
@@ -31,16 +30,14 @@ abstract class Thing
      * @Groups({"WatchLink"})
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
-     * @Iri("https://schema.org/description")
      */
     private $description;
     /**
      * @var string An image of the item. This can be a [URL](http://schema.org/URL) or a fully described [ImageObject](http://schema.org/ImageObject).
      *
      * @Groups({"WatchLink"})
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(nullable=true, length=1024)
      * @Assert\Url
-     * @Iri("https://schema.org/image")
      */
     private $image;
     /**
@@ -49,17 +46,15 @@ abstract class Thing
      * @Groups({"WatchLink"})
      * @ORM\Column(nullable=true)
      * @Assert\Type(type="string")
-     * @Iri("https://schema.org/name")
      */
     private $name;
     /**
      * @var string URL of the item.
      *
      * @Groups({"WatchLink"})
-     * @ORM\Column
+     * @ORM\Column(length=1024)
      * @Assert\Url
      * @Assert\NotBlank
-     * @Iri("https://schema.org/url")
      */
     private $url;
     /**

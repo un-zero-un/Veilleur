@@ -1,7 +1,7 @@
-imports:
-    - { resource: services/api.yml }
-
 services:
+    _defaults:
+        autowire: true
+
     monolog.formatter.colored_line:
         class: Bramus\Monolog\Formatter\ColoredLineFormatter
 
@@ -17,13 +17,45 @@ services:
         class:     AppBundle\Fetcher\GuzzleFetcher
         arguments: [ '@guzzle.client' ]
 
+    'veilleur.urlparser':
+      class: AppBundle\Parser\UrlParser
+
     extractor.watch_link_metadata:
         class:     AppBundle\Extractor\WatchLinkMetadataExtractor
-        arguments: [ '@fetcher.guzzle', '@repository.tag' ]
+        arguments: [ '@veilleur.urlparser', '@fetcher.guzzle', '@repository.tag' ]
 
     parser.slack_message:
         class: AppBundle\Parser\SlackMessageParser
 
     slack.api:
         class:     AppBundle\Api\SlackApi
-        arguments: [ '@guzzle.client', '%slack_web_api_token%' ]
+        arguments: [ '@guzzle.client', '%env(SLACK_WEB_API_TOKEN)%' ]
+
+    'AppBundle\Filter\TagFilter':
+        arguments: ["@doctrine", '@request_stack']
+
+    'AppBundle\Filter\OverriddenFilter':
+        arguments: ["@doctrine", '@request_stack']
+
+    'AppBundle\Filter\SearchFilter':
+      arguments: ["@doctrine", "@request_stack"]
+
+    'veilleur.adminvalidator':
+      class: AppBundle\Security\AdminValidator
+      arguments: [ "%env(json:ADMIN_DOMAINS)%" ]
+
+    'veilleur.userprovider':
+      class: AppBundle\Provider\UserProvider
+      arguments: ['@doctrine', '@veilleur.adminvalidator' ]
+
+    'veilleur.auth_success':
+      class: AppBundle\Security\AuthenticationSuccessHandler
+      arguments: [ '@lexik_jwt_authentication.jwt_manager', '@event_dispatcher']
+
+    AppBundle\Controller\UserController:
+      arguments: [ '@doctrine.orm.entity_manager' ]
+
+    AppBundle\Event\GenerateRefreshTokenListener:
+      arguments: [ '@gesdinet.jwtrefreshtoken.refresh_token_manager', '2592000', '@validator', '@request_stack', 'username']
+      tags:
+        - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success }

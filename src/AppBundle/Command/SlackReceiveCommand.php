@@ -178,6 +178,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
                 'Unable to insert watchlink',
                 [
                     'exception' => $e,
+                    'errmsg'    => $e->getMessage(),
                     'message'   => $data->text,
                 ]
             );
@@ -186,6 +187,7 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
                 'Database exception',
                 [
                     'exception' => $e,
+                    'errmsg'    => $e->getMessage(),
                     'message'   => $data->text,
                 ]
             );
@@ -193,9 +195,10 @@ class SlackReceiveCommand extends Command implements ContainerAwareInterface
             exit(1);
         } catch (\Exception $e) {
             $this->container->get('logger')->addError(
-                'Unknow exception',
+                'Unknown exception',
                 [
                     'exception' => $e,
+                    'errmsg'    => $e->getMessage(),
                     'message'   => $data->text,
                 ]
             );

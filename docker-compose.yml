@@ -1,28 +1,40 @@
-data:
-    image: unzeroun/base
+version: "3"
 
-fpm:
-    image:        unzeroun/fpm7
-    volumes_from: [ data ]
-    links:        [ mysql ]
-    volumes:      [ '.:/www' ]
+services:
 
-mysql:
-    build:        docker/mysql
-    volumes_from: [ data ]
-    environment:  { MYSQL_ROOT_PASSWORD: root }
+  nginx:
+    build:
+      context: ./docker/dev/nginx
+    env_file: env
+    ports:
+      - "80:80"
+    links:
+      - php
+    volumes:
+      - .:/www
+#      - ./mylogo.png:/www/web/static/logo.png # If you want to load your own logo
 
-nginx:
-    image:        unzeroun/nginx
-    volumes_from: [ data      ]
-    links:        [ fpm       ]
-    ports:        [ '80:80' ]
-    volumes:      [ '.:/www'  ]
+  php:
+    build:
+      context: ./docker/dev/php
+    env_file: env
+    links:
+      - database
+    volumes:
+      - .:/www
 
-cli:
-    image:        unzeroun/cli7
-    volumes_from: [ data     ]
-    links:        [ mysql    ]
-    volumes:      [ '.:/www' ]
-    stdin_open:   true
-    tty:          true
+  database:
+    image: postgres:10.3-alpine
+    volumes:
+      - db:/var/lib/postgresql/data
+    env_file: env
+
+  adminer:
+   image: adminer
+   links:
+     - database
+   ports:
+     - 8080:8080
+
+volumes:
+  db: ~

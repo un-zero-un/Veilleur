@@ -2,28 +2,49 @@
 
 namespace AppBundle\Filter;
 
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use AppBundle\Entity\WatchLink;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
-use Dunglas\ApiBundle\Api\ResourceInterface;
-use Dunglas\ApiBundle\Doctrine\Orm\Filter\AbstractFilter;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * @author Yohan Giarelli <yohan@un-zero-un.fr>
+ * @author Yohan Giarelli <yohan@giarel.li>
  */
 class OverriddenFilter extends AbstractFilter
 {
-    public function apply(ResourceInterface $resource, QueryBuilder $queryBuilder, Request $request)
+    public function __construct(ManagerRegistry $doctrine, RequestStack $rs)
     {
-        if ($resource->getEntityClass() !== WatchLink::class) {
+        parent::__construct($doctrine, $rs, null, ['overridden' => null]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
+    {
+        $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+        if ($resourceClass !== WatchLink::class || $property !== "overridden") {
             return;
         }
 
-        $queryBuilder->andWhere($queryBuilder->getRootAliases()[0].'.overridden = FALSE');
+
+        $queryBuilder->andWhere($queryBuilder->getRootAliases()[0].'.overridden = :val')
+                     ->setParameter("val", $bool);
     }
 
-    public function getDescription(ResourceInterface $resource)
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription(string $resource): array
     {
-        return [];
+        return [
+            "overridden"   => [
+                "property" => "overridden",
+                "type"     => "bool",
+                "required" => false
+            ]
+        ];
     }
 }

@@ -11,4 +11,5 @@ interface Fetcher
      * @return string
      */
     public function fetch(string $url): string;
+
 }

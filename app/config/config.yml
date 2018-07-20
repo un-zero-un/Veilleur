@@ -1,11 +1,22 @@
+parameters:
+    locale: en
+
+    env(PRIVATE_KEY_PATH): '/www/var/jwt/private.pem'
+    env(PUBLIC_KEY_PATH): '/www/var/jwt/public.pem'
+    env(PASSPHRASE_KEY): ''
+    env(TOKEN_TTL): '60'
+
+    slack_web_channel: '%env(SLACK_WEB_CHANNEL)%'
+    google_client_id: '%env(GOOGLE_CLIENT_ID)%'
+
 imports:
-    - { resource: parameters.yml }
     - { resource: services.yml }
+    - { resource: security.yml }
 
 framework:
     esi:             ~
     translator:      { fallbacks: ["%locale%"] }
-    secret:          "%secret%"
+    secret:          "%env(APP_SECRET)%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
@@ -28,47 +39,58 @@ framework:
 # Doctrine Configuration
 doctrine:
     dbal:
-        server_version: 5.6
-        driver:   "%database_driver%"
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
+        driver:   pdo_pgsql
+        server_version: 10.3
+        host:     "%env(POSTGRES_HOST)%"
+        port:     "%env(POSTGRES_PORT)%"
+        dbname:   "%env(POSTGRES_DB)%"
+        user:     "%env(POSTGRES_USER)%"
+        password: "%env(POSTGRES_PASSWORD)%"
         charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
 
-# DunglasJsonLdApi configuration
-dunglas_api:
-    title:       "%api_name%"
-    description: "%api_description%"
-
 # Nelmio CORS
 nelmio_cors:
     defaults:
-        allow_origin:  ["%cors_allow_origin%"]
+        allow_origin:  ["%env(CORS_ALLOW_ORIGIN)%"]
         allow_methods: ["POST", "PUT", "GET", "DELETE", "OPTIONS"]
         allow_headers: ["content-type", "authorization"]
         max_age:       3600
+        expose_headers: ['Content-Disposition', 'Content-Length', 'Link']
     paths:
-        '^/': ~
+        '^/':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
 
-# Nelmio API Doc
-nelmio_api_doc:
-    sandbox:
-        accept_type:        "application/json"
-        body_format:
-            formats:        [ "json" ]
-            default_format: "json"
-        request_format:
-            formats:
-                json:       "application/json"
+api_platform:
+  title: "%env(API_NAME)%"
+  description: "%env(API_DESCRIPTION)%"
+  swagger:
+    api_keys:
+      apiKey:
+        name: Authorization
+        type: header
+
+
+hwi_oauth:
+  firewall_names: [ login ]
+  resource_owners:
+    google_auth:
+      type: google
+      client_id: '%env(GOOGLE_CLIENT_ID)%'
+      client_secret: '%env(GOOGLE_CLIENT_SECRET)%'
+      scope: 'email profile'
+
+lexik_jwt_authentication:
+  private_key_path: '%env(PRIVATE_KEY_PATH)%'
+  public_key_path: '%env(PUBLIC_KEY_PATH)%'
+  pass_phrase: '%env(PASSPHRASE_KEY)%'
+  token_ttl: '%env(TOKEN_TTL)%'
+
+gesdinet_jwt_refresh_token:
+    ttl: 2592000
+    user_provider: veilleur.userprovider

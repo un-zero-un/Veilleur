@@ -2,37 +2,51 @@
 
 namespace AppBundle\Filter;
 
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use AppBundle\Entity\Tag;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
-use Dunglas\ApiBundle\Api\ResourceInterface;
-use Dunglas\ApiBundle\Doctrine\Orm\Filter\AbstractFilter;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @author Yohan Giarelli <yohan@giarel.li>
  */
 class TagFilter extends AbstractFilter
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function apply(ResourceInterface $resource, QueryBuilder $queryBuilder, Request $request)
+    public function __construct(ManagerRegistry $doctrine, RequestStack $requestStack)
     {
-        if (!$request->query->has('tags')) {
-            return;
-        }
-
-        foreach ($request->query->get('tags') as $i => $tag) {
-            $queryBuilder
-                ->innerJoin($queryBuilder->getRootAliases()[0] . '.tags', 't'.$i)
-                ->andWhere('t'.$i.'.name = :name_' . $i)
-                ->setParameter('name_' . $i, $tag);
-        }
+        parent::__construct($doctrine, $requestStack, null, ['tags' => null]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDescription(ResourceInterface $resource)
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request->query->has('tags') || $property !== 'tags') {
+            return;
+        }
+
+        foreach ($value as $i => $tag)
+        {
+            $subq = $queryBuilder->getEntityManager()->getRepository(Tag::class)->createQueryBuilder('tag'.$i);
+            $subq->select('t'.$i)->andWhere('tag'.$i.'.name=:name_'.$i)->andWhere('tag'.$i.' = t'.$i.'.mainTag');
+
+            $queryBuilder->innerJoin($queryBuilder->getRootAliases()[0].'.tags', 't'.$i)
+                ->andWhere($queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->eq('t'.$i.'.name', ':name_'.$i),
+                    $queryBuilder->expr()->in('t'.$i, $subq->getDQL())
+                ))
+                ->setParameter('name_'.$i, $tag);
+        }
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription(string $resource): array
     {
         return [
             'tags[]' => [

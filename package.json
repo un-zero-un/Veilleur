@@ -1,0 +1,47 @@
+{
+  "name": "veilleur_front",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/codemod": "^1.1.0",
+    "@material-ui/core": "^1.2.0",
+    "@material-ui/icons": "^1.1.0",
+    "babel-loader": "^7.1.4",
+    "babel-runtime": "^6.26.0",
+    "jwt-decode": "^2.2.0",
+    "material-ui-chip-input": "^1.0.0-beta.5",
+    "node-sass": "^4.8.3",
+    "react": "^16.3.2",
+    "react-autosuggest": "^9.3.4",
+    "react-contexify": "^3.0.1",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-redux-router": "^0.0.14",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.4",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^0.16.0",
+    "sass-loader": "^7.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.20.1",
+    "babel-minify-webpack-plugin": "^0.3.1",
+    "babel-plugin-direct-import": "^0.5.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-react-app": "^3.1.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "uglifyjs-webpack-plugin": "^1.2.5"
+  }
+}
