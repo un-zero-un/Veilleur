@@ -12,6 +12,8 @@ import DialogTitle            from "@material-ui/core/DialogTitle/DialogTitle";
 import DialogContent          from "@material-ui/core/DialogContent/DialogContent";
 import ListItemText           from "@material-ui/core/ListItemText/ListItemText";
 
+import ArrowIcon  from "@material-ui/icons/ArrowBack";
+
 class LinkingTags extends Component {
 
     handleClose() {
@@ -66,6 +68,7 @@ class LinkingTags extends Component {
                     <Button onClick={() => this.clearField(0)}>
                         {this.props.masterTag != null ? this.props.masterTag.name : ""}
                     </Button>
+                    <ArrowIcon/>
                     <Button onClick={() => this.clearField(1)}>
                         {this.props.slaveTag != null ? this.props.slaveTag.name : ""}
                     </Button>
